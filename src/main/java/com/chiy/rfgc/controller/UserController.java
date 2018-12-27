@@ -60,18 +60,18 @@ public class UserController {
         if (entity == null) {
             return ApiResult.FAILURE("登录失败，账号或密码不正确");
         }
-        return ApiResult.SUCCESS(entity.getId());
+        return ApiResult.SUCCESS(entity.getUuid());
     }
 
     @ApiOperation("修改")
     @RequestMapping("/update")
     public ApiResult<Object> update(String uuid, UserEntity entity) throws Exception {
         // 判断是否登录
-        if (StringUtils.isEmpty(uuid) || userRepository.findById(uuid) == null) {
+        if (StringUtils.isEmpty(uuid) || userRepository.findByUuid(uuid) == null) {
             return ApiResult.FAILURE("未登录");
         }
         // 判断是否存在
-        if (userRepository.findById(entity.getId()) == null) {
+        if (userRepository.findByUuid(entity.getUuid()) == null) {
             return ApiResult.FAILURE("修改失败，不存在");
         }
         // 判断公司id
@@ -94,7 +94,7 @@ public class UserController {
             return ApiResult.FAILURE("未登录");
         }
         // 通过id查询是否存在
-        if (userRepository.findById(uuid) == null) {
+        if (userRepository.findByUuid(uuid) == null) {
             return ApiResult.FAILURE("该用户不存在");
         }
         // 通过id删除
@@ -113,7 +113,7 @@ public class UserController {
             return ApiResult.FAILURE("未登录");
         }
         // 通过id查询是否存在
-        UserEntity userEntity = userRepository.findById(uuid);
+        UserEntity userEntity = userRepository.findByUuid(uuid);
         if (userEntity == null) {
             return ApiResult.FAILURE("该用户不存在");
         }

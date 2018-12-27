@@ -10,7 +10,7 @@ import java.util.Objects;
 @Entity
 @Table(name = "user", schema = "rfgc", catalog = "")
 public class UserEntity {
-    private String id;
+    private String uuid;
     @ApiModelProperty(value = "账号")
     private String zh;
     @ApiModelProperty(value = "密码")
@@ -26,12 +26,12 @@ public class UserEntity {
     @GenericGenerator(name = "role_id", strategy = "uuid")
     @GeneratedValue(generator = "role_id")
     @Column(name = "id", unique = true, nullable = false, length = 32)
-    public String getId() {
-        return id;
+    public String getUuid() {
+        return uuid;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
     }
 
     @Basic
@@ -89,7 +89,7 @@ public class UserEntity {
         if (this == o) return true;
         if (!(o instanceof UserEntity)) return false;
         UserEntity that = (UserEntity) o;
-        return Objects.equals(id, that.id) &&
+        return Objects.equals(uuid, that.uuid) &&
                 Objects.equals(zh, that.zh) &&
                 Objects.equals(mm, that.mm) &&
                 Objects.equals(xm, that.xm) &&
@@ -99,6 +99,6 @@ public class UserEntity {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, zh, mm, xm, gsid, cjsj);
+        return Objects.hash(uuid, zh, mm, xm, gsid, cjsj);
     }
 }

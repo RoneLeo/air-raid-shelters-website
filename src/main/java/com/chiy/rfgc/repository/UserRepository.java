@@ -19,13 +19,13 @@ public interface UserRepository extends CrudRepository<UserEntity, Long> {
     UserEntity findByZhAndMm(String zh, String mm);
 
     // 通过id查询
-    UserEntity findById(String id);
+    UserEntity findByUuid(String uuid);
 
     // 通过id删除
     @Query(value = "delete from user where id=?1", nativeQuery = true)
     @Modifying
     @Transactional
-    int deleteById(String id);
+    int deleteById(String uuid);
 
     List<UserEntity> findAllByGsidOrderByCjsjDesc(Integer gsid);
 
