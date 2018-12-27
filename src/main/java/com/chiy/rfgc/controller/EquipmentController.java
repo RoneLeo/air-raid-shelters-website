@@ -1,10 +1,10 @@
 package com.chiy.rfgc.controller;
 
 import com.chiy.rfgc.common.ApiResult;
-import com.chiy.rfgc.entity.ContactusEntity;
-import com.chiy.rfgc.entity.NetserviceEntity;
+import com.chiy.rfgc.entity.EquipmentEntity;
 import com.chiy.rfgc.repository.CompanyRepository;
-import com.chiy.rfgc.repository.NetServiceRepository;
+import com.chiy.rfgc.repository.EquipmentRepository;
+import com.chiy.rfgc.repository.EquipmentTypeRepository;
 import com.chiy.rfgc.repository.UserRepository;
 import com.chiy.rfgc.utils.StringUtils;
 import io.swagger.annotations.Api;
@@ -19,32 +19,37 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.annotation.Resource;
 import java.util.Date;
 
-@Api(description = "网上服务")
+@Api(description = "产品中心管理")
 @RestController
-@RequestMapping(value = "/netService", method = {RequestMethod.GET, RequestMethod.POST})
-public class NetServiceController {
+@RequestMapping(value = "/equipment", method = {RequestMethod.GET, RequestMethod.POST})
+public class EquipmentController {
 
     @Resource
-    private NetServiceRepository netServiceRepository;
+    private EquipmentRepository equipmentRepository;
     @Resource
     private UserRepository userRepository;
     @Resource
     private CompanyRepository companyRepository;
+    @Resource
+    private EquipmentTypeRepository equipmentTypeRepository;
 
     @ApiOperation(value = "添加")
     @RequestMapping("/add")
-    public ApiResult<Object> add(String uuid, NetserviceEntity entity) {
+    public ApiResult<Object> add(String uuid, EquipmentEntity entity) {
         // 判断是否登录
         if (StringUtils.isEmpty(uuid) || userRepository.findById(uuid) == null) {
             return ApiResult.FAILURE("未登录");
         }
-        // 判断公司id
+        // 判断公司id不能为空，是否存在
         if (entity.getGsid() == null || companyRepository.findById(entity.getGsid()) == null) {
-            return ApiResult.FAILURE("添加失败，公司id为空或者不存在");
+            return ApiResult.FAILURE("添加失败，公司id不能为空或该公司id不存在");
         }
-        //
+        // 判断设备类型
+        if (entity.getSblx() == null || equipmentTypeRepository.findById(entity.getSblx()) == null) {
+            return ApiResult.FAILURE("添加失败，设备类型不能为空或该设备类型不存在");
+        }
         entity.setCjsj(new Date());
-        NetserviceEntity entity1 = netServiceRepository.save(entity);
+        EquipmentEntity entity1 = equipmentRepository.save(entity);
         if (entity1 == null) {
             return ApiResult.FAILURE("添加失败");
         }
@@ -53,20 +58,20 @@ public class NetServiceController {
 
     @ApiOperation("修改")
     @RequestMapping("/update")
-    public ApiResult<Object> update(String uuid, NetserviceEntity entity) {
+    public ApiResult<Object> update(String uuid, EquipmentEntity entity) {
         // 判断是否登录
         if (StringUtils.isEmpty(uuid) || userRepository.findById(uuid) == null) {
             return ApiResult.FAILURE("未登录");
         }
-        // 判断公司id
+        // 判断公司id不能为空，是否存在
         if (entity.getGsid() == null || companyRepository.findById(entity.getGsid()) == null) {
-            return ApiResult.FAILURE("修改失败，公司id为空或者不存在");
+            return ApiResult.FAILURE("添加失败，公司id不能为空或该公司id不存在");
         }
-        // 判断是否存在
-        if (netServiceRepository.findById(entity.getId()) == null) {
-            return ApiResult.FAILURE("不存在，修改失败");
+        // 判断设备类型
+        if (entity.getSblx() == null || equipmentTypeRepository.findById(entity.getSblx()) == null) {
+            return ApiResult.FAILURE("修改失败，设备类型不能为空或该设备类型不存在");
         }
-        NetserviceEntity entity1 = netServiceRepository.save(entity);
+        EquipmentEntity entity1 = equipmentRepository.save(entity);
         if (entity1 == null) {
             return ApiResult.FAILURE("修改失败");
         }
@@ -84,10 +89,10 @@ public class NetServiceController {
             return ApiResult.FAILURE("id不能为空");
         }
         // 查询是否存在
-        if (netServiceRepository.findById(id) == null) {
+        if (equipmentRepository.findById(id) == null) {
             return ApiResult.FAILURE("不存在，修改失败");
         }
-        int result = netServiceRepository.deleteById(id);
+        int result = equipmentRepository.deleteById(id);
         if (result == 0) {
             return ApiResult.FAILURE("删除失败");
         }
@@ -103,10 +108,9 @@ public class NetServiceController {
         }
         Pageable pageable = PageRequest.of(page - 1, size);
 
-        Page<NetserviceEntity> list = netServiceRepository.findAllByGsidOrderByCjsjDesc(userRepository.findById(uuid).getGsid(), pageable);
+        Page<EquipmentEntity> list = equipmentRepository.findAllByGsidOrderByCjsjDesc(userRepository.findById(uuid).getGsid(), pageable);
 
         return ApiResult.SUCCESS(list);
 
     }
-
 }

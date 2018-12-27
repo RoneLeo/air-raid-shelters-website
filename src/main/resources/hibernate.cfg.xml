@@ -9,6 +9,13 @@
       <mapping class="com.chiy.rfgc.entity.ContactusEntity"/>
       <mapping class="com.chiy.rfgc.entity.NetserviceEntity"/>
       <mapping class="com.chiy.rfgc.entity.UserEntity"/>
+      <mapping class="com.chiy.rfgc.entity.EquipmentEntity"/>
+      <mapping class="com.chiy.rfgc.entity.FileEntity"/>
+      <mapping class="com.chiy.rfgc.entity.NewsEntity"/>
+      <mapping class="com.chiy.rfgc.entity.RecruitmentEntity"/>
+      <mapping class="com.chiy.rfgc.entity.ProjectcaseEntity"/>
+      <mapping class="com.chiy.rfgc.entity.CompanyEntity"/>
+      <mapping class="com.chiy.rfgc.entity.EquipmenttypeEntity"/>
       <!-- <property name="connection.username"/> -->
     <!-- <property name="connection.password"/> -->
 

@@ -2,7 +2,9 @@ package com.chiy.rfgc.controller;
 
 import com.chiy.rfgc.common.ApiResult;
 import com.chiy.rfgc.entity.UserEntity;
+import com.chiy.rfgc.repository.CompanyRepository;
 import com.chiy.rfgc.repository.UserRepository;
+import com.chiy.rfgc.utils.MD5Utils;
 import com.chiy.rfgc.utils.StringUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -11,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpSession;
 import java.util.Date;
 import java.util.List;
 
@@ -22,14 +23,25 @@ public class UserController {
 
     @Resource
     private UserRepository userRepository;
+    @Resource
+    private CompanyRepository companyRepository;
 
     @ApiOperation("添加用户")
     @RequestMapping("/add")
-    public ApiResult<Object> add(UserEntity entity, HttpSession session) {
+    public ApiResult<Object> add(String uuid, UserEntity entity) throws Exception {
+        // 判断是否登录
+//        if (StringUtils.isEmpty(uuid) || userRepository.findById(uuid) == null) {
+//            return ApiResult.FAILURE("未登录");
+//        }
+        // 判断公司id
+        if (entity.getGsid() == null || companyRepository.findById(entity.getGsid()) == null) {
+            return ApiResult.FAILURE("添加失败，公司id为空或者不存在");
+        }
         // 判断账号是否存在
         if (userRepository.findByZh(entity.getZh()) != null) {
             return ApiResult.FAILURE("账号已存在");
         }
+        entity.setMm(MD5Utils.getMD5(entity.getMm()));
         entity.setCjsj(new Date());
         UserEntity entity1 = userRepository.save(entity);
         if (entity1 == null) {
@@ -40,24 +52,33 @@ public class UserController {
 
     @ApiOperation("登录")
     @RequestMapping("/login")
-    public ApiResult<Object> login(String zh, String mm) {
+    public ApiResult<Object> login(String zh, String mm) throws Exception {
         if (StringUtils.isEmpty(zh) || StringUtils.isEmpty(mm)) {
             return ApiResult.FAILURE("账号或密码不能为空");
         }
-        UserEntity entity = userRepository.findByZhAndMm(zh, mm);
+        UserEntity entity = userRepository.findByZhAndMm(zh, MD5Utils.getMD5(mm));
         if (entity == null) {
             return ApiResult.FAILURE("登录失败，账号或密码不正确");
         }
-        return ApiResult.SUCCESS(entity);
+        return ApiResult.SUCCESS(entity.getId());
     }
 
     @ApiOperation("修改")
     @RequestMapping("/update")
-    public ApiResult<Object> update(UserEntity entity, HttpSession session) {
-        // 查询用户是否存在
-        if (userRepository.findById(entity.getId()) == null) {
-            return ApiResult.FAILURE("该用户不存在");
+    public ApiResult<Object> update(String uuid, UserEntity entity) throws Exception {
+        // 判断是否登录
+        if (StringUtils.isEmpty(uuid) || userRepository.findById(uuid) == null) {
+            return ApiResult.FAILURE("未登录");
         }
+        // 判断是否存在
+        if (userRepository.findById(entity.getId()) == null) {
+            return ApiResult.FAILURE("修改失败，不存在");
+        }
+        // 判断公司id
+        if (entity.getGsid() == null || companyRepository.findById(entity.getGsid()) == null) {
+            return ApiResult.FAILURE("修改失败，公司id为空或者不存在");
+        }
+        entity.setMm(MD5Utils.getMD5(entity.getMm()));
         UserEntity entity1 = userRepository.save(entity);
         if (entity1 == null) {
             return ApiResult.FAILURE("修改失败");
@@ -67,13 +88,17 @@ public class UserController {
 
     @ApiOperation("删除")
     @RequestMapping("/delete")
-    public ApiResult<Object> delete(String id, HttpSession session) {
+    public ApiResult<Object> delete(String uuid) {
+        // 判断是否登录
+        if (StringUtils.isEmpty(uuid)) {
+            return ApiResult.FAILURE("未登录");
+        }
         // 通过id查询是否存在
-        if (userRepository.findById(id) == null) {
-            return ApiResult.FAILURE("删除失败，该用户不存在");
+        if (userRepository.findById(uuid) == null) {
+            return ApiResult.FAILURE("该用户不存在");
         }
         // 通过id删除
-        int result = userRepository.deleteById(id);
+        int result = userRepository.deleteById(uuid);
         if (result == 0) {
             return ApiResult.FAILURE("删除失败");
         }
@@ -82,14 +107,19 @@ public class UserController {
 
     @ApiOperation("通过公司id查询用户列表")
     @RequestMapping("/findAllByGsid")
-    public ApiResult<Object> findAllByGsid(Integer gsid, HttpSession session) {
-        if (gsid == null) {
-            return ApiResult.FAILURE("公司id不能为空");
+    public ApiResult<Object> findAllByGsid(String uuid) {
+        // 判断是否登录
+        if (StringUtils.isEmpty(uuid)) {
+            return ApiResult.FAILURE("未登录");
         }
-        List<UserEntity> list = userRepository.findAllByGsidOrderByCjsjDesc(gsid);
+        // 通过id查询是否存在
+        UserEntity userEntity = userRepository.findById(uuid);
+        if (userEntity == null) {
+            return ApiResult.FAILURE("该用户不存在");
+        }
+        List<UserEntity> list = userRepository.findAllByGsidOrderByCjsjDesc(userEntity.getGsid());
         return ApiResult.SUCCESS(list);
     }
-
 
 
 

@@ -1,10 +1,11 @@
 package com.chiy.rfgc.controller;
 
 import com.chiy.rfgc.common.ApiResult;
-import com.chiy.rfgc.entity.ContactusEntity;
 import com.chiy.rfgc.entity.NetserviceEntity;
+import com.chiy.rfgc.entity.ProjectcaseEntity;
+import com.chiy.rfgc.entity.RecruitmentEntity;
 import com.chiy.rfgc.repository.CompanyRepository;
-import com.chiy.rfgc.repository.NetServiceRepository;
+import com.chiy.rfgc.repository.RecruitmentRepository;
 import com.chiy.rfgc.repository.UserRepository;
 import com.chiy.rfgc.utils.StringUtils;
 import io.swagger.annotations.Api;
@@ -19,13 +20,13 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.annotation.Resource;
 import java.util.Date;
 
-@Api(description = "网上服务")
+@Api(description = "人才招聘")
 @RestController
-@RequestMapping(value = "/netService", method = {RequestMethod.GET, RequestMethod.POST})
-public class NetServiceController {
+@RequestMapping(value = "/recruitment", method = {RequestMethod.GET, RequestMethod.POST})
+public class RecruitmentController {
 
     @Resource
-    private NetServiceRepository netServiceRepository;
+    private RecruitmentRepository recruitmentRepository;
     @Resource
     private UserRepository userRepository;
     @Resource
@@ -33,7 +34,7 @@ public class NetServiceController {
 
     @ApiOperation(value = "添加")
     @RequestMapping("/add")
-    public ApiResult<Object> add(String uuid, NetserviceEntity entity) {
+    public ApiResult<Object> add(String uuid, RecruitmentEntity entity) {
         // 判断是否登录
         if (StringUtils.isEmpty(uuid) || userRepository.findById(uuid) == null) {
             return ApiResult.FAILURE("未登录");
@@ -44,7 +45,7 @@ public class NetServiceController {
         }
         //
         entity.setCjsj(new Date());
-        NetserviceEntity entity1 = netServiceRepository.save(entity);
+        RecruitmentEntity entity1 = recruitmentRepository.save(entity);
         if (entity1 == null) {
             return ApiResult.FAILURE("添加失败");
         }
@@ -53,7 +54,7 @@ public class NetServiceController {
 
     @ApiOperation("修改")
     @RequestMapping("/update")
-    public ApiResult<Object> update(String uuid, NetserviceEntity entity) {
+    public ApiResult<Object> update(String uuid, RecruitmentEntity entity) {
         // 判断是否登录
         if (StringUtils.isEmpty(uuid) || userRepository.findById(uuid) == null) {
             return ApiResult.FAILURE("未登录");
@@ -63,10 +64,10 @@ public class NetServiceController {
             return ApiResult.FAILURE("修改失败，公司id为空或者不存在");
         }
         // 判断是否存在
-        if (netServiceRepository.findById(entity.getId()) == null) {
+        if (recruitmentRepository.findById(entity.getId()) == null) {
             return ApiResult.FAILURE("不存在，修改失败");
         }
-        NetserviceEntity entity1 = netServiceRepository.save(entity);
+        RecruitmentEntity entity1 = recruitmentRepository.save(entity);
         if (entity1 == null) {
             return ApiResult.FAILURE("修改失败");
         }
@@ -84,10 +85,10 @@ public class NetServiceController {
             return ApiResult.FAILURE("id不能为空");
         }
         // 查询是否存在
-        if (netServiceRepository.findById(id) == null) {
+        if (recruitmentRepository.findById(id) == null) {
             return ApiResult.FAILURE("不存在，修改失败");
         }
-        int result = netServiceRepository.deleteById(id);
+        int result = recruitmentRepository.deleteById(id);
         if (result == 0) {
             return ApiResult.FAILURE("删除失败");
         }
@@ -103,10 +104,9 @@ public class NetServiceController {
         }
         Pageable pageable = PageRequest.of(page - 1, size);
 
-        Page<NetserviceEntity> list = netServiceRepository.findAllByGsidOrderByCjsjDesc(userRepository.findById(uuid).getGsid(), pageable);
+        Page<RecruitmentEntity> list = recruitmentRepository.findAllByGsidOrderByCjsjDesc(userRepository.findById(uuid).getGsid(), pageable);
 
         return ApiResult.SUCCESS(list);
 
     }
-
 }
