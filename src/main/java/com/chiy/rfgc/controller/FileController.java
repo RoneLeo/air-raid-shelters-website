@@ -41,7 +41,7 @@ public class FileController {
     @RequestMapping("/add")
     public ApiResult<Object> add(String uuid, FileEntity entity, MultipartFile file) {
         // 判断是否登录
-        if (StringUtils.isEmpty(uuid) || userRepository.findById(uuid) == null) {
+        if (StringUtils.isEmpty(uuid) || userRepository.findByUuid(uuid) == null) {
             return ApiResult.FAILURE("未登录");
         }
         // 判断公司id
@@ -70,7 +70,7 @@ public class FileController {
     @RequestMapping("/delete")
     public ApiResult<Object> delete(String uuid, Integer id) {
         // 判断是否登录
-        if (StringUtils.isEmpty(uuid) || userRepository.findById(uuid) == null) {
+        if (StringUtils.isEmpty(uuid) || userRepository.findByUuid(uuid) == null) {
             return ApiResult.FAILURE("未登录");
         }
         if (id == null) {
@@ -91,7 +91,7 @@ public class FileController {
     @RequestMapping("/findAllByGsidByPage")
     public ApiResult<Object> findAllByGsidByPage(String uuid, @RequestParam @ApiParam(value = "1-证书， 2-图片") Integer wjlx, int page, int size) {
         // 判断是否登录
-        if (StringUtils.isEmpty(uuid) || userRepository.findById(uuid) == null) {
+        if (StringUtils.isEmpty(uuid) || userRepository.findByUuid(uuid) == null) {
             return ApiResult.FAILURE("未登录");
         }
         if (wjlx == null) {
@@ -99,7 +99,7 @@ public class FileController {
         }
         Pageable pageable = PageRequest.of(page - 1, size);
 
-        Page<FileEntity> list = fileRepository.findAllByGsidAndWjlxOrderByCjsjDesc(userRepository.findById(uuid).getGsid(), wjlx, pageable);
+        Page<FileEntity> list = fileRepository.findAllByGsidAndWjlxOrderByCjsjDesc(userRepository.findByUuid(uuid).getGsid(), wjlx, pageable);
 
         return ApiResult.SUCCESS(list);
 

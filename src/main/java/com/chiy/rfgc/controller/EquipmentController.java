@@ -37,7 +37,7 @@ public class EquipmentController {
     @RequestMapping("/add")
     public ApiResult<Object> add(String uuid, EquipmentEntity entity) {
         // 判断是否登录
-        if (StringUtils.isEmpty(uuid) || userRepository.findById(uuid) == null) {
+        if (StringUtils.isEmpty(uuid) || userRepository.findByUuid(uuid) == null) {
             return ApiResult.FAILURE("未登录");
         }
         // 判断公司id不能为空，是否存在
@@ -60,7 +60,7 @@ public class EquipmentController {
     @RequestMapping("/update")
     public ApiResult<Object> update(String uuid, EquipmentEntity entity) {
         // 判断是否登录
-        if (StringUtils.isEmpty(uuid) || userRepository.findById(uuid) == null) {
+        if (StringUtils.isEmpty(uuid) || userRepository.findByUuid(uuid) == null) {
             return ApiResult.FAILURE("未登录");
         }
         // 判断公司id不能为空，是否存在
@@ -82,7 +82,7 @@ public class EquipmentController {
     @RequestMapping("/delete")
     public ApiResult<Object> delete(String uuid, Integer id) {
         // 判断是否登录
-        if (StringUtils.isEmpty(uuid) || userRepository.findById(uuid) == null) {
+        if (StringUtils.isEmpty(uuid) || userRepository.findByUuid(uuid) == null) {
             return ApiResult.FAILURE("未登录");
         }
         if (id == null) {
@@ -103,12 +103,12 @@ public class EquipmentController {
     @RequestMapping("/findAllByGsidByPage")
     public ApiResult<Object> findAllByGsidByPage(String uuid, int page, int size) {
         // 判断是否登录
-        if (StringUtils.isEmpty(uuid) || userRepository.findById(uuid) == null) {
+        if (StringUtils.isEmpty(uuid) || userRepository.findByUuid(uuid) == null) {
             return ApiResult.FAILURE("未登录");
         }
         Pageable pageable = PageRequest.of(page - 1, size);
 
-        Page<EquipmentEntity> list = equipmentRepository.findAllByGsidOrderByCjsjDesc(userRepository.findById(uuid).getGsid(), pageable);
+        Page<EquipmentEntity> list = equipmentRepository.findAllByGsidOrderByCjsjDesc(userRepository.findByUuid(uuid).getGsid(), pageable);
 
         return ApiResult.SUCCESS(list);
 
