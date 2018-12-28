@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 
 @Api(description = "文件管理")
@@ -33,15 +34,17 @@ public class FileController {
     private UserRepository userRepository;
     @Resource
     private CompanyRepository companyRepository;
+    @Resource
+    private UserController userController;
 
     private static final String CERTIFICATE_PATH = "/certificate/";
     private static final String PHOTO_PATH = "/photo/";
 
     @ApiOperation("添加")
     @RequestMapping("/add")
-    public ApiResult<Object> add(String uuid, FileEntity entity, MultipartFile file) {
+    public ApiResult<Object> add(HttpServletRequest request, FileEntity entity, MultipartFile file) {
         // 判断是否登录
-        if (StringUtils.isEmpty(uuid) || userRepository.findByUuid(uuid) == null) {
+        if (userController.judgeNotLogin(request)) {
             return ApiResult.FAILURE("未登录");
         }
         // 判断公司id
@@ -72,9 +75,9 @@ public class FileController {
 
     @ApiOperation("删除")
     @RequestMapping("/delete")
-    public ApiResult<Object> delete(String uuid, Integer id) {
+    public ApiResult<Object> delete(HttpServletRequest request, Integer id) {
         // 判断是否登录
-        if (StringUtils.isEmpty(uuid) || userRepository.findByUuid(uuid) == null) {
+        if (userController.judgeNotLogin(request)) {
             return ApiResult.FAILURE("未登录");
         }
         if (id == null) {
@@ -93,9 +96,9 @@ public class FileController {
 
     @ApiOperation("通过公司id查询分页显示")
     @RequestMapping("/findAllByGsidByPage")
-    public ApiResult<Object> findAllByGsidByPage(String uuid, @RequestParam @ApiParam(value = "1-证书， 2-图片") Integer wjlx, int page, int size) {
+    public ApiResult<Object> findAllByGsidByPage(HttpServletRequest request, @RequestParam @ApiParam(value = "1-证书， 2-图片") Integer wjlx, int page, int size) {
         // 判断是否登录
-        if (StringUtils.isEmpty(uuid) || userRepository.findByUuid(uuid) == null) {
+        if (userController.judgeNotLogin(request)) {
             return ApiResult.FAILURE("未登录");
         }
         if (wjlx == null) {
@@ -103,7 +106,7 @@ public class FileController {
         }
         Pageable pageable = PageRequest.of(page - 1, size);
 
-        Page<FileEntity> list = fileRepository.findAllByGsidAndWjlxOrderByCjsjDesc(userRepository.findByUuid(uuid).getGsid(), wjlx, pageable);
+        Page<FileEntity> list = fileRepository.findAllByGsidAndWjlxOrderByCjsjDesc(userRepository.findByUuid(request.getHeader("uuid")).getGsid(), wjlx, pageable);
 
         return ApiResult.SUCCESS(list);
 

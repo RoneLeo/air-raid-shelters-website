@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 
 @Api(description = "人才招聘")
@@ -31,12 +32,14 @@ public class RecruitmentController {
     private UserRepository userRepository;
     @Resource
     private CompanyRepository companyRepository;
+    @Resource
+    private UserController userController;
 
     @ApiOperation(value = "添加")
     @RequestMapping("/add")
-    public ApiResult<Object> add(String uuid, RecruitmentEntity entity) {
+    public ApiResult<Object> add(HttpServletRequest request, RecruitmentEntity entity) {
         // 判断是否登录
-        if (StringUtils.isEmpty(uuid) || userRepository.findByUuid(uuid) == null) {
+        if (userController.judgeNotLogin(request)) {
             return ApiResult.FAILURE("未登录");
         }
         // 判断公司id
@@ -54,9 +57,9 @@ public class RecruitmentController {
 
     @ApiOperation("修改")
     @RequestMapping("/update")
-    public ApiResult<Object> update(String uuid, RecruitmentEntity entity) {
+    public ApiResult<Object> update(HttpServletRequest request, RecruitmentEntity entity) {
         // 判断是否登录
-        if (StringUtils.isEmpty(uuid) || userRepository.findByUuid(uuid) == null) {
+        if (userController.judgeNotLogin(request)) {
             return ApiResult.FAILURE("未登录");
         }
         // 判断公司id
@@ -76,9 +79,9 @@ public class RecruitmentController {
 
     @ApiOperation("删除")
     @RequestMapping("/delete")
-    public ApiResult<Object> delete(String uuid, Integer id) {
+    public ApiResult<Object> delete(HttpServletRequest request, Integer id) {
         // 判断是否登录
-        if (StringUtils.isEmpty(uuid) || userRepository.findByUuid(uuid) == null) {
+        if (userController.judgeNotLogin(request)) {
             return ApiResult.FAILURE("未登录");
         }
         if (id == null) {
@@ -97,14 +100,14 @@ public class RecruitmentController {
 
     @ApiOperation("通过公司id查询分页显示")
     @RequestMapping("/findAllByGsidByPage")
-    public ApiResult<Object> findAllByGsidByPage(String uuid, int page, int size) {
+    public ApiResult<Object> findAllByGsidByPage(HttpServletRequest request, int page, int size) {
         // 判断是否登录
-        if (StringUtils.isEmpty(uuid) || userRepository.findByUuid(uuid) == null) {
+        if (userController.judgeNotLogin(request)) {
             return ApiResult.FAILURE("未登录");
         }
         Pageable pageable = PageRequest.of(page - 1, size);
 
-        Page<RecruitmentEntity> list = recruitmentRepository.findAllByGsidOrderByCjsjDesc(userRepository.findByUuid(uuid).getGsid(), pageable);
+        Page<RecruitmentEntity> list = recruitmentRepository.findAllByGsidOrderByCjsjDesc(userRepository.findByUuid(request.getHeader("uuid")).getGsid(), pageable);
 
         return ApiResult.SUCCESS(list);
 
