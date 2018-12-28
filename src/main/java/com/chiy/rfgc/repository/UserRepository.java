@@ -29,4 +29,6 @@ public interface UserRepository extends CrudRepository<UserEntity, Long> {
 
     List<UserEntity> findAllByGsidOrderByCjsjDesc(Integer gsid);
 
+    List<UserEntity> findAll();
+
 }
