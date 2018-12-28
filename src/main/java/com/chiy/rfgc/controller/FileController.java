@@ -51,6 +51,10 @@ public class FileController {
         if (entity.getWjlx() == null) {
             return ApiResult.FAILURE("添加失败，文件类型不能为空");
         }
+        // 文件不能为空
+        if (file == null) {
+            return ApiResult.FAILURE("未选择文件");
+        }
         String wjlj = "";
         if (entity.getWjlx() == 1) {
             wjlj = CERTIFICATE_PATH;

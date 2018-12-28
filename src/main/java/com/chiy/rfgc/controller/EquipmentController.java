@@ -113,4 +113,5 @@ public class EquipmentController {
         return ApiResult.SUCCESS(list);
 
     }
+
 }
