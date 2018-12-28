@@ -10,10 +10,22 @@ export default new Router({
             redirect: '/dashboard'
         },
         {
+            path: '/login',
+            component: resolve => require(['../components/page/Login.vue'], resolve)
+        },
+        {
+            path: '*',
+            redirect: '/404'
+        },
+        {
             path: '/',
             component: resolve => require(['../components/common/Home.vue'], resolve),
-            meta: { title: '自述文件' },
             children:[
+                {
+                    path: '/user',
+                    component: resolve => require(['../components/page/User.vue'], resolve),
+                    meta: { title: '用户信息' }
+                },
                 {
                     path: '/dashboard',
                     component: resolve => require(['../components/page/Dashboard.vue'], resolve),
@@ -63,12 +75,12 @@ export default new Router({
                     component: resolve => require(['../components/page/BaseCharts.vue'], resolve),
                     meta: { title: 'schart图表' }
                 },
-                /*{
+                {
                     // 拖拽列表组件
                     path: '/drag',
                     component: resolve => require(['../components/page/DragList.vue'], resolve),
                     meta: { title: '拖拽列表' }
-                },*/
+                },
                 {
                     // 权限页面
                     path: '/permission',
@@ -86,14 +98,6 @@ export default new Router({
                     meta: { title: '403' }
                 }
             ]
-        },
-        {
-            path: '/login',
-            component: resolve => require(['../components/page/Login.vue'], resolve)
-        },
-        {
-            path: '*',
-            redirect: '/404'
         }
     ]
 })

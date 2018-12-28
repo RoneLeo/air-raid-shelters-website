@@ -6,16 +6,16 @@ const path = require('path')
 
 module.exports = {
   dev: {
-
     // Paths
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     proxyTable: {
       '/api':{
-          target:'http://jsonplaceholder.typicode.com',
+          //target:'http://jsonplaceholder.typicode.com',
+          target:'http://182.151.22.247:8081',
           changeOrigin:true,
           pathRewrite:{
-              '/api':''
+              '^/api':''
           }
       },
       '/ms':{

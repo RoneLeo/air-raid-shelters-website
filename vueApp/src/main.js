@@ -2,14 +2,36 @@ import Vue from 'vue';
 import App from './App';
 import router from './router';
 import axios from 'axios';
+import qs from 'qs';
 import ElementUI from 'element-ui';
+import common from './components/common/commonFn';
 import 'element-ui/lib/theme-chalk/index.css';    // 默认主题
 // import '../static/css/theme-green/index.css';       // 浅绿色主题
 import '../static/css/icon.css';
 import "babel-polyfill";
 
+// http request 拦截器（所有发送的请求都要从这儿过一次），通过这个，我们就可以把token传到后台，我这里是使用sessionStorage来存储token等权限信息和用户信息，若要使用cookie可以自己封装一个函数并import便可使用
+axios.interceptors.request.use(
+    config => {
+        const uuid = localStorage.getItem("uuid"); //获取存储在本地的token
+        config.data = qs.stringify(config.data);
+        config.headers = {
+            'Content-Type': 'application/x-www-form-urlencoded', //参数格式设置
+        };
+        if (uuid) {
+            config.headers.Authorization = "Token"; //携带权限参数
+            config.headers.uuid = uuid; //用户id
+        }
+        return config;
+    },
+    err => {
+        return Promise.reject(err);
+    }
+);
+
 Vue.use(ElementUI, { size: 'small' });
 Vue.prototype.$axios = axios;
+Vue.prototype.$common = common;
 
 //使用钩子函数对路由进行权限跳转
 router.beforeEach((to, from, next) => {
