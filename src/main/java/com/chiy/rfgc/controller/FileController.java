@@ -2,11 +2,9 @@ package com.chiy.rfgc.controller;
 
 import com.chiy.rfgc.common.ApiResult;
 import com.chiy.rfgc.entity.FileEntity;
-import com.chiy.rfgc.entity.NetserviceEntity;
 import com.chiy.rfgc.repository.CompanyRepository;
 import com.chiy.rfgc.repository.FileRepository;
 import com.chiy.rfgc.repository.UserRepository;
-import com.chiy.rfgc.utils.StringUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -33,8 +31,6 @@ public class FileController {
     @Resource
     private UserRepository userRepository;
     @Resource
-    private CompanyRepository companyRepository;
-    @Resource
     private UserController userController;
 
     private static final String CERTIFICATE_PATH = "/certificate/";
@@ -43,13 +39,10 @@ public class FileController {
     @ApiOperation("添加")
     @RequestMapping("/add")
     public ApiResult<Object> add(HttpServletRequest request, FileEntity entity, MultipartFile file) {
+        String uuid = userController.getUuid(request);
         // 判断是否登录
-        if (userController.judgeNotLogin(request)) {
-            return ApiResult.FAILURE("未登录");
-        }
-        // 判断公司id
-        if (entity.getGsid() == null || companyRepository.findById(entity.getGsid()) == null) {
-            return ApiResult.FAILURE("添加失败，公司id为空或者不存在");
+        if ("".equals(uuid)) {
+            return ApiResult.UNKNOWN();
         }
         if (entity.getWjlx() == null) {
             return ApiResult.FAILURE("添加失败，文件类型不能为空");
@@ -64,6 +57,7 @@ public class FileController {
         } else {
             wjlj = PHOTO_PATH;
         }
+        entity.setGsid(userRepository.findByUuid(uuid).getGsid());
         entity.setWjlj(wjlj + file.getOriginalFilename());
         entity.setCjsj(new Date());
         FileEntity entity1 = fileRepository.save(entity);
@@ -76,9 +70,10 @@ public class FileController {
     @ApiOperation("删除")
     @RequestMapping("/delete")
     public ApiResult<Object> delete(HttpServletRequest request, Integer id) {
+        String uuid = userController.getUuid(request);
         // 判断是否登录
-        if (userController.judgeNotLogin(request)) {
-            return ApiResult.FAILURE("未登录");
+        if ("".equals(uuid)) {
+            return ApiResult.UNKNOWN();
         }
         if (id == null) {
             return ApiResult.FAILURE("id不能为空");
@@ -97,16 +92,17 @@ public class FileController {
     @ApiOperation("通过公司id查询分页显示")
     @RequestMapping("/findAllByGsidByPage")
     public ApiResult<Object> findAllByGsidByPage(HttpServletRequest request, @RequestParam @ApiParam(value = "1-证书， 2-图片") Integer wjlx, int page, int size) {
+        String uuid = userController.getUuid(request);
         // 判断是否登录
-        if (userController.judgeNotLogin(request)) {
-            return ApiResult.FAILURE("未登录");
+        if ("".equals(uuid)) {
+            return ApiResult.UNKNOWN();
         }
         if (wjlx == null) {
             return ApiResult.FAILURE("文件类型不能为空");
         }
         Pageable pageable = PageRequest.of(page - 1, size);
 
-        Page<FileEntity> list = fileRepository.findAllByGsidAndWjlxOrderByCjsjDesc(userRepository.findByUuid(request.getHeader("uuid")).getGsid(), wjlx, pageable);
+        Page<FileEntity> list = fileRepository.findAllByGsidAndWjlxOrderByCjsjDesc(userRepository.findByUuid(uuid).getGsid(), wjlx, pageable);
 
         return ApiResult.SUCCESS(list);
 

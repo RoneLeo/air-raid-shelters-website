@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.Date;
 import java.util.List;
 
@@ -24,24 +25,20 @@ public class UserController {
 
     @Resource
     private UserRepository userRepository;
-    @Resource
-    private CompanyRepository companyRepository;
 
     @ApiOperation("添加用户")
     @RequestMapping("/add")
     public ApiResult<Object> add(UserEntity entity, HttpServletRequest request) throws Exception {
+        String uuid = getUuid(request);
         // 判断是否登录
-        if (judgeNotLogin(request)) {
-            return ApiResult.FAILURE("未登录");
-        }
-        // 判断公司id
-        if (entity.getGsid() == null || companyRepository.findById(entity.getGsid()) == null) {
-            return ApiResult.FAILURE("添加失败，公司id为空或者不存在");
+        if ("".equals(uuid)) {
+            return ApiResult.UNKNOWN();
         }
         // 判断账号是否存在
         if (userRepository.findByZh(entity.getZh()) != null) {
             return ApiResult.FAILURE("账号已存在");
         }
+        entity.setGsid(userRepository.findByUuid(uuid).getGsid());
         entity.setMm(MD5Utils.getMD5(entity.getMm()));
         entity.setCjsj(new Date());
         UserEntity entity1 = userRepository.save(entity);
@@ -53,7 +50,7 @@ public class UserController {
 
     @ApiOperation("登录")
     @RequestMapping("/login")
-    public ApiResult<Object> login(String zh, String mm) throws Exception {
+    public ApiResult<Object> login(String zh, String mm, HttpSession session) throws Exception {
         if (StringUtils.isEmpty(zh) || StringUtils.isEmpty(mm)) {
             return ApiResult.FAILURE("账号或密码不能为空");
         }
@@ -61,24 +58,21 @@ public class UserController {
         if (entity == null) {
             return ApiResult.FAILURE("登录失败，账号或密码不正确");
         }
+        session.setAttribute("Admin", entity.getZh());
         return ApiResult.SUCCESS(entity);
     }
 
     @ApiOperation("修改")
     @RequestMapping("/update")
     public ApiResult<Object> update(UserEntity entity, HttpServletRequest request) throws Exception {
+        String uuid = getUuid(request);
         // 判断是否登录
-        // 判断是否登录
-        if (judgeNotLogin(request)) {
-            return ApiResult.FAILURE("未登录");
+        if ("".equals(uuid)) {
+            return ApiResult.UNKNOWN();
         }
         // 判断是否存在
         if (userRepository.findByUuid(entity.getUuid()) == null) {
             return ApiResult.FAILURE("修改失败，不存在");
-        }
-        // 判断公司id
-        if (entity.getGsid() == null || companyRepository.findById(entity.getGsid()) == null) {
-            return ApiResult.FAILURE("修改失败，公司id为空或者不存在");
         }
         entity.setMm(MD5Utils.getMD5(entity.getMm()));
         UserEntity entity1 = userRepository.save(entity);
@@ -91,13 +85,14 @@ public class UserController {
     @ApiOperation("删除")
     @RequestMapping("/delete")
     public ApiResult<Object> delete(String uuid, HttpServletRequest request) {
+        String id = getUuid(request);
         // 判断是否登录
-        if (judgeNotLogin(request)) {
-            return ApiResult.FAILURE("未登录");
+        if ("".equals(id)) {
+            return ApiResult.UNKNOWN();
         }
-        // 通过id查询是否存在
+        // 判断是否存在
         if (userRepository.findByUuid(uuid) == null) {
-            return ApiResult.FAILURE("该用户不存在");
+            return ApiResult.UNKNOWN();
         }
         // 通过id删除
         int result = userRepository.deleteById(uuid);
@@ -110,28 +105,25 @@ public class UserController {
     @ApiOperation("通过公司id查询用户列表")
     @RequestMapping("/findAllByGsid")
     public ApiResult<Object> findAllByGsid(HttpServletRequest request) {
+        String uuid = getUuid(request);
         // 判断是否登录
-        if (judgeNotLogin(request)) {
-            return ApiResult.FAILURE("未登录");
+        if ("".equals(uuid)) {
+            return ApiResult.UNKNOWN();
         }
-        // 通过id查询是否存在
-        UserEntity userEntity = userRepository.findByUuid(request.getHeader("uuid"));
-        if (userEntity == null) {
-            return ApiResult.FAILURE("该用户不存在");
-        }
-        List<UserEntity> list = userRepository.findAllByGsidOrderByCjsjDesc(userEntity.getGsid());
+        List<UserEntity> list = userRepository.findAllByGsidOrderByCjsjDesc(userRepository.findByUuid(uuid).getGsid());
         return ApiResult.SUCCESS(list);
     }
 
     // 获取请求头
-    public boolean judgeNotLogin(HttpServletRequest request) {
+    public String getUuid(HttpServletRequest request) {
         String uuid = request.getHeader("uuid");
         // 判断是否登录
         if (StringUtils.isEmpty(uuid) || userRepository.findByUuid(uuid) == null) {
-            return true;
+            return "";
         }
-        return false;
+        return uuid;
     }
+
 
 
 

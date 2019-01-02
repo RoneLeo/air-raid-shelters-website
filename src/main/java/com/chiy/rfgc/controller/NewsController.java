@@ -2,7 +2,6 @@ package com.chiy.rfgc.controller;
 
 import com.chiy.rfgc.common.ApiResult;
 import com.chiy.rfgc.entity.NewsEntity;
-import com.chiy.rfgc.repository.CompanyRepository;
 import com.chiy.rfgc.repository.NewsRepository;
 import com.chiy.rfgc.repository.UserRepository;
 import io.swagger.annotations.Api;
@@ -28,22 +27,18 @@ public class NewsController {
     @Resource
     private UserRepository userRepository;
     @Resource
-    private CompanyRepository companyRepository;
-    @Resource
     private UserController userController;
 
     @ApiOperation(value = "添加")
     @RequestMapping("/add")
     public ApiResult<Object> add(HttpServletRequest request, NewsEntity entity) {
+        String uuid = userController.getUuid(request);
         // 判断是否登录
-        if (userController.judgeNotLogin(request)) {
-            return ApiResult.FAILURE("未登录");
-        }
-        // 判断公司id
-        if (entity.getGsid() == null || companyRepository.findById(entity.getGsid()) == null) {
-            return ApiResult.FAILURE("添加失败，公司id为空或者不存在");
+        if ("".equals(uuid)) {
+            return ApiResult.UNKNOWN();
         }
         //
+        entity.setGsid(userRepository.findByUuid(uuid).getGsid());
         entity.setCjsj(new Date());
         NewsEntity entity1 = newsRepository.save(entity);
         if (entity1 == null) {
@@ -55,13 +50,10 @@ public class NewsController {
     @ApiOperation("修改")
     @RequestMapping("/update")
     public ApiResult<Object> update(HttpServletRequest request, NewsEntity entity) {
+        String uuid = userController.getUuid(request);
         // 判断是否登录
-        if (userController.judgeNotLogin(request)) {
-            return ApiResult.FAILURE("未登录");
-        }
-        // 判断公司id
-        if (entity.getGsid() == null || companyRepository.findById(entity.getGsid()) == null) {
-            return ApiResult.FAILURE("修改失败，公司id为空或者不存在");
+        if ("".equals(uuid)) {
+            return ApiResult.UNKNOWN();
         }
         // 判断是否存在
         if (newsRepository.findById(entity.getId()) == null) {
@@ -77,9 +69,10 @@ public class NewsController {
     @ApiOperation("删除")
     @RequestMapping("/delete")
     public ApiResult<Object> delete(HttpServletRequest request, Integer id) {
+        String uuid = userController.getUuid(request);
         // 判断是否登录
-        if (userController.judgeNotLogin(request)) {
-            return ApiResult.FAILURE("未登录");
+        if ("".equals(uuid)) {
+            return ApiResult.UNKNOWN();
         }
         if (id == null) {
             return ApiResult.FAILURE("id不能为空");
@@ -98,13 +91,14 @@ public class NewsController {
     @ApiOperation("通过公司id查询分页显示")
     @RequestMapping("/findAllByGsidByPage")
     public ApiResult<Object> findAllByGsidByPage(HttpServletRequest request, int page, int size) {
+        String uuid = userController.getUuid(request);
         // 判断是否登录
-        if (userController.judgeNotLogin(request)) {
-            return ApiResult.FAILURE("未登录");
+        if ("".equals(uuid)) {
+            return ApiResult.UNKNOWN();
         }
         Pageable pageable = PageRequest.of(page - 1, size);
 
-        Page<NewsEntity> list = newsRepository.findAllByGsidOrderByCjsjDesc(userRepository.findByUuid(request.getHeader("uuid")).getGsid(), pageable);
+        Page<NewsEntity> list = newsRepository.findAllByGsidOrderByCjsjDesc(userRepository.findByUuid(uuid).getGsid(), pageable);
 
         return ApiResult.SUCCESS(list);
 
