@@ -171,3 +171,8 @@ a {
 .v-note-wrapper .v-note-panel {
     min-height: 500px;
 }
+
+
+.el-select{
+    width:100%;
+}

@@ -9,9 +9,10 @@
             <el-button type="primary" @click="add">添加用户</el-button>
         </div>
         <div class="container">
-            <el-table :data="data" class="table" ref="multipleTable" @selection-change="handleSelectionChange">
+            <el-table :data="tableData" class="table" ref="multipleTable" @selection-change="handleSelectionChange">
                 <el-table-column prop="zh" label="账号"></el-table-column>
-                <el-table-column prop="mm" label="密码"></el-table-column>
+                <el-table-column prop="xm" label="姓名"></el-table-column>
+                <!--<el-table-column prop="mm" label="密码"></el-table-column>-->
                 <el-table-column prop="gsid" label="公司ID"></el-table-column>
                 <el-table-column prop="cjsj" label="创建时间"></el-table-column>
                 <el-table-column label="操作"  align="center">
@@ -21,10 +22,6 @@
                     </template>
                 </el-table-column>
             </el-table>
-            <div class="pagination">
-                <el-pagination background @current-change="handleCurrentChange" layout="prev, pager, next" :total="1000">
-                </el-pagination>
-            </div>
         </div>
 
         <!-- 弹出框 -->
@@ -40,7 +37,9 @@
                     <el-input v-model="form.xm"></el-input>
                 </el-form-item>
                 <el-form-item label="公司ID">
-                    <el-input v-model="form.gsid"></el-input>
+                    <el-select v-model="form.gsid" placeholder="请选择">
+                        <el-option v-for="item in this.$dict.company" :key="item.id" :label="item.name" :value="item.id"></el-option>
+                    </el-select>
                 </el-form-item>
                 <el-form-item label="创建时间">
                     <el-input v-model="form.cjsj"></el-input>
@@ -80,32 +79,15 @@
                 modelVisible: false,
                 delVisible: false,
                 form: {},
-                idx: -1
+                idx: -1,
+                dict: this.$dict
             }
         },
         created() {
             this.getData();
         },
         computed: {
-            data() {
-                return this.tableData.filter((d) => {
-                    let is_del = false;
-                    for (let i = 0; i < this.del_list.length; i++) {
-                        if (d.name === this.del_list[i].name) {
-                            is_del = true;
-                            break;
-                        }
-                    }
-                    if (!is_del) {
-                        if (d.address.indexOf(this.select_cate) > -1 &&
-                            (d.name.indexOf(this.select_word) > -1 ||
-                                d.address.indexOf(this.select_word) > -1)
-                        ) {
-                            return d;
-                        }
-                    }
-                })
-            }
+
         },
         methods: {
             // 分页导航
@@ -116,6 +98,9 @@
             // 获取 easy-mock 的模拟数据
             getData() {
                 this.$axios.post('/api/user/findAllByGsid').then((res) => {
+                    if(res.resCode == 200){
+                        this.tableData = res.data;
+                    }
                     console.log(111,res);
                 });
             },

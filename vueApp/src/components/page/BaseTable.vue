@@ -129,7 +129,7 @@
                 this.$axios.post(this.url, {
                     page: this.cur_page
                 }).then((res) => {
-                    this.tableData = res.data.list;
+                    this.tableData = res.list;
                 })
             },
             search() {

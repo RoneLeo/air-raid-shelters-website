@@ -45,16 +45,17 @@
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
                         let param = this.ruleForm;
-                        this.$axios.post('/api/user/login', {zh: param.username,mm: param.password}).then( (response) => {
-                            let data = this.$common.dataParse(response);
-                            localStorage.setItem('ms_username',data.xm);
-                            localStorage.setItem('uuid',data.uuid);
-                            this.$router.push('/');
-                        }).catch(function (error) {
-                            console.log(error);
+                        this.$axios.post('/api/user/login', {zh: param.username,mm: param.password}).then( (res) => {
+                            if(res.resCode == 200){
+                                let data = res.data;
+                                localStorage.setItem('ms_username',data.xm);
+                                localStorage.setItem('uuid',data.uuid);
+                                this.$router.push('/');
+                            }else{
+                                this.$message.error(res.resMsg);
+                            }
                         });
                     } else {
-                        console.log('error submit!!');
                         return false;
                     }
                 });

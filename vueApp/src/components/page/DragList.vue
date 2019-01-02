@@ -16,7 +16,7 @@
                     <draggable v-model="todo" @remove="removeHandle" :options="dragOptions">
                         <transition-group tag="div" id="todo" class="item-ul">
                             <div v-for="(item,key,index) in todo" class="drag-list" :key="key">
-                                {{item.content}} {{key}} {{index}}
+                                {{item.content}} | {{key}}
                             </div>
                         </transition-group>
                     </draggable>
