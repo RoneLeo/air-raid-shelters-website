@@ -39,12 +39,12 @@ public class FileController {
 
     @ApiOperation("添加")
     @RequestMapping("/add")
-    public ApiResult<Object> add(String uuid, HttpServletRequest request, FileEntity entity, MultipartFile file) throws IOException {
-//        String uuid = userController.getUuid(request);
-//        // 判断是否登录
-//        if ("".equals(uuid)) {
-//            return ApiResult.UNKNOWN();
-//        }
+    public ApiResult<Object> add(HttpServletRequest request, FileEntity entity, MultipartFile file) throws IOException {
+        String uuid = userController.getUuid(request);
+        // 判断是否登录
+        if ("".equals(uuid)) {
+            return ApiResult.UNKNOWN();
+        }
         if (entity.getWjlx() == null) {
             return ApiResult.FAILURE("添加失败，文件类型不能为空");
         }
