@@ -6,7 +6,6 @@ import com.chiy.rfgc.repository.CompanyRepository;
 import com.chiy.rfgc.repository.EquipmentRepository;
 import com.chiy.rfgc.repository.EquipmentTypeRepository;
 import com.chiy.rfgc.repository.UserRepository;
-import com.chiy.rfgc.utils.StringUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -32,8 +31,6 @@ public class EquipmentController {
     @Resource
     private UserRepository userRepository;
     @Resource
-    private CompanyRepository companyRepository;
-    @Resource
     private EquipmentTypeRepository equipmentTypeRepository;
     @Resource
     private UserController userController;
@@ -53,13 +50,10 @@ public class EquipmentController {
                                  @ApiParam(value = "性能图片") MultipartFile xntp1,
                                  @ApiParam(value = "分类图片") MultipartFile fltp1,
                                  HttpServletRequest request) {
+        String uuid = userController.getUuid(request);
         // 判断是否登录
-        if (userController.judgeNotLogin(request)) {
-            return ApiResult.FAILURE("未登录");
-        }
-        // 判断公司id不能为空，是否存在
-        if (entity.getGsid() == null || companyRepository.findById(entity.getGsid()) == null) {
-            return ApiResult.FAILURE("添加失败，公司id不能为空或该公司id不存在");
+        if ("".equals(uuid)) {
+            return ApiResult.UNKNOWN();
         }
         // 判断设备类型
         if (entity.getSblx() == null || equipmentTypeRepository.findById(entity.getSblx()) == null) {
@@ -92,6 +86,7 @@ public class EquipmentController {
         if (fltp1 != null) {
             entity.setFltp(EQUIPMENT_PHOTO_PATH + fltp1.getOriginalFilename());
         }
+        entity.setGsid(userRepository.findByUuid(uuid).getGsid());
         entity.setCjsj(new Date());
         EquipmentEntity entity1 = equipmentRepository.save(entity);
         if (entity1 == null) {
@@ -112,13 +107,10 @@ public class EquipmentController {
                                     @ApiParam(value = "安装与使用图片") MultipartFile azysytp1,
                                     @ApiParam(value = "性能图片") MultipartFile xntp1,
                                     @ApiParam(value = "分类图片") MultipartFile fltp1) {
+        String uuid = userController.getUuid(request);
         // 判断是否登录
-        if (userController.judgeNotLogin(request)) {
-            return ApiResult.FAILURE("未登录");
-        }
-        // 判断公司id不能为空，是否存在
-        if (entity.getGsid() == null || companyRepository.findById(entity.getGsid()) == null) {
-            return ApiResult.FAILURE("添加失败，公司id不能为空或该公司id不存在");
+        if ("".equals(uuid)) {
+            return ApiResult.UNKNOWN();
         }
         // 判断设备类型
         if (entity.getSblx() == null || equipmentTypeRepository.findById(entity.getSblx()) == null) {
@@ -161,9 +153,10 @@ public class EquipmentController {
     @ApiOperation("删除")
     @RequestMapping("/delete")
     public ApiResult<Object> delete(HttpServletRequest request, Integer id) {
+        String uuid = userController.getUuid(request);
         // 判断是否登录
-        if (userController.judgeNotLogin(request)) {
-            return ApiResult.FAILURE("未登录");
+        if ("".equals(uuid)) {
+            return ApiResult.UNKNOWN();
         }
         if (id == null) {
             return ApiResult.FAILURE("id不能为空");
@@ -182,13 +175,14 @@ public class EquipmentController {
     @ApiOperation("通过公司id查询分页显示")
     @RequestMapping("/findAllByGsidByPage")
     public ApiResult<Object> findAllByGsidByPage(HttpServletRequest request, int page, int size) {
+        String uuid = userController.getUuid(request);
         // 判断是否登录
-        if (userController.judgeNotLogin(request)) {
-            return ApiResult.FAILURE("未登录");
+        if ("".equals(uuid)) {
+            return ApiResult.UNKNOWN();
         }
         Pageable pageable = PageRequest.of(page - 1, size);
 
-        Page<EquipmentEntity> list = equipmentRepository.findAllByGsidOrderByCjsjDesc(userRepository.findByUuid(request.getHeader("uuid")).getGsid(), pageable);
+        Page<EquipmentEntity> list = equipmentRepository.findAllByGsidOrderByCjsjDesc(userRepository.findByUuid(uuid).getGsid(), pageable);
 
         return ApiResult.SUCCESS(list);
 
