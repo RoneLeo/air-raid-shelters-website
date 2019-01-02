@@ -47,6 +47,18 @@ public class NetServiceController {
         return ApiResult.SUCCESS(entity1);
     }
 
+    @ApiOperation(value = "前端添加接口")
+    @RequestMapping("/addFront")
+    public ApiResult<Object> addFront(Integer gsid, NetserviceEntity entity) {
+        entity.setGsid(gsid);
+        entity.setCjsj(new Date());
+        NetserviceEntity entity1 = netServiceRepository.save(entity);
+        if (entity1 == null) {
+            return ApiResult.FAILURE("添加失败");
+        }
+        return ApiResult.SUCCESS(entity1);
+    }
+
     @ApiOperation("修改")
     @RequestMapping("/update")
     public ApiResult<Object> update(HttpServletRequest request, NetserviceEntity entity) {
