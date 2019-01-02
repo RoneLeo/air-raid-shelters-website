@@ -1,22 +1,22 @@
 <template>
     <div class="login-wrap">
         <div class="ms-login">
-            <div class="ms-title">后台管理系统</div>
+            <div class="ms-title">人防门户网站管理系统</div>
             <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="0px" class="ms-content">
                 <el-form-item prop="username">
-                    <el-input v-model="ruleForm.username" placeholder="username">
+                    <el-input v-model="ruleForm.username" placeholder="用户名">
                         <el-button slot="prepend" icon="el-icon-lx-people"></el-button>
                     </el-input>
                 </el-form-item>
                 <el-form-item prop="password">
-                    <el-input type="password" placeholder="password" v-model="ruleForm.password" @keyup.enter.native="submitForm('ruleForm')">
+                    <el-input type="password" placeholder="密码" v-model="ruleForm.password" @keyup.enter.native="submitForm('ruleForm')">
                         <el-button slot="prepend" icon="el-icon-lx-lock"></el-button>
                     </el-input>
                 </el-form-item>
                 <div class="login-btn">
                     <el-button type="primary" @click="submitForm('ruleForm')">登录</el-button>
                 </div>
-                <p class="login-tips">Tips : 用户名和密码随便填。</p>
+                <p class="login-tips">Tips : 请输入正确的用户名和密码。</p>
             </el-form>
         </div>
     </div>
@@ -28,7 +28,7 @@
             return {
                 ruleForm: {
                     username: 'admin',
-                    password: '123123'
+                    password: '123456'
                 },
                 rules: {
                     username: [
@@ -44,10 +44,18 @@
             submitForm(formName) {
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
-                        localStorage.setItem('ms_username',this.ruleForm.username);
-                        this.$router.push('/');
+                        let param = this.ruleForm;
+                        this.$axios.post('/api/user/login', {zh: param.username,mm: param.password}).then( (res) => {
+                            if(res.resCode == 200){
+                                let data = res.data;
+                                localStorage.setItem('ms_username',data.xm);
+                                localStorage.setItem('uuid',data.uuid);
+                                this.$router.push('/');
+                            }else{
+                                this.$message.error(res.resMsg);
+                            }
+                        });
                     } else {
-                        console.log('error submit!!');
                         return false;
                     }
                 });
@@ -56,12 +64,12 @@
     }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
     .login-wrap{
         position: relative;
         width:100%;
         height:100%;
-        background-image: url(../../assets/login-bg.jpg);
+        background-image: url('/static/img/login-bg.jpg');
         background-size: 100%;
     }
     .ms-title{
@@ -76,14 +84,14 @@
         position: absolute;
         left:50%;
         top:50%;
-        width:350px;
+        width:400px;
         margin:-190px 0 0 -175px;
         border-radius: 5px;
-        background: rgba(255,255,255, 0.3);
+        background: rgba(0,0,0, 0.3);
         overflow: hidden;
     }
     .ms-content{
-        padding: 30px 30px;
+        padding: 40px;
     }
     .login-btn{
         text-align: center;

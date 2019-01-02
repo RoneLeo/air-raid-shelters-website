@@ -15,8 +15,8 @@
                     <div class="item-title">todo</div>
                     <draggable v-model="todo" @remove="removeHandle" :options="dragOptions">
                         <transition-group tag="div" id="todo" class="item-ul">
-                            <div v-for="(item,index) in todo" class="drag-list" :key="index">
-                                {{item.content}}
+                            <div v-for="(item,key,index) in todo" class="drag-list" :key="key">
+                                {{item.content}} | {{key}}
                             </div>
                         </transition-group>
                     </draggable>
@@ -25,7 +25,7 @@
                     <div class="item-title">doing</div>
                     <draggable v-model="doing" @remove="removeHandle" :options="dragOptions">
                         <transition-group tag="div" id="doing" class="item-ul">
-                            <div v-for="(item,index) in doing" class="drag-list" :key="index">
+                            <div v-for="(item,key,index) in doing" class="drag-list" :key="key">
                                 {{item.content}}
                             </div>
                         </transition-group>
@@ -35,7 +35,7 @@
                     <div class="item-title">done</div>
                     <draggable v-model="done" @remove="removeHandle" :options="dragOptions">
                         <transition-group tag="div" id="done" class="item-ul">
-                            <div v-for="(item,index) in done" class="drag-list" :key="index">
+                            <div v-for="(item,key,index) in done" class="drag-list" :key="key">
                                 {{item.content}}
                             </div>
                         </transition-group>
