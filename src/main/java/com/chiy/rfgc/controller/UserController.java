@@ -2,7 +2,6 @@ package com.chiy.rfgc.controller;
 
 import com.chiy.rfgc.common.ApiResult;
 import com.chiy.rfgc.entity.UserEntity;
-import com.chiy.rfgc.repository.CompanyRepository;
 import com.chiy.rfgc.repository.UserRepository;
 import com.chiy.rfgc.utils.MD5Utils;
 import com.chiy.rfgc.utils.StringUtils;

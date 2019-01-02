@@ -2,7 +2,6 @@ package com.chiy.rfgc.controller;
 
 import com.chiy.rfgc.common.ApiResult;
 import com.chiy.rfgc.entity.FileEntity;
-import com.chiy.rfgc.repository.CompanyRepository;
 import com.chiy.rfgc.repository.FileRepository;
 import com.chiy.rfgc.repository.UserRepository;
 import io.swagger.annotations.Api;
@@ -19,6 +18,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.io.File;
+import java.io.IOException;
 import java.util.Date;
 
 @Api(description = "文件管理")
@@ -38,7 +39,7 @@ public class FileController {
 
     @ApiOperation("添加")
     @RequestMapping("/add")
-    public ApiResult<Object> add(HttpServletRequest request, FileEntity entity, MultipartFile file) {
+    public ApiResult<Object> add(HttpServletRequest request, FileEntity entity, MultipartFile file) throws IOException {
         String uuid = userController.getUuid(request);
         // 判断是否登录
         if ("".equals(uuid)) {
@@ -57,8 +58,15 @@ public class FileController {
         } else {
             wjlj = PHOTO_PATH;
         }
+        String path = request.getSession().getServletContext().getRealPath(wjlj);
+        File dest = new File(path + file.getOriginalFilename());
+        if(!dest.getParentFile().exists()){
+            dest.getParentFile().mkdir();
+        }
+        file.transferTo(dest);
+
         entity.setGsid(userRepository.findByUuid(uuid).getGsid());
-        entity.setWjlj(wjlj + file.getOriginalFilename());
+        entity.setWjlj(path + file.getOriginalFilename());
         entity.setCjsj(new Date());
         FileEntity entity1 = fileRepository.save(entity);
         if (entity1 == null) {
@@ -108,43 +116,4 @@ public class FileController {
 
     }
 
-
-
-
-
-
-
-
-    /**
-     * 添加文件
-     */
-//    public FileEntity addFile(HttpServletRequest request, MultipartFile file, Integer wjlx, Integer gsid) {
-//        String fileName = file.getOriginalFilename();
-//        String realPath = "";
-//        if (wjlx == 1) {
-//            realPath = CERTIFICATE_PATH;
-//        } else {
-//            realPath = PHOTO_PATH;
-//        }
-//        String path = request.getSession().getServletContext().getRealPath(realPath);
-//        File dest = new File(path + fileName);
-//        if (!dest.getParentFile().exists()) {
-//            dest.getParentFile().mkdir();
-//        }
-//        FileEntity entity = new FileEntity();
-//        try {
-//            file.transferTo(dest);
-//            entity.setGsid(gsid);
-//            entity.setWjlx(wjlx);
-//            entity.setWjmc(fileName);
-//            entity.setWjlj(path + fileName);
-//            entity.setCjsj(new Date());
-//            fileRepository.save(entity);
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//
-//        return entity;
-//
-//    }
 }
