@@ -4,7 +4,7 @@
     "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
 <hibernate-configuration>
   <session-factory>
-    <property name="connection.url">jdbc:mysql://47.92.212.61:3306/rfgc</property>
+    <property name="connection.url">jdbc:mysql://182.151.22.247:3306/rfgc</property>
     <property name="connection.driver_class">com.mysql.jdbc.Driver</property>
       <mapping class="com.chiy.rfgc.entity.ContactusEntity"/>
       <mapping class="com.chiy.rfgc.entity.NetserviceEntity"/>
@@ -16,6 +16,7 @@
       <mapping class="com.chiy.rfgc.entity.ProjectcaseEntity"/>
       <mapping class="com.chiy.rfgc.entity.CompanyEntity"/>
       <mapping class="com.chiy.rfgc.entity.EquipmenttypeEntity"/>
+      <mapping class="com.chiy.rfgc.entity.ProductdetailsEntity"/>
       <!-- <property name="connection.username"/> -->
     <!-- <property name="connection.password"/> -->
 
