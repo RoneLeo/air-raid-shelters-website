@@ -16,7 +16,7 @@ public class UEditorController {
     @RequestMapping(value = "/exec")
     public String exec(HttpServletRequest request) throws UnsupportedEncodingException {
         request.setCharacterEncoding("utf-8");
-        String rootPath = request.getRealPath("/");
+        String rootPath = request.getSession().getServletContext().getRealPath("/");
         return new ActionEnter( request, rootPath).exec();
     }
 }
