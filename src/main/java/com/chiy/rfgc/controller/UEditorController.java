@@ -1,22 +1,31 @@
 package com.chiy.rfgc.controller;
-
-import com.chiy.rfgc.baidu.ueditor.ActionEnter;
-import org.springframework.web.bind.annotation.CrossOrigin;
+import com.baidu.ueditor.ActionEnter;
+import org.json.JSONException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-
 import javax.servlet.http.HttpServletRequest;
-import java.io.UnsupportedEncodingException;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.PrintWriter;
 
 @RestController
-@CrossOrigin
-@RequestMapping(value = "/sys/ueditor", method={RequestMethod.GET, RequestMethod.POST})
 public class UEditorController {
-    @RequestMapping(value = "/exec")
-    public String exec(HttpServletRequest request) throws UnsupportedEncodingException {
-        request.setCharacterEncoding("utf-8");
-        String rootPath = request.getSession().getServletContext().getRealPath("/");
-        return new ActionEnter( request, rootPath).exec();
+    @Autowired
+    private HttpServletRequest request;
+
+    @RequestMapping("/ueditorConfig")
+    public void getUEditorConfig(HttpServletResponse response) {
+        String rootPath = "src/main/resources/static";
+        try {
+            String exec = new ActionEnter(request, rootPath).exec();
+            PrintWriter writer = response.getWriter();
+            writer.write(exec);
+            writer.flush();
+            writer.close();
+        } catch (IOException | JSONException e) {
+            e.printStackTrace();
+        }
     }
+
 }
