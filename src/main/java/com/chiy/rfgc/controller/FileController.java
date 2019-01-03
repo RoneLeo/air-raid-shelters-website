@@ -99,12 +99,12 @@ public class FileController {
 
     @ApiOperation("通过公司id查询分页显示")
     @RequestMapping("/findAllByGsidByPage")
-    public ApiResult<Object> findAllByGsidByPage(String uuid, HttpServletRequest request, @RequestParam @ApiParam(value = "1-证书， 2-图片") Integer wjlx, int page, int size) {
-//        String uuid = userController.getUuid(request);
-//        // 判断是否登录
-//        if ("".equals(uuid)) {
-//            return ApiResult.UNKNOWN();
-//        }
+    public ApiResult<Object> findAllByGsidByPage(HttpServletRequest request, @RequestParam @ApiParam(value = "1-证书， 2-图片") Integer wjlx, int page, int size) {
+        String uuid = userController.getUuid(request);
+        // 判断是否登录
+        if ("".equals(uuid)) {
+            return ApiResult.UNKNOWN();
+        }
         if (wjlx == null) {
             return ApiResult.FAILURE("文件类型不能为空");
         }
@@ -114,6 +114,19 @@ public class FileController {
 
         return ApiResult.SUCCESS(list);
 
+    }
+
+    @ApiOperation("前端显示公司信息")
+    @RequestMapping("/findAllByGsid")
+    public ApiResult<Object> findAllByGsid(Integer gsid, Integer wjlx, int page, int size) {
+        if (wjlx == null) {
+            return ApiResult.FAILURE("文件类型不能为空");
+        }
+        Pageable pageable = PageRequest.of(page - 1, size);
+
+        Page<FileEntity> list = fileRepository.findAllByGsidAndWjlxOrderByCjsjDesc(gsid, wjlx, pageable);
+
+        return ApiResult.SUCCESS(list);
     }
 
 }

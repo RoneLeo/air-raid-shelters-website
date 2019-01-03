@@ -104,4 +104,14 @@ public class ProjectCaseController {
         return ApiResult.SUCCESS(list);
 
     }
+
+    @ApiOperation("前端显示公司信息")
+    @RequestMapping("/findAllByGsid")
+    public ApiResult<Object> findAllByGsid(Integer gsid, int page, int size) {
+        Pageable pageable = PageRequest.of(page - 1, size);
+
+        Page<ProjectcaseEntity> list = projectCaseRepository.findAllByGsidOrderByCjsjDesc(gsid, pageable);
+
+        return ApiResult.SUCCESS(list);
+    }
 }
