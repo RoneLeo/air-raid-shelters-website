@@ -39,17 +39,7 @@ public class EquipmentController {
 
     @ApiOperation(value = "添加")
     @RequestMapping("/add")
-    public ApiResult<Object> add(EquipmentEntity entity,
-                                 @ApiParam(value = "产品特点图片") MultipartFile cptdtp1,
-                                 @ApiParam(value = "适用范围图片") MultipartFile syfwtp1,
-                                 @ApiParam(value = "主要技术参数图片") MultipartFile zyjscstp1,
-                                 @ApiParam(value = "单位图片") MultipartFile dwtp1,
-                                 @ApiParam(value = "预留备用穿墙管间距尺寸表图片") MultipartFile ylbtp1,
-                                 @ApiParam(value = "说明图片") MultipartFile smtp1,
-                                 @ApiParam(value = "安装与使用图片") MultipartFile azysytp1,
-                                 @ApiParam(value = "性能图片") MultipartFile xntp1,
-                                 @ApiParam(value = "分类图片") MultipartFile fltp1,
-                                 HttpServletRequest request) {
+    public ApiResult<Object> add(EquipmentEntity entity, HttpServletRequest request) {
         String uuid = userController.getUuid(request);
         // 判断是否登录
         if ("".equals(uuid)) {
@@ -59,33 +49,33 @@ public class EquipmentController {
         if (entity.getSblx() == null || equipmentTypeRepository.findById(entity.getSblx()) == null) {
             return ApiResult.FAILURE("添加失败，设备类型不能为空或该设备类型不存在");
         }
-        if (cptdtp1 != null) {
-            entity.setCptdtp(EQUIPMENT_PHOTO_PATH + cptdtp1.getOriginalFilename());
-        }
-        if (syfwtp1 != null) {
-            entity.setSyfwtp(EQUIPMENT_PHOTO_PATH + syfwtp1.getOriginalFilename());
-        }
-        if (zyjscstp1 != null) {
-            entity.setZyjscstp(EQUIPMENT_PHOTO_PATH + zyjscstp1.getOriginalFilename());
-        }
-        if (dwtp1 != null) {
-            entity.setDwtp(EQUIPMENT_PHOTO_PATH + dwtp1.getOriginalFilename());
-        }
-        if (ylbtp1 != null) {
-            entity.setYlbtp(EQUIPMENT_PHOTO_PATH + ylbtp1.getOriginalFilename());
-        }
-        if (smtp1 != null) {
-            entity.setSmtp(EQUIPMENT_PHOTO_PATH + smtp1.getOriginalFilename());
-        }
-        if (azysytp1 != null) {
-            entity.setAzysytp(EQUIPMENT_PHOTO_PATH + azysytp1.getOriginalFilename());
-        }
-        if (xntp1 != null) {
-            entity.setXntp(EQUIPMENT_PHOTO_PATH + xntp1.getOriginalFilename());
-        }
-        if (fltp1 != null) {
-            entity.setFltp(EQUIPMENT_PHOTO_PATH + fltp1.getOriginalFilename());
-        }
+//        if (cptdtp1 != null) {
+//            entity.setCptdtp(EQUIPMENT_PHOTO_PATH + cptdtp1.getOriginalFilename());
+//        }
+//        if (syfwtp1 != null) {
+//            entity.setSyfwtp(EQUIPMENT_PHOTO_PATH + syfwtp1.getOriginalFilename());
+//        }
+//        if (zyjscstp1 != null) {
+//            entity.setZyjscstp(EQUIPMENT_PHOTO_PATH + zyjscstp1.getOriginalFilename());
+//        }
+//        if (dwtp1 != null) {
+//            entity.setDwtp(EQUIPMENT_PHOTO_PATH + dwtp1.getOriginalFilename());
+//        }
+//        if (ylbtp1 != null) {
+//            entity.setYlbtp(EQUIPMENT_PHOTO_PATH + ylbtp1.getOriginalFilename());
+//        }
+//        if (smtp1 != null) {
+//            entity.setSmtp(EQUIPMENT_PHOTO_PATH + smtp1.getOriginalFilename());
+//        }
+//        if (azysytp1 != null) {
+//            entity.setAzysytp(EQUIPMENT_PHOTO_PATH + azysytp1.getOriginalFilename());
+//        }
+//        if (xntp1 != null) {
+//            entity.setXntp(EQUIPMENT_PHOTO_PATH + xntp1.getOriginalFilename());
+//        }
+//        if (fltp1 != null) {
+//            entity.setFltp(EQUIPMENT_PHOTO_PATH + fltp1.getOriginalFilename());
+//        }
         entity.setGsid(userRepository.findByUuid(uuid).getGsid());
         entity.setCjsj(new Date());
         EquipmentEntity entity1 = equipmentRepository.save(entity);
@@ -97,16 +87,7 @@ public class EquipmentController {
 
     @ApiOperation("修改")
     @RequestMapping("/update")
-    public ApiResult<Object> update(HttpServletRequest request, EquipmentEntity entity,
-                                    @ApiParam(value = "产品特点图片") MultipartFile cptdtp1,
-                                    @ApiParam(value = "适用范围图片") MultipartFile syfwtp1,
-                                    @ApiParam(value = "主要技术参数图片") MultipartFile zyjscstp1,
-                                    @ApiParam(value = "单位图片") MultipartFile dwtp1,
-                                    @ApiParam(value = "预留备用穿墙管间距尺寸表图片") MultipartFile ylbtp1,
-                                    @ApiParam(value = "说明图片") MultipartFile smtp1,
-                                    @ApiParam(value = "安装与使用图片") MultipartFile azysytp1,
-                                    @ApiParam(value = "性能图片") MultipartFile xntp1,
-                                    @ApiParam(value = "分类图片") MultipartFile fltp1) {
+    public ApiResult<Object> update(HttpServletRequest request, EquipmentEntity entity) {
         String uuid = userController.getUuid(request);
         // 判断是否登录
         if ("".equals(uuid)) {
@@ -116,33 +97,33 @@ public class EquipmentController {
         if (entity.getSblx() == null || equipmentTypeRepository.findById(entity.getSblx()) == null) {
             return ApiResult.FAILURE("修改失败，设备类型不能为空或该设备类型不存在");
         }
-        if (cptdtp1 != null) {
-            entity.setCptdtp(EQUIPMENT_PHOTO_PATH + cptdtp1.getOriginalFilename());
-        }
-        if (syfwtp1 != null) {
-            entity.setSyfwtp(EQUIPMENT_PHOTO_PATH + syfwtp1.getOriginalFilename());
-        }
-        if (zyjscstp1 != null) {
-            entity.setZyjscstp(EQUIPMENT_PHOTO_PATH + zyjscstp1.getOriginalFilename());
-        }
-        if (dwtp1 != null) {
-            entity.setDwtp(EQUIPMENT_PHOTO_PATH + dwtp1.getOriginalFilename());
-        }
-        if (ylbtp1 != null) {
-            entity.setYlbtp(EQUIPMENT_PHOTO_PATH + ylbtp1.getOriginalFilename());
-        }
-        if (smtp1 != null) {
-            entity.setSmtp(EQUIPMENT_PHOTO_PATH + smtp1.getOriginalFilename());
-        }
-        if (azysytp1 != null) {
-            entity.setAzysytp(EQUIPMENT_PHOTO_PATH + azysytp1.getOriginalFilename());
-        }
-        if (xntp1 != null) {
-            entity.setXntp(EQUIPMENT_PHOTO_PATH + xntp1.getOriginalFilename());
-        }
-        if (fltp1 != null) {
-            entity.setFltp(EQUIPMENT_PHOTO_PATH + fltp1.getOriginalFilename());
-        }
+//        if (cptdtp1 != null) {
+//            entity.setCptdtp(EQUIPMENT_PHOTO_PATH + cptdtp1.getOriginalFilename());
+//        }
+//        if (syfwtp1 != null) {
+//            entity.setSyfwtp(EQUIPMENT_PHOTO_PATH + syfwtp1.getOriginalFilename());
+//        }
+//        if (zyjscstp1 != null) {
+//            entity.setZyjscstp(EQUIPMENT_PHOTO_PATH + zyjscstp1.getOriginalFilename());
+//        }
+//        if (dwtp1 != null) {
+//            entity.setDwtp(EQUIPMENT_PHOTO_PATH + dwtp1.getOriginalFilename());
+//        }
+//        if (ylbtp1 != null) {
+//            entity.setYlbtp(EQUIPMENT_PHOTO_PATH + ylbtp1.getOriginalFilename());
+//        }
+//        if (smtp1 != null) {
+//            entity.setSmtp(EQUIPMENT_PHOTO_PATH + smtp1.getOriginalFilename());
+//        }
+//        if (azysytp1 != null) {
+//            entity.setAzysytp(EQUIPMENT_PHOTO_PATH + azysytp1.getOriginalFilename());
+//        }
+//        if (xntp1 != null) {
+//            entity.setXntp(EQUIPMENT_PHOTO_PATH + xntp1.getOriginalFilename());
+//        }
+//        if (fltp1 != null) {
+//            entity.setFltp(EQUIPMENT_PHOTO_PATH + fltp1.getOriginalFilename());
+//        }
         EquipmentEntity entity1 = equipmentRepository.save(entity);
         if (entity1 == null) {
             return ApiResult.FAILURE("修改失败");
