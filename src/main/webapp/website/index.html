@@ -16,6 +16,12 @@
     <!--<![endif]-->
     <script src="js/amazeui.min.js"></script>
     <script src="js/common.js?v=1.0"></script>
+    <script>
+        $(function () {
+            createBaner();
+        })
+    </script>
+
 </head>
 <body>
 <!--[if lte IE 9]>
@@ -38,28 +44,8 @@
 </div>
 <div id="main">
     <div class="banner c">
-        <div data-am-widget="slider" class="am-slider am-slider-a1" data-am-slider='{"directionNav":false,}'>
-            <ul class="am-slides">
-                <li>
-                    <div class="banner_li c"
-                         style="background: url('http://www.ytrsrf.com/uploadfile/2017/0523/20170523041952661.jpg') no-repeat center;"></div>
-                </li>
-                <li>
-                    <div class="banner_li c"
-                         style="background: url('http://www.ytrsrf.com/uploadfile/2017/0331/20170331014308236.jpg') no-repeat center;"></div>
-                </li>
-                <li>
-                    <div class="banner_li c"
-                         style="background: url('http://www.ytrsrf.com/uploadfile/2017/0331/20170331013618319.jpg') no-repeat center;"></div>
-                </li>
-                <li>
-                    <div class="banner_li c" style="background: url('img/banner-rf.jpg') no-repeat center;">
-                        <div class="banner_li_txt">
-                            四川鑫旺人防设备有限公司
-                        </div>
-                    </div>
-                </li>
-            </ul>
+        <div id="bannerBox" data-am-widget="slider" class="am-slider am-slider-a1" data-am-slider='{"directionNav":false,}'>
+            <ul class="am-slides" id="bannerList"></ul>
         </div>
     </div>
     <div class="product c">
@@ -340,15 +326,7 @@
         </div>
     </div>
 </div>
-
 <!--底部通过模板引入-->
 <div id="foot"></div>
-
-
-<script>
-    $(function () {
-        $('#foot').load('template/footer.html');
-    });
-</script>
 </body>
 </html>
