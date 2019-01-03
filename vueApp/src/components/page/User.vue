@@ -6,7 +6,7 @@
             </el-breadcrumb>
         </div>
         <div class="handle-box">
-            <el-button type="primary" @click="add">添加用户</el-button>
+
         </div>
         <div class="container">
             <el-table :data="tableData" class="table" ref="multipleTable" @selection-change="handleSelectionChange">
@@ -22,10 +22,14 @@
                     </template>
                 </el-table-column>
             </el-table>
+            <div style="padding: 20px 8px">
+                <el-button type="primary" @click="add">添加用户</el-button>
+            </div>
         </div>
 
         <!-- 弹出框 -->
-        <el-dialog :title="modelTitle" :visible.sync="modelVisible" width="40%">
+        <el-dialog :title="modelTitle" :visible.sync="modelVisible" width="40%"
+                   :close-on-click-modal="false" @closed="modelClose(form)">
             <el-form ref="form" :model="form" label-width="100px">
                 <el-form-item label="账号">
                     <el-input v-model="form.zh"></el-input>
@@ -90,6 +94,9 @@
 
         },
         methods: {
+            modelClose(form) {
+                this.$refs[form].resetFields();
+            },
             // 分页导航
             handleCurrentChange(val) {
                 this.cur_page = val;
@@ -126,8 +133,6 @@
                     address: item.address
                 }
                 this.modelVisible = true;
-
-
             },
             handleDelete(index, row) {
                 this.idx = index;
