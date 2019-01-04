@@ -38,7 +38,7 @@
 
         <!-- 弹出框 -->
         <el-dialog :title="modelTitle" :visible.sync="modelVisible" width="40%"
-                   :close-on-click-modal="false" @closed="modelClose(form)">
+                   :close-on-click-modal="false" @closed="modelClose">
             <el-form ref="form" :model="form" label-width="100px">
                 <el-form-item label="招聘岗位"
                               prop="zpgw"
@@ -70,7 +70,6 @@
                               style="width: 92%">
                     <el-input v-model="form.xxsm" type="textarea" :autosize="{ minRows: 2, maxRows: 10}"></el-input>
                 </el-form-item>
-
             </el-form>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="modelVisible = false">取 消</el-button>
@@ -120,8 +119,8 @@
 
         },
         methods: {
-            modelClose(form) {
-                this.form = {}
+            modelClose() {
+                this.form = {};
                 this.$refs[form].resetFields();
             },
             // 分页导航
@@ -175,8 +174,6 @@
                 let url = '/api/recruitment/add';
                 if(this.form.id) {
                     url = '/api/recruitment/update'
-                    this.form.gsid = '';
-                    this.form.cjsj = '';
                 }
                 this.$axios.post(url, this.$qs.stringify(Object.assign({},this.form))).then(res => {
 //                    this.addLoading = false

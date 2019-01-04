@@ -47,6 +47,16 @@ export default new Router({
                     meta: { title: '录入产品' }
                 },
                 {
+                    path: '/news',
+                    component: resolve => require(['../components/page/News.vue'], resolve),
+                    meta: { title: '新闻管理' }
+                },
+                {
+                    path: '/projectCase',
+                    component: resolve => require(['../components/page/ProjectCase.vue'], resolve),
+                    meta: { title: '工程案例' }
+                },
+                {
                     path: '/recruitment',
                     component: resolve => require(['../components/page/Recruitment.vue'], resolve),
                     meta: { title: '招聘信息管理' }
@@ -55,6 +65,11 @@ export default new Router({
                     path: '/services',
                     component: resolve => require(['../components/page/Services.vue'], resolve),
                     meta: { title: '网上订购列表' }
+                },
+                {
+                    path: '/company',
+                    component: resolve => require(['../components/page/Company.vue'], resolve),
+                    meta: { title: '公司信息' }
                 },
                 {
                     path: '/icon',

@@ -2,25 +2,29 @@
     <div class="table">
         <div class="crumbs">
             <el-breadcrumb separator="/">
-                <el-breadcrumb-item><i class="el-icon-lx-cascades"></i> 产品管理</el-breadcrumb-item>
+                <el-breadcrumb-item><i class="el-icon-lx-cascades"></i> 工程案例</el-breadcrumb-item>
             </el-breadcrumb>
         </div>
         <div class="container" v-loading="loading">
             <el-table :data="tableData" class="table" ref="multipleTable">
-                <el-table-column prop="cpmc" label="产品名称"></el-table-column>
-                <el-table-column prop="sblx" label="产品类型" :formatter="formatterSBLX"></el-table-column>
+                <el-table-column prop="gcmc" label="工程名称"></el-table-column>
+                <el-table-column label="展示图片">
+                    <template slot-scope="scope">
+                        <a target="_blank" :href='`http://182.151.22.247:8081${scope.row.tp}`'>{{scope.row.tp}}</a>
+                    </template>
+                </el-table-column>
                 <el-table-column prop="cjsj" label="创建时间"></el-table-column>
                 <el-table-column label="操作" align="center">
                     <template slot-scope="scope">
-                        <el-button type="text" icon="el-icon-lx-attention" @click="lookFile(scope.$index, scope.row)">点击查看
-                        </el-button>
-                        <el-button type="text" icon="el-icon-delete" class="red" @click="delFile(scope.$index, scope.row)">删除
-                        </el-button>
+                        <!--<el-button type="text" icon="el-icon-lx-edit"-->
+                                   <!--@click="editFile(scope.$index, scope.row)">编辑-->
+                        <!--</el-button>-->
+                        <el-button type="text" icon="el-icon-delete" class="red" @click="delFile(scope.$index, scope.row)">删除</el-button>
                     </template>
                 </el-table-column>
             </el-table>
             <div style="padding: 28px 8px">
-                <!--<el-button type="primary" @click="add" style="float: left">上传文件</el-button>-->
+                <el-button type="primary" @click="add" style="float: left">上传工程案例</el-button>
                 <el-pagination
                         style="float: right;"
                         @current-change="handleCurrentChange"
@@ -36,21 +40,14 @@
         <el-dialog :title="modelTitle" :visible.sync="modelVisible" width="40%"
                    :close-on-click-modal="false" @closed="modelClose(addForm)">
             <el-form :ref="addForm" :model="addForm" label-width="100px">
-                <el-form-item label="文件名称"
-                              prop="wjmc"
-                              :rules="[{ required: true, message: '文件名称不能为空', trigger: 'blur' }]">
-                    <el-input v-model="addForm.wjmc"></el-input>
+                <el-form-item label="工程名称"
+                              prop="gcmc"
+                              :rules="[{ required: true, message: '工程名称不能为空', trigger: 'blur' }]">
+                    <el-input v-model="addForm.gcmc"></el-input>
                 </el-form-item>
-                <el-form-item label="文件类型"
-                              prop="wjlx"
-                              :rules="[{ required: true, message: '文件类型不能为空', trigger: 'blur' }]">
-                    <el-select v-model="addForm.wjlx" placeholder="请选择文件类型">
-                        <el-option v-for="item in this.$dict.fileType" :key="item.id+Math.random()" :label="item.name" :value="item.id"></el-option>
-                    </el-select>
-                </el-form-item>
-                <el-form-item label="文件"
+                <el-form-item label="展示图片"
                               prop="file"
-                              :rules="[{ required: true, message: '文件不能为空', trigger: 'blur' }]">
+                              :rules="[{ required: true, message: '展示图片为空', trigger: 'blur' }]">
                     <input type="file" @change="getFile($event)" />
                 </el-form-item>
             </el-form>
@@ -68,7 +65,7 @@
         name: 'basetable',
         data() {
             return {
-                modelTitle: '添加文件',
+                modelTitle: '工程案例详情',
                 tableData: [],
                 modelVisible: false,
                 addForm: {},
@@ -80,13 +77,6 @@
                 addLoading: false,
                 equipmentType: []
             }
-        },
-        mounted () {
-            this.$axios.post('/api/equipmentType/findAll').then((res) => {
-                let data = res.data;
-
-                this.equipmentType = data;
-            });
         },
         created() {
             this.getData();
@@ -105,8 +95,9 @@
             formatterWjlx(row) {
                 return this.$common.dictParse(row.wjlx, this.$dict.fileType);
             },
-            lookFile(index, row) {
-                window.open('http://182.151.22.247:8081' + row.wjlj);
+            editFile(index, row) {
+                this.addForm = Object.assign({}, row);
+                this.modelVisible = true;
             },
             modelClose(addForm) {
                 this.$refs[addForm].resetFields();
@@ -123,7 +114,7 @@
             // 获取 easy-mock 的模拟数据
             getData() {
                 this.loading = true;
-                this.$axios.post('/api/equipment/findAllByGsidByPage', this.$qs.stringify({ page: this.page, size: this.size})).then((res) => {
+                this.$axios.post('/api/projectCase/findAllByGsidByPage', this.$qs.stringify({ page: this.page, size: this.size})).then((res) => {
                     if (res.resCode == 200) {
                         this.loading = false;
                         this.tableData = res.data.content;
@@ -142,9 +133,13 @@
                 this.$refs[addForm].validate((valid) => {
                     if (valid) {
                         this.addLoading = true;
+                        let url = '/api/projectCase/add';
+                        if(this.addForm.id) {
+                            url = '/api/projectCase/update'
+                        }
                         let formData = new FormData();
                         for(let key in this.addForm) {
-                                formData.append(key, this.addForm[key]);
+                            formData.append(key, this.addForm[key]);
                         }
                         for (var value of formData.values()) {
                             console.log(value);
@@ -154,10 +149,14 @@
                                 'Content-Type': 'multipart/form-data'
                             }
                         };
-                        this.$axios.post( '/api/file/add', formData, config ).then( res=> {
-                            this.addLoading = false
+                        this.$axios.post(url, formData, config).then(res => {
+                            this.addLoading = false;
                             this.modelVisible = false;
-                            this.getData();
+                            if(this.activeName == 'first') {
+                                this.getData(1, this.page, this.size);
+                            }else {
+                                this.getData(2, this.page1, this.size1);
+                            }
                         })
                     }
                 })
