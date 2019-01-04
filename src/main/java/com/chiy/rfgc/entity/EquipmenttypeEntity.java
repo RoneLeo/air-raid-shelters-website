@@ -10,7 +10,7 @@ import java.util.Objects;
 public class EquipmenttypeEntity {
     private Integer id;
     @ApiModelProperty(value = "设备类型")
-    private String sblx;
+    private String name;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,24 +26,24 @@ public class EquipmenttypeEntity {
     @Basic
     @Column(name = "type")
     public String getSblx() {
-        return sblx;
+        return name;
     }
 
-    public void setSblx(String sblx) {
-        this.sblx = sblx;
+    public void setSblx(String name) {
+        this.name = name;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (!(o instanceof EquipmenttypeEntity)) return false;
         EquipmenttypeEntity that = (EquipmenttypeEntity) o;
-        return id == that.id &&
-                Objects.equals(sblx, that.sblx);
+        return Objects.equals(id, that.id) &&
+                Objects.equals(name, that.name);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, sblx);
+        return Objects.hash(id, name);
     }
 }

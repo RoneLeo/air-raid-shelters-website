@@ -13,9 +13,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.io.File;
+import java.io.IOException;
 import java.util.Date;
 
 @Api(description = "工程案例")
@@ -30,15 +33,24 @@ public class ProjectCaseController {
     @Resource
     private UserController userController;
 
+    private static final String PROJECT_PHOTO_PATH = "/project/";
+
     @ApiOperation(value = "添加")
     @RequestMapping("/add")
-    public ApiResult<Object> add(HttpServletRequest request, ProjectcaseEntity entity) {
+    public ApiResult<Object> add(HttpServletRequest request, ProjectcaseEntity entity, MultipartFile file) throws IOException {
         String uuid = userController.getUuid(request);
         // 判断是否登录
         if ("".equals(uuid)) {
             return ApiResult.UNKNOWN();
         }
-        //
+        // 添加图片
+        String path = request.getSession().getServletContext().getRealPath(PROJECT_PHOTO_PATH);
+        File dest = new File(path + file.getOriginalFilename());
+        if(!dest.getParentFile().exists()){
+            dest.getParentFile().mkdir();
+        }
+        file.transferTo(dest);
+        entity.setTp(PROJECT_PHOTO_PATH + file.getOriginalFilename());
         entity.setGsid(userRepository.findByUuid(uuid).getGsid());
         entity.setCjsj(new Date());
         ProjectcaseEntity entity1 = projectCaseRepository.save(entity);

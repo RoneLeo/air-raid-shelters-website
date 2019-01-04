@@ -2,7 +2,6 @@ package com.chiy.rfgc.controller;
 
 
 import com.chiy.rfgc.common.ApiResult;
-import com.chiy.rfgc.entity.EquipmentEntity;
 import com.chiy.rfgc.entity.EquipmenttypeEntity;
 import com.chiy.rfgc.repository.EquipmentTypeRepository;
 import io.swagger.annotations.Api;

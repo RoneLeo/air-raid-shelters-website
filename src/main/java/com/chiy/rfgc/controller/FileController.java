@@ -35,7 +35,7 @@ public class FileController {
     private UserController userController;
 
     private static final String CERTIFICATE_PATH = "/certificate/";
-    private static final String PHOTO_PATH = "/photo/";
+    private static final String HOMEPAGE_PHOTO_PATH = "/homepage/";
 
     @ApiOperation("添加")
     @RequestMapping("/add")
@@ -56,19 +56,9 @@ public class FileController {
         if (entity.getWjlx() == 1) {
             wjlj = CERTIFICATE_PATH;
         } else {
-            wjlj = PHOTO_PATH;
+            wjlj = HOMEPAGE_PHOTO_PATH;
         }
-        String path = request.getSession().getServletContext().getRealPath(wjlj);
-        File dest = new File(path + file.getOriginalFilename());
-        if(!dest.getParentFile().exists()){
-            dest.getParentFile().mkdir();
-        }
-        file.transferTo(dest);
-
-        entity.setGsid(userRepository.findByUuid(uuid).getGsid());
-        entity.setWjlj(wjlj + file.getOriginalFilename());
-        entity.setCjsj(new Date());
-        FileEntity entity1 = fileRepository.save(entity);
+        FileEntity entity1 = addFile(request, file, wjlj, uuid);
         if (entity1 == null) {
             return ApiResult.FAILURE("添加失败");
         }
@@ -129,7 +119,25 @@ public class FileController {
         return ApiResult.SUCCESS(list);
     }
 
+    /**
+     * 添加文件
+     */
+    public FileEntity addFile(HttpServletRequest request, MultipartFile file, String wjlj, String uuid) throws IOException {
+        String path = request.getSession().getServletContext().getRealPath(wjlj);
+        File dest = new File(path + file.getOriginalFilename());
+        if(!dest.getParentFile().exists()){
+            dest.getParentFile().mkdir();
+        }
+        file.transferTo(dest);
 
+        FileEntity entity = new FileEntity();
+
+        entity.setGsid(userRepository.findByUuid(uuid).getGsid());
+        entity.setWjlj(wjlj + file.getOriginalFilename());
+        entity.setCjsj(new Date());
+        FileEntity entity1 = fileRepository.save(entity);
+        return entity1;
+    }
 
 
 }
