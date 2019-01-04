@@ -113,6 +113,18 @@ public class ContactUsController {
         return ApiResult.SUCCESS(list);
     }
 
+    @ApiOperation("查询本公司信息")
+    @RequestMapping("/findByGsid")
+    public ApiResult<Object> findAllByGsid(HttpServletRequest request) {
+        String uuid = userController.getUuid(request);
+        // 判断是否登录
+        if ("".equals(uuid)) {
+            return ApiResult.UNKNOWN();
+        }
+        ContactusEntity entity = contactUsRepository.findByGsid(userRepository.findByUuid(uuid).getGsid());
+        return ApiResult.SUCCESS(entity);
+    }
+
 
 
 }

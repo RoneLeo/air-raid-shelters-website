@@ -32,6 +32,10 @@ public class ContactusEntity {
     private String gsjj;
     @ApiModelProperty(value = "备案信息")
     private String baxx;
+    @ApiModelProperty(value = "关键字")
+    private String gjz;
+    @ApiModelProperty(value = "公司描述")
+    private String gsms;
     @ApiModelProperty(value = "创建时间")
     private Date cjsj;
 
@@ -157,6 +161,26 @@ public class ContactusEntity {
     }
 
     @Basic
+    @Column(name = "keywords")
+    public String getGjz() {
+        return gjz;
+    }
+
+    public void setGjz(String gjz) {
+        this.gjz = gjz;
+    }
+
+    @Basic
+    @Column(name = "description")
+    public String getGsms() {
+        return gsms;
+    }
+
+    public void setGsms(String gsms) {
+        this.gsms = gsms;
+    }
+
+    @Basic
     @Column(name = "create_time")
     public Date getCjsj() {
         return cjsj;
@@ -183,11 +207,13 @@ public class ContactusEntity {
                 Objects.equals(jwd, that.jwd) &&
                 Objects.equals(gsjj, that.gsjj) &&
                 Objects.equals(baxx, that.baxx) &&
+                Objects.equals(gjz, that.gjz) &&
+                Objects.equals(gsms, that.gsms) &&
                 Objects.equals(cjsj, that.cjsj);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, gsid, gsmc, lxdz, lxdh, lxcz, gswz, lxyb, lxyx, jwd, gsjj, baxx, cjsj);
+        return Objects.hash(id, gsid, gsmc, lxdz, lxdh, lxcz, gswz, lxyb, lxyx, jwd, gsjj, baxx, gjz, gsms, cjsj);
     }
 }
