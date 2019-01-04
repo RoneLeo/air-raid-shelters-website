@@ -2,13 +2,12 @@ package com.chiy.rfgc.controller;
 
 import com.chiy.rfgc.common.ApiResult;
 import com.chiy.rfgc.entity.EquipmentEntity;
-import com.chiy.rfgc.repository.CompanyRepository;
 import com.chiy.rfgc.repository.EquipmentRepository;
 import com.chiy.rfgc.repository.EquipmentTypeRepository;
 import com.chiy.rfgc.repository.UserRepository;
+import com.chiy.rfgc.utils.FileUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -19,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 import java.util.Date;
 
 @Api(description = "产品中心管理")
@@ -39,7 +39,7 @@ public class EquipmentController {
 
     @ApiOperation(value = "添加")
     @RequestMapping("/add")
-    public ApiResult<Object> add(EquipmentEntity entity, HttpServletRequest request) {
+    public ApiResult<Object> add(EquipmentEntity entity, HttpServletRequest request, MultipartFile file) throws IOException {
         String uuid = userController.getUuid(request);
         // 判断是否登录
         if ("".equals(uuid)) {
@@ -48,6 +48,11 @@ public class EquipmentController {
         // 判断设备类型
         if (entity.getSblx() == null || equipmentTypeRepository.findById(entity.getSblx()) == null) {
             return ApiResult.FAILURE("添加失败，设备类型不能为空或该设备类型不存在");
+        }
+        // 添加图片
+        if (file != null) {
+            FileUtils.addPhoto(request, EQUIPMENT_PHOTO_PATH, file);
+            entity.setCptp(EQUIPMENT_PHOTO_PATH + file.getOriginalFilename());
         }
         entity.setGsid(userRepository.findByUuid(uuid).getGsid());
         entity.setCjsj(new Date());
@@ -60,7 +65,7 @@ public class EquipmentController {
 
     @ApiOperation("修改")
     @RequestMapping("/update")
-    public ApiResult<Object> update(HttpServletRequest request, EquipmentEntity entity) {
+    public ApiResult<Object> update(HttpServletRequest request, EquipmentEntity entity, MultipartFile file) throws IOException {
         String uuid = userController.getUuid(request);
         // 判断是否登录
         if ("".equals(uuid)) {
@@ -69,6 +74,11 @@ public class EquipmentController {
         // 判断设备类型
         if (entity.getSblx() == null || equipmentTypeRepository.findById(entity.getSblx()) == null) {
             return ApiResult.FAILURE("修改失败，设备类型不能为空或该设备类型不存在");
+        }
+        // 添加图片
+        if (file != null) {
+            FileUtils.addPhoto(request, EQUIPMENT_PHOTO_PATH, file);
+            entity.setCptp(EQUIPMENT_PHOTO_PATH + file.getOriginalFilename());
         }
         EquipmentEntity entity1 = equipmentRepository.save(entity);
         if (entity1 == null) {

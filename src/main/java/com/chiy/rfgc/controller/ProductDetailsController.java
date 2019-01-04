@@ -36,10 +36,7 @@ public class ProductDetailsController {
     private UserController userController;
     @Resource
     private EquipmentRepository equipmentRepository;
-    @Resource
-    private FileRepository fileRepository;
 
-    private static final String PRODUCT_PHOTO_PATH = "/product/";
 
     @ApiOperation(value = "添加")
     @RequestMapping("/add")
@@ -121,32 +118,7 @@ public class ProductDetailsController {
         return ApiResult.SUCCESS(list);
     }
 
-    @ApiOperation("添加图片")
-    @RequestMapping("/addPhoto")
-    public ApiResult<Object> addPhoto(HttpServletRequest request, MultipartFile file) throws IOException {
-        String wjlj = PRODUCT_PHOTO_PATH;
-        String uuid = userController.getUuid(request);
-        // 判断是否登录
-        if ("".equals(uuid)) {
-            return ApiResult.UNKNOWN();
-        }
-        String path = request.getSession().getServletContext().getRealPath(wjlj);
-        File dest = new File(path + file.getOriginalFilename());
-        if(!dest.getParentFile().exists()){
-            dest.getParentFile().mkdir();
-        }
-        file.transferTo(dest);
-        FileEntity entity = new FileEntity();
-        entity.setGsid(userRepository.findByUuid(uuid).getGsid());
-        entity.setWjmc("");
-        entity.setWjlj(wjlj + file.getOriginalFilename());
-        entity.setCjsj(new Date());
-        FileEntity entity1 = fileRepository.save(entity);
-        if (entity1 == null) {
-            return ApiResult.FAILURE("添加失败");
-        }
-        return ApiResult.SUCCESS(entity1.getWjlj());
-    }
+
 
 
 }
