@@ -23,5 +23,5 @@ public interface NewsRepository extends CrudRepository<NewsEntity, Long> {
     int deleteById(Integer id);
 
     // 通过公司id查询
-    Page<NewsEntity> findAllByGsidOrderByCjsjDesc(Integer gsid, Pageable pageable);
+    Page<NewsEntity> findAllByGsidAndXwlxOrderByCjsjDesc(Integer gsid, Integer xwlx, Pageable pageable);
 }

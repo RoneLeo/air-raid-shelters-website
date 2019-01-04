@@ -13,7 +13,7 @@ public class NewsEntity {
     private Integer id;
     @ApiModelProperty(value = "公司id")
     private Integer gsid;
-    @ApiModelProperty(value = "新闻类型")
+    @ApiModelProperty(value = "新闻类型 1-公司新闻 2-行业新闻")
     private Integer xwlx;
     @ApiModelProperty(value = "新闻标题")
     private String xwbt;

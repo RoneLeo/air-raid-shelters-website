@@ -90,15 +90,18 @@ public class NewsController {
 
     @ApiOperation("通过公司id查询分页显示")
     @RequestMapping("/findAllByGsidByPage")
-    public ApiResult<Object> findAllByGsidByPage(HttpServletRequest request, int page, int size) {
+    public ApiResult<Object> findAllByGsidByPage(HttpServletRequest request, Integer xwlx, int page, int size) {
         String uuid = userController.getUuid(request);
         // 判断是否登录
         if ("".equals(uuid)) {
             return ApiResult.UNKNOWN();
         }
+        if (xwlx == null) {
+            return ApiResult.FAILURE("新闻类型不能为空");
+        }
         Pageable pageable = PageRequest.of(page - 1, size);
 
-        Page<NewsEntity> list = newsRepository.findAllByGsidOrderByCjsjDesc(userRepository.findByUuid(uuid).getGsid(), pageable);
+        Page<NewsEntity> list = newsRepository.findAllByGsidAndXwlxOrderByCjsjDesc(userRepository.findByUuid(uuid).getGsid(), xwlx, pageable);
 
         return ApiResult.SUCCESS(list);
 
@@ -106,10 +109,13 @@ public class NewsController {
 
     @ApiOperation("前端显示公司信息")
     @RequestMapping("/findAllByGsid")
-    public ApiResult<Object> findAllByGsid(Integer gsid, int page, int size) {
+    public ApiResult<Object> findAllByGsid(Integer gsid, Integer xwlx, int page, int size) {
+        if (xwlx == null) {
+            return ApiResult.FAILURE("新闻类型不能为空");
+        }
         Pageable pageable = PageRequest.of(page - 1, size);
 
-        Page<NewsEntity> list = newsRepository.findAllByGsidOrderByCjsjDesc(gsid, pageable);
+        Page<NewsEntity> list = newsRepository.findAllByGsidAndXwlxOrderByCjsjDesc(gsid, xwlx, pageable);
 
         return ApiResult.SUCCESS(list);
     }

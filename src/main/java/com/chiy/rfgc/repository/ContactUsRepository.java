@@ -22,6 +22,9 @@ public interface ContactUsRepository extends CrudRepository<ContactusEntity, Lon
     int deleteById(Integer id);
 
     // 通过公司id查询
+    ContactusEntity findByGsid(Integer gsid);
+
+    // 通过公司id查询
     Page<ContactusEntity> findAllByGsidOrderByCjsjDesc(Integer gsid, Pageable pageable);
 
 }
