@@ -32,6 +32,31 @@ export default new Router({
                     meta: { title: '系统首页' }
                 },
                 {
+                    path: '/files',
+                    component: resolve => require(['../components/page/Files.vue'], resolve),
+                    meta: { title: '文件管理' }
+                },
+                {
+                    path: '/products',
+                    component: resolve => require(['../components/page/Products.vue'], resolve),
+                    meta: { title: '产品管理' }
+                },
+                {
+                    path: '/addProduct',
+                    component: resolve => require(['../components/page/AddProduct.vue'], resolve),
+                    meta: { title: '录入产品' }
+                },
+                {
+                    path: '/recruitment',
+                    component: resolve => require(['../components/page/Recruitment.vue'], resolve),
+                    meta: { title: '招聘信息管理' }
+                },
+                {
+                    path: '/services',
+                    component: resolve => require(['../components/page/Services.vue'], resolve),
+                    meta: { title: '网上订购列表' }
+                },
+                {
                     path: '/icon',
                     component: resolve => require(['../components/page/Icon.vue'], resolve),
                     meta: { title: '自定义图标' }

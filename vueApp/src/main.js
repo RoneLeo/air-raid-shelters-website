@@ -15,10 +15,11 @@ import "babel-polyfill";
 axios.interceptors.request.use(
     config => {
         const uuid = localStorage.getItem("uuid"); //获取存储在本地的token
-        config.data = qs.stringify(config.data);
-        config.headers = {
-            'Content-Type': 'application/x-www-form-urlencoded', //参数格式设置
-        };
+        // config.data = qs.stringify(config.data);
+        // console.log(config.data)
+        // config.headers = {
+        //     'Content-Type': 'application/x-www-form-urlencoded', //参数格式设置
+        // };
         if (uuid) {
             config.headers.Authorization = "Token"; //携带权限参数
             config.headers.uuid = uuid; //用户id
@@ -50,6 +51,7 @@ axios.interceptors.response.use(
 );
 Vue.use(ElementUI, { size: 'small' });
 Vue.prototype.$axios = axios;
+Vue.prototype.$qs = qs;
 Vue.prototype.$dict = dict;
 Vue.prototype.$common = common;
 

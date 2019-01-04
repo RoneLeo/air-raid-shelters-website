@@ -98,7 +98,7 @@
 <style>
     .tags {
         position: relative;
-        height: 30px;
+        height: 40px;
         overflow: hidden;
         background: #fff;
         padding-right: 120px;
@@ -109,11 +109,13 @@
         box-sizing: border-box;
         width: 100%;
         height: 100%;
+        padding: 5px 0;
+        padding-left: 8px;
     }
 
     .tags-li {
         float: left;
-        margin: 3px 5px 2px 3px;
+        margin: 3px 5px 2px 5px;
         border-radius: 3px;
         font-size: 12px;
         overflow: hidden;
@@ -157,10 +159,10 @@
         right: 0;
         top: 0;
         box-sizing: border-box;
-        padding-top: 1px;
+        padding: 5px 0;
         text-align: center;
         width: 110px;
-        height: 30px;
+        height: 40px;
         background: #fff;
         box-shadow: -3px 0 15px 3px rgba(0, 0, 0, .1);
         z-index: 10;
