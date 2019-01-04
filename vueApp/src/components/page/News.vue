@@ -2,19 +2,21 @@
     <div class="table">
         <div class="crumbs">
             <el-breadcrumb separator="/">
-                <el-breadcrumb-item><i class="el-icon-lx-cascades"></i> 文件管理</el-breadcrumb-item>
+                <el-breadcrumb-item><i class="el-icon-lx-cascades"></i> 新闻管理</el-breadcrumb-item>
             </el-breadcrumb>
         </div>
         <div class="container" v-loading="loading">
             <el-tabs v-model="activeName" @tab-click="handleClick">
-                <el-tab-pane label="资质证书" name="first">
+                <el-tab-pane label="公司新闻" name="first">
                     <el-table :data="tableData" class="table" :show-header="false" ref="multipleTable">
-                        <el-table-column prop="wjmc" label="文件名称"></el-table-column>
+                        <el-table-column prop="xwbt" label="新闻标题"></el-table-column>
+                        <el-table-column prop="xwnr" label="新闻内容" :show-overflow-tooltip="true"></el-table-column>
+
                         <el-table-column prop="cjsj" label="创建时间" width="200"></el-table-column>
                         <el-table-column label="操作" align="center" width="200">
                             <template slot-scope="scope">
-                                <el-button type="text" icon="el-icon-lx-attention"
-                                           @click="lookFile(scope.$index, scope.row)">点击查看
+                                <el-button type="text" icon="el-icon-lx-edit"
+                                           @click="editFile(scope.$index, scope.row)">编辑
                                 </el-button>
                                 <el-button type="text" icon="el-icon-delete" class="red"
                                            @click="delFile(scope.$index, scope.row)">删除
@@ -23,7 +25,7 @@
                         </el-table-column>
                     </el-table>
                     <div style="padding: 28px 8px">
-                        <el-button type="primary" @click="add" style="float: left">上传文件</el-button>
+                        <el-button type="primary" @click="add" style="float: left">上传新闻</el-button>
                         <el-pagination
                                 style="float: right;"
                                 @current-change="handleCurrentChange"
@@ -34,14 +36,15 @@
                         </el-pagination>
                     </div>
                 </el-tab-pane>
-                <el-tab-pane label="banner图片" name="second">
+                <el-tab-pane label="行业新闻" name="second">
                     <el-table :data="tableData1" class="table" :show-header="false" ref="multipleTable">
-                        <el-table-column prop="wjmc" label="文件名称"></el-table-column>
+                        <el-table-column prop="xwbt" label="新闻标题"></el-table-column>
+                        <el-table-column prop="xwnr" label="新闻内容" :show-overflow-tooltip="true"></el-table-column>
                         <el-table-column prop="cjsj" label="创建时间" width="200"></el-table-column>
                         <el-table-column label="操作" align="center" width="200">
                             <template slot-scope="scope">
-                                <el-button type="text" icon="el-icon-lx-attention"
-                                           @click="lookFile(scope.$index, scope.row)">点击查看
+                                <el-button type="text" icon="el-icon-lx-edit"
+                                           @click="editFile(scope.$index, scope.row)">编辑
                                 </el-button>
                                 <el-button type="text" icon="el-icon-delete" class="red"
                                            @click="delFile(scope.$index, scope.row)">删除
@@ -50,7 +53,7 @@
                         </el-table-column>
                     </el-table>
                     <div style="padding: 28px 8px">
-                        <el-button type="primary" @click="add" style="float: left">上传文件</el-button>
+                        <el-button type="primary" @click="add" style="float: left">上传新闻</el-button>
                         <el-pagination
                                 style="float: right;"
                                 @current-change="handleCurrentChange1"
@@ -69,23 +72,23 @@
         <el-dialog :title="modelTitle" :visible.sync="modelVisible" width="40%"
                    :close-on-click-modal="false" @closed="closeClear">
             <el-form ref="addForm" :model="addForm" label-width="100px">
-                <el-form-item label="文件名称"
-                              prop="wjmc"
-                              :rules="[{ required: true, message: '文件名称不能为空', trigger: 'blur' }]">
-                    <el-input v-model="addForm.wjmc"></el-input>
+                <el-form-item label="新闻标题"
+                              prop="xwbt"
+                              :rules="[{ required: true, message: '新闻标题不能为空', trigger: 'blur' }]">
+                    <el-input v-model="addForm.xwbt"></el-input>
                 </el-form-item>
-                <el-form-item label="文件类型"
-                              prop="wjlx"
-                              :rules="[{ required: true, message: '文件类型不能为空', trigger: 'blur' }]">
-                    <el-select v-model="addForm.wjlx" placeholder="请选择文件类型">
-                        <el-option v-for="item in this.$dict.fileType" :key="item.id+Math.random()" :label="item.name"
+                <el-form-item label="新闻内容"
+                              prop="xwnr"
+                              :rules="[{ required: true, message: '新闻内容不能为空', trigger: 'blur' }]">
+                    <el-input v-model="addForm.xwnr" type="textarea" :autosize="{ minRows: 5, maxRows: 18}"></el-input>
+                </el-form-item>
+                <el-form-item label="新闻类型"
+                              prop="xwlx"
+                              :rules="[{ required: true, message: '新闻类型不能为空', trigger: 'blur' }]">
+                    <el-select v-model="addForm.xwlx" placeholder="请选择新闻类型">
+                        <el-option v-for="item in this.$dict.newType" :key="item.id*2.0395" :label="item.name"
                                    :value="item.id"></el-option>
                     </el-select>
-                </el-form-item>
-                <el-form-item label="文件"
-                              prop="file"
-                              :rules="[{ required: true, message: '文件不能为空', trigger: 'blur' }]">
-                    <input type="file" @change="getFile($event)"/>
                 </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
@@ -103,16 +106,16 @@
         data() {
             return {
                 activeName: 'first',
-                modelTitle: '添加文件',
+                modelTitle: '新闻详情',
                 tableData: [],
                 tableData1: [],
                 modelVisible: false,
                 addForm: {},
                 file: {},
-                size: 10,
+                size: 2,
                 page: 1,
                 totalElements: 0,
-                size1: 10,
+                size1: 1,
                 page1: 1,
                 totalElements1: 0,
                 loading: true,
@@ -133,10 +136,9 @@
                 }else {
                     this.getData(2, this.page1, this.size1);
                 }
-                console.log(tab, event);
             },
             delFile(index, row) {
-                this.$axios.post('/api/file/delete', this.$qs.stringify({id: row.id})).then((res) => {
+                this.$axios.post('/api/news/delete', this.$qs.stringify({id: row.id})).then((res) => {
                     this.$message.success('已删除！');
                     if(this.activeName == 'first') {
                         this.getData(1, this.page, this.size);
@@ -149,8 +151,9 @@
             formatterWjlx(row) {
                 return this.$common.dictParse(row.wjlx, this.$dict.fileType);
             },
-            lookFile(index, row) {
-                window.open('http://182.151.22.247:8081' + row.wjlj);
+            editFile(index, row) {
+                this.addForm = Object.assign({}, row);
+                this.modelVisible = true;
             },
             modelClose(addForm) {
                 this.$refs[addForm].resetFields();
@@ -170,8 +173,8 @@
             },
             getData(type,page,size) {
                 this.loading = true;
-                this.$axios.post('/api/file/findAllByGsidByPage', this.$qs.stringify({
-                    wjlx: type,
+                this.$axios.post('/api/news/findAllByGsidByPage', this.$qs.stringify({
+                    xwlx: type,
                     page: page,
                     size: size
                 })).then((res) => {
@@ -189,7 +192,6 @@
             },
             add(){
                 this.addForm = {};
-                this.file = {};
                 this.modelVisible = true;
             },
             // 保存编辑
@@ -197,19 +199,11 @@
                 this.$refs[addForm].validate((valid) => {
                     if (valid) {
                         this.addLoading = true;
-                        let formData = new FormData();
-                        for (let key in this.addForm) {
-                            formData.append(key, this.addForm[key]);
+                        let url = '/api/news/add';
+                        if(this.addForm.id) {
+                            url = '/api/news/update'
                         }
-                        for (var value of formData.values()) {
-                            console.log(value);
-                        }
-                        let config = {
-                            headers: {
-                                'Content-Type': 'multipart/form-data'
-                            }
-                        };
-                        this.$axios.post('/api/file/add', formData, config).then(res => {
+                        this.$axios.post(url, this.$qs.stringify(Object.assign({}, this.addForm))).then(res => {
                             this.addLoading = false
                             this.modelVisible = false;
                             if(this.activeName == 'first') {

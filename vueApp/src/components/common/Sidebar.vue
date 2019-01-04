@@ -54,6 +54,16 @@
                         title: '文件管理'
                     },
                     {
+                        icon: 'el-icon-lx-vipcard',
+                        index: 'news',
+                        title: '新闻管理'
+                    },
+                    {
+                        icon: 'el-icon-lx-punch',
+                        index: 'projectCase',
+                        title: '工程案例'
+                    },
+                    {
                         icon: 'el-icon-lx-shop',
                         index: 'products',
                         title: '产品管理'
@@ -72,6 +82,11 @@
                         icon: 'el-icon-lx-calendar',
                         index: 'services',
                         title: '网上订购列表'
+                    },
+                    {
+                        icon: 'el-icon-lx-cart',
+                        index: 'company',
+                        title: '公司信息'
                     },
 //                    {
 //                        icon: 'el-icon-lx-cascades',
