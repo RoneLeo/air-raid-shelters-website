@@ -10,21 +10,21 @@
                 <el-col :span="22" style="height: 100%;">
                     <el-form :inline="true" :model="form" class="demo-form-inline"  label-position="right">
                         <el-form-item label-width="80px" label="产品类型">
-                            <el-input v-model="form.sblx" placeholder="产品类型"></el-input>
-                        </el-form-item>
-                        <el-form-item label-width="150px" label="产品名称">
-                            <el-select v-model="form.cpmc" placeholder="活动区域">
-                                <el-option label="区域一" value="shanghai"></el-option>
-                                <el-option label="区域二" value="beijing"></el-option>
+                            <el-select v-model="form.sblx" placeholder="活动区域">
+                                <el-option v-for="item in this.equipmentType" :key="item.id*2.0987" :label="item.name"
+                                           :value="item.id"></el-option>
                             </el-select>
                         </el-form-item>
+                        <el-form-item label-width="150px" label="产品名称">
+                            <el-input v-model="form.cpmc" placeholder="产品类型"></el-input>
+                        </el-form-item>
                         <el-form-item label-width="150px" label="产品图片">
-                            <input type="file">
+                            <input type="file" @change="getFile($event)"/>
                         </el-form-item>
                     </el-form>
                 </el-col>
                 <el-col :span="2" style="text-align: right;">
-                    <el-button icon="el-icon-lx-attention" @click="prelook" type="primary">预览</el-button>
+                    <el-button icon="el-icon-lx-attention" @click="prelook" type="primary">保存</el-button>
                 </el-col>
             </el-row>
 
@@ -96,17 +96,27 @@ import UEditor from '@/components/common/ueditor.vue'
                 form: {},
                 contents: [],
                 content: {},
+                equipmentType: []
             }
         },
         mounted () {
             this.editor = UE.getEditor("editor");
+            this.$axios.post('/api/equipmentType/findAll').then((res) => {
+                let data = res.data;
+                this.equipmentType = data;
+            });
         },
+
         created() {
         },
         computed: {
 
         },
         methods: {
+            getFile(event) {
+                this.file = event.target.files[0];
+                this.form.file = this.file;
+            },
             editItem(item, index) {
                 console.log(index)
                 console.log()
@@ -137,7 +147,7 @@ import UEditor from '@/components/common/ueditor.vue'
                 }, 300)
             },
             prelook() {
-                console.log(this.form, this.content);
+                console.log(this.form, this.contents);
             },
             getContent: function(){
                 let content = this.$refs.ueditor.getUEContent();

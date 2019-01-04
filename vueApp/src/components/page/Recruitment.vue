@@ -38,7 +38,7 @@
 
         <!-- 弹出框 -->
         <el-dialog :title="modelTitle" :visible.sync="modelVisible" width="40%"
-                   :close-on-click-modal="false" @closed="modelClose">
+                   :close-on-click-modal="false" @closed="closeClear">
             <el-form ref="form" :model="form" label-width="100px">
                 <el-form-item label="招聘岗位"
                               prop="zpgw"
@@ -119,9 +119,8 @@
 
         },
         methods: {
-            modelClose() {
-                this.form = {};
-                this.$refs[form].resetFields();
+            closeClear() {
+                this.$refs.form.resetFields()
             },
             // 分页导航
             handleCurrentChange(val) {

@@ -38,8 +38,8 @@
 
         <!-- 弹出框 -->
         <el-dialog :title="modelTitle" :visible.sync="modelVisible" width="40%"
-                   :close-on-click-modal="false" @closed="modelClose(addForm)">
-            <el-form :ref="addForm" :model="addForm" label-width="100px">
+                   :close-on-click-modal="false" @closed="closeClear">
+            <el-form ref="addForm" :model="addForm" label-width="100px">
                 <el-form-item label="工程名称"
                               prop="gcmc"
                               :rules="[{ required: true, message: '工程名称不能为空', trigger: 'blur' }]">
@@ -83,24 +83,14 @@
         },
         computed: {},
         methods: {
-            formatterSBLX(row) {
-                this.$common.dictParse(row.sblx, this.equipmentType);
+            closeClear() {
+                this.$refs.addForm.resetFields()
             },
             delFile(index, row) {
-                this.$axios.post('/api/file/delete', this.$qs.stringify({id: row.id})).then((res) => {
+                this.$axios.post('/api/projectCase/delete', this.$qs.stringify({id: row.id})).then((res) => {
                     this.$message.success('已删除！');
                     this.getData();
                 });
-            },
-            formatterWjlx(row) {
-                return this.$common.dictParse(row.wjlx, this.$dict.fileType);
-            },
-            editFile(index, row) {
-                this.addForm = Object.assign({}, row);
-                this.modelVisible = true;
-            },
-            modelClose(addForm) {
-                this.$refs[addForm].resetFields();
             },
             getFile(event) {
                 this.file = event.target.files[0];

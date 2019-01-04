@@ -12,7 +12,7 @@
                 <el-table-column prop="cjsj" label="创建时间"></el-table-column>
                 <el-table-column label="操作" align="center">
                     <template slot-scope="scope">
-                        <el-button type="text" icon="el-icon-lx-attention" @click="lookFile(scope.$index, scope.row)">点击查看
+                        <el-button type="text" icon="el-icon-lx-attention" @click="look(scope.$index, scope.row)">点击查看
                         </el-button>
                         <el-button type="text" icon="el-icon-delete" class="red" @click="delFile(scope.$index, scope.row)">删除
                         </el-button>
@@ -20,7 +20,7 @@
                 </el-table-column>
             </el-table>
             <div style="padding: 28px 8px">
-                <!--<el-button type="primary" @click="add" style="float: left">上传文件</el-button>-->
+                <el-button type="primary" @click="add" style="float: left">新增产品</el-button>
                 <el-pagination
                         style="float: right;"
                         @current-change="handleCurrentChange"
@@ -84,7 +84,6 @@
         mounted () {
             this.$axios.post('/api/equipmentType/findAll').then((res) => {
                 let data = res.data;
-
                 this.equipmentType = data;
             });
         },
@@ -94,7 +93,7 @@
         computed: {},
         methods: {
             formatterSBLX(row) {
-                this.$common.dictParse(row.sblx, this.equipmentType);
+                return this.$common.dictParse(row.sblx, this.equipmentType);
             },
             delFile(index, row) {
                 this.$axios.post('/api/file/delete', this.$qs.stringify({id: row.id})).then((res) => {
@@ -105,7 +104,7 @@
             formatterWjlx(row) {
                 return this.$common.dictParse(row.wjlx, this.$dict.fileType);
             },
-            lookFile(index, row) {
+            look(index, row) {
                 window.open('http://182.151.22.247:8081' + row.wjlj);
             },
             modelClose(addForm) {
@@ -133,8 +132,7 @@
             },
 
             add(){
-                this.addForm = {};
-                this.modelVisible = true;
+                this.$router.push('/addProduct');
             },
 
             // 保存编辑

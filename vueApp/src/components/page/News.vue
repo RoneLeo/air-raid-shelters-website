@@ -70,8 +70,8 @@
 
         <!-- 弹出框 -->
         <el-dialog :title="modelTitle" :visible.sync="modelVisible" width="40%"
-                   :close-on-click-modal="false" @closed="modelClose(addForm)">
-            <el-form :ref="addForm" :model="addForm" label-width="100px">
+                   :close-on-click-modal="false" @closed="closeClear">
+            <el-form ref="addForm" :model="addForm" label-width="100px">
                 <el-form-item label="新闻标题"
                               prop="xwbt"
                               :rules="[{ required: true, message: '新闻标题不能为空', trigger: 'blur' }]">
@@ -127,6 +127,9 @@
         },
         computed: {},
         methods: {
+            closeClear() {
+                this.$refs.addForm.resetFields()
+            },
             handleClick(tab, event) {
                 if(tab.name === 'first'){
                     this.getData(1, this.page, this.size);
