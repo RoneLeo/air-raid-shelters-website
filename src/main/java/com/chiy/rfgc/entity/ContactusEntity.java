@@ -30,6 +30,8 @@ public class ContactusEntity {
     private String jwd;
     @ApiModelProperty(value = "公司简介")
     private String gsjj;
+    @ApiModelProperty(value = "备案信息")
+    private String baxx;
     @ApiModelProperty(value = "创建时间")
     private Date cjsj;
 
@@ -145,6 +147,16 @@ public class ContactusEntity {
     }
 
     @Basic
+    @Column(name = "record_information")
+    public String getBaxx() {
+        return baxx;
+    }
+
+    public void setBaxx(String baxx) {
+        this.baxx = baxx;
+    }
+
+    @Basic
     @Column(name = "create_time")
     public Date getCjsj() {
         return cjsj;
@@ -157,10 +169,10 @@ public class ContactusEntity {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (!(o instanceof ContactusEntity)) return false;
         ContactusEntity that = (ContactusEntity) o;
-        return id == that.id &&
-                gsid == that.gsid &&
+        return Objects.equals(id, that.id) &&
+                Objects.equals(gsid, that.gsid) &&
                 Objects.equals(gsmc, that.gsmc) &&
                 Objects.equals(lxdz, that.lxdz) &&
                 Objects.equals(lxdh, that.lxdh) &&
@@ -170,11 +182,12 @@ public class ContactusEntity {
                 Objects.equals(lxyx, that.lxyx) &&
                 Objects.equals(jwd, that.jwd) &&
                 Objects.equals(gsjj, that.gsjj) &&
+                Objects.equals(baxx, that.baxx) &&
                 Objects.equals(cjsj, that.cjsj);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, gsid, gsmc, lxdz, lxdh, lxcz, gswz, lxyb, lxyx, jwd, gsjj, cjsj);
+        return Objects.hash(id, gsid, gsmc, lxdz, lxdh, lxcz, gswz, lxyb, lxyx, jwd, gsjj, baxx, cjsj);
     }
 }
