@@ -25,11 +25,11 @@ public class EquipmenttypeEntity {
 
     @Basic
     @Column(name = "type")
-    public String getSblx() {
+    public String getName() {
         return name;
     }
 
-    public void setSblx(String name) {
+    public void setName(String name) {
         this.name = name;
     }
 
