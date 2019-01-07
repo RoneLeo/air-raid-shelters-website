@@ -1728,3 +1728,10 @@
 }
 /*show_chanpin*/
 
+
+.pre_content{
+    border: 0;
+    background: #fff;
+    font-size: 15px;
+}
+
