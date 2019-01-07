@@ -18,7 +18,6 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 @Api(description = "人才招聘")
 @RestController
@@ -119,12 +118,12 @@ public class RecruitmentController {
 
     @ApiOperation("通过id查询")
     @RequestMapping("/findById")
-    public ApiResult<Object> findById(HttpServletRequest request, Integer id) {
-        String uuid = userController.getUuid(request);
-        // 判断是否登录
-        if ("".equals(uuid)) {
-            return ApiResult.UNKNOWN();
-        }
+    public ApiResult<Object> findById(String uuid, HttpServletRequest request, Integer id) {
+//        String uuid = userController.getUuid(request);
+//        // 判断是否登录
+//        if ("".equals(uuid)) {
+//            return ApiResult.UNKNOWN();
+//        }
         if (id == null) {
             return ApiResult.FAILURE("设备类型不能为空");
         }
