@@ -17,6 +17,8 @@ public class ProjectcaseEntity {
     private String gcmc;
     @ApiModelProperty(value = "图片")
     private String tp;
+    @ApiModelProperty(value = "案例介绍")
+    private String aljs;
     @ApiModelProperty(value = "创建时间")
     private Date cjsj;
 
@@ -62,6 +64,16 @@ public class ProjectcaseEntity {
     }
 
     @Basic
+    @Column(name = "introduction")
+    public String getAljs() {
+        return aljs;
+    }
+
+    public void setAljs(String aljs) {
+        this.aljs = aljs;
+    }
+
+    @Basic
     @Column(name = "photo")
     public String getTp() {
         return tp;
@@ -80,11 +92,12 @@ public class ProjectcaseEntity {
                 Objects.equals(gsid, that.gsid) &&
                 Objects.equals(gcmc, that.gcmc) &&
                 Objects.equals(tp, that.tp) &&
+                Objects.equals(aljs, that.aljs) &&
                 Objects.equals(cjsj, that.cjsj);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, gsid, gcmc, tp, cjsj);
+        return Objects.hash(id, gsid, gcmc, tp, aljs, cjsj);
     }
 }
