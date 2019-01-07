@@ -1,6 +1,7 @@
 package com.chiy.rfgc.controller;
 
 import com.chiy.rfgc.common.ApiResult;
+import com.chiy.rfgc.entity.EquipmentEntity;
 import com.chiy.rfgc.entity.RecruitmentEntity;
 import com.chiy.rfgc.repository.RecruitmentRepository;
 import com.chiy.rfgc.repository.UserRepository;
@@ -15,7 +16,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Api(description = "人才招聘")
 @RestController
@@ -112,5 +115,24 @@ public class RecruitmentController {
         Page<RecruitmentEntity> list = recruitmentRepository.findAllByGsidOrderByCjsjDesc(gsid, pageable);
 
         return ApiResult.SUCCESS(list);
+    }
+
+    @ApiOperation("通过id查询")
+    @RequestMapping("/findById")
+    public ApiResult<Object> findById(HttpServletRequest request, Integer id) {
+        String uuid = userController.getUuid(request);
+        // 判断是否登录
+        if ("".equals(uuid)) {
+            return ApiResult.UNKNOWN();
+        }
+        if (id == null) {
+            return ApiResult.FAILURE("设备类型不能为空");
+        }
+        RecruitmentEntity entity = recruitmentRepository.findById(id);
+        if (entity.getGsid() != userRepository.findByUuid(uuid).getGsid()) {
+            return ApiResult.FAILURE("查询失败");
+        }
+        return ApiResult.SUCCESS(entity);
+
     }
 }
