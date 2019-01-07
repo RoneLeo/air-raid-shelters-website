@@ -24,4 +24,5 @@ public interface RecruitmentRepository extends CrudRepository<RecruitmentEntity,
 
     // 通过公司id查询
     Page<RecruitmentEntity> findAllByGsidOrderByCjsjDesc(Integer gsid, Pageable pageable);
+
 }
