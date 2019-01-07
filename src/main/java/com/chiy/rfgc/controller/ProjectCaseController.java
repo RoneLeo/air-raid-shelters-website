@@ -128,4 +128,14 @@ public class ProjectCaseController {
 
         return ApiResult.SUCCESS(list);
     }
+
+    @ApiOperation("通过id公司信息")
+    @RequestMapping("/findById")
+    public ApiResult<Object> findById(Integer id) {
+        if (id == null) {
+            return ApiResult.FAILURE("id不能为空");
+        }
+        ProjectcaseEntity entity = projectCaseRepository.findById(id);
+        return ApiResult.SUCCESS(entity);
+    }
 }
