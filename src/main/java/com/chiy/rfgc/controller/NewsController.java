@@ -110,6 +110,9 @@ public class NewsController {
     @ApiOperation("前端显示公司信息")
     @RequestMapping("/findAllByGsid")
     public ApiResult<Object> findAllByGsid(Integer gsid, Integer xwlx, int page, int size) {
+        if (gsid == null) {
+            return ApiResult.FAILURE("公司id不能为空");
+        }
         if (xwlx == null) {
             return ApiResult.FAILURE("新闻类型不能为空");
         }

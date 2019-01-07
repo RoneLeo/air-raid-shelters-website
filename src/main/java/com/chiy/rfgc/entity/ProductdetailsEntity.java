@@ -11,16 +11,16 @@ import java.util.Objects;
 @Table(name = "productdetails", schema = "rfgc", catalog = "")
 public class ProductdetailsEntity {
     private Integer id;
-    @ApiModelProperty(value = "公司id")
-    private Integer gsid;
+//    @ApiModelProperty(value = "公司id")
+//    private Integer gsid;
     @ApiModelProperty(value = "产品id")
     private Integer cpid;
     @ApiModelProperty(value = "标题")
     private String bt;
     @ApiModelProperty(value = "详细内容")
     private String xxnr;
-    @ApiModelProperty(value = "创建时间")
-    private Date cjsj;
+//    @ApiModelProperty(value = "创建时间")
+//    private Date cjsj;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,15 +33,15 @@ public class ProductdetailsEntity {
         this.id = id;
     }
 
-    @Basic
-    @Column(name = "company_id")
-    public Integer getGsid() {
-        return gsid;
-    }
-
-    public void setGsid(Integer gsid) {
-        this.gsid = gsid;
-    }
+//    @Basic
+//    @Column(name = "company_id")
+//    public Integer getGsid() {
+//        return gsid;
+//    }
+//
+//    public void setGsid(Integer gsid) {
+//        this.gsid = gsid;
+//    }
 
     @Basic
     @Column(name = "product_id")
@@ -73,31 +73,30 @@ public class ProductdetailsEntity {
         this.xxnr = xxnr;
     }
 
-    @Basic
-    @Column(name = "create_time")
-    public Date getCjsj() {
-        return cjsj;
-    }
+//    @Basic
+//    @Column(name = "create_time")
+//    public Date getCjsj() {
+//        return cjsj;
+//    }
+//
+//    public void setCjsj(Date cjsj) {
+//        this.cjsj = cjsj;
+//    }
 
-    public void setCjsj(Date cjsj) {
-        this.cjsj = cjsj;
-    }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (!(o instanceof ProductdetailsEntity)) return false;
         ProductdetailsEntity that = (ProductdetailsEntity) o;
-        return id == that.id &&
-                Objects.equals(gsid, that.gsid) &&
+        return Objects.equals(id, that.id) &&
                 Objects.equals(cpid, that.cpid) &&
                 Objects.equals(bt, that.bt) &&
-                Objects.equals(xxnr, that.xxnr) &&
-                Objects.equals(cjsj, that.cjsj);
+                Objects.equals(xxnr, that.xxnr);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, gsid, cpid, bt, xxnr, cjsj);
+        return Objects.hash(id, cpid, bt, xxnr);
     }
 }

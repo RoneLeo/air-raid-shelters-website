@@ -7,6 +7,7 @@ import com.chiy.rfgc.repository.EquipmentRepository;
 import com.chiy.rfgc.repository.FileRepository;
 import com.chiy.rfgc.repository.ProductDetailsRepository;
 import com.chiy.rfgc.repository.UserRepository;
+import com.chiy.rfgc.utils.FileUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.data.domain.Page;
@@ -37,6 +38,8 @@ public class ProductDetailsController {
     @Resource
     private EquipmentRepository equipmentRepository;
 
+    private static final String PRODUCT_PHOTO_PATH = "/equipment/";
+
 
     @ApiOperation(value = "添加")
     @RequestMapping("/add")
@@ -53,8 +56,6 @@ public class ProductDetailsController {
         if (equipmentRepository.findById(entity.getId()) == null) {
             return ApiResult.FAILURE("产品id不存在");
         }
-        entity.setGsid(userRepository.findByUuid(uuid).getGsid());
-        entity.setCjsj(new Date());
         ProductdetailsEntity entity1 = productDetailsRepository.save(entity);
         if (entity1 == null) {
             return ApiResult.FAILURE("添加失败");
@@ -103,20 +104,25 @@ public class ProductDetailsController {
         return ApiResult.SUCCESS("删除成功");
     }
 
-    @ApiOperation("通过公司id查询分页显示")
+    @ApiOperation("通过产品id查询分页显示")
     @RequestMapping("/findAllByGsidByPage")
-    public ApiResult<Object> findAllByGsidByPage(HttpServletRequest request, int page, int size) {
+    public ApiResult<Object> findAllByGsidByPage(HttpServletRequest request, Integer cpid, int page, int size) {
         String uuid = userController.getUuid(request);
         // 判断是否登录
         if ("".equals(uuid)) {
             return ApiResult.UNKNOWN();
         }
+        if (cpid == null) {
+            return ApiResult.FAILURE("产品id不能为空");
+        }
         Pageable pageable = PageRequest.of(page - 1, size);
 
-        Page<ProductdetailsEntity> list = productDetailsRepository.findAllByGsidOrderByCjsjDesc(userRepository.findByUuid(uuid).getGsid(), pageable);
+        Page<ProductdetailsEntity> list = productDetailsRepository.findAllByCpidOrderById(cpid, pageable);
 
         return ApiResult.SUCCESS(list);
     }
+
+
 
 
 

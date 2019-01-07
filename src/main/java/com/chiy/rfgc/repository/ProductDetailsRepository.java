@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
 import javax.transaction.Transactional;
+import java.util.List;
 
 public interface ProductDetailsRepository extends CrudRepository<ProductdetailsEntity, Long> {
 
@@ -23,7 +24,9 @@ public interface ProductDetailsRepository extends CrudRepository<ProductdetailsE
     @Transactional
     int deleteById(Integer id);
 
-    // 通过公司id查询
-    Page<ProductdetailsEntity> findAllByGsidOrderByCjsjDesc(Integer gsid, Pageable pageable);
+    // 通过产品id查询
+    Page<ProductdetailsEntity> findAllByCpidOrderById(Integer cpid, Pageable pageable);
+
+    List<ProductdetailsEntity> findAllByCpid(Integer cpid);
 
 }
