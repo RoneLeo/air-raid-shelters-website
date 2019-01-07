@@ -122,7 +122,8 @@ function getCompanyInfo() {
     });
 }
 
-function createBaner() {
+//获取banner信息
+function banner() {
     $.post(ServerUrl + 'file/findAllByGsid',{gsid: Gsid,wjlx:2,page:1,size:10000},function (json) {
         var content = json.data.content;
         if (!content.length) {
@@ -213,27 +214,6 @@ function submitService() {
 
 }
 
-///获取页面参数
-function getUrlParam() {
-    var url = location.search; //获取url中"?"符后的字串
-    var theRequest = {};
-    if (url.indexOf("?") != -1) {
-        var str = url.substr(1);
-        var strs = [];
-        if(str.indexOf('&') != -1){
-            strs = str.split("&");
-        }
-        else{
-            strs[0] = str;
-        }
-
-        for(var i = 0; i < strs.length; i ++) {
-            theRequest[strs[i].split("=")[0]] = decodeURI(strs[i].split("=")[1]);
-        }
-    }
-    return theRequest;
-}
-
 //招聘信息
 function recruitment() {
     $.post(ServerUrl + 'recruitment/findAllByGsid',{gsid:Gsid,page:1,size:1000},function (json) {
@@ -271,6 +251,51 @@ function recruitmentDetails(){
     }
 }
 
+//工程案例
+function projectCase() {
+    $.post(ServerUrl + 'projectCase/findAllByGsid',{gsid: Gsid,page:1,size:1000},function (json) {
+        var content = json.data.content;
+        var projectCaseList = '';
+        for(var i=0;i<content.length;i++){
+            var lastClass = '';
+            var item = content[i];
+            var gcmc = item.gcmc;
+            var tp = item.tp;
+            if((i+1)%4 == 0){
+                lastClass = 'product_main_li4';
+            }
+            projectCaseList += '<li class="'+lastClass+'">\n' +
+                '<a href="projectDetails.html">\n' +
+                '    <div class="product_main_li c">\n' +
+                '        <div class="product_main_img c">\n' +
+                '            <img src="'+ ServerUrl + tp +'">\n' +
+                '        </div>\n' +
+                '        <div class="product_main_name c">'+gcmc+'</div>\n' +
+                '    </div>\n' +
+                '</a>\n' +
+                '</li>'
+        }
+        $('#projectCaseList').html(projectCaseList);
+    })
+}
+//工程案例详情
+function projectCaseDetails(){
+    $('#caseName').html('项目名称');
+    $('#caseImg').prop('src','http://www.ytrsrf.com/uploadfile/2017/0523/20170523120207948.jpg');
+    $('#caseTxt').html('项目介绍项目介绍项目介绍项目介绍项目介绍项目介绍项目介绍项目介绍');
+    $('#caseTime').text('2019-09-11 16:00:00');
+    return;
+    var id = getUrlParam().id;
+    if(id){
+        $.post(ServerUrl + 'recruitment/findById',{id:id},function (json) {
+            var data = json.data;
+            var xxsm = data.xxsm;
+            $('#caseName').html(xxsm);
+            $('#positionName').text(data.zpgw);
+            $('#publicTime').text(data.cjsj);
+        })
+    }
+}
 
 
 
@@ -350,5 +375,26 @@ function addMapControl() {
         isOpen: false
     });
     map.addControl(overviewControl);
+}
+
+//获取页面参数
+function getUrlParam() {
+    var url = location.search; //获取url中"?"符后的字串
+    var theRequest = {};
+    if (url.indexOf("?") != -1) {
+        var str = url.substr(1);
+        var strs = [];
+        if(str.indexOf('&') != -1){
+            strs = str.split("&");
+        }
+        else{
+            strs[0] = str;
+        }
+
+        for(var i = 0; i < strs.length; i ++) {
+            theRequest[strs[i].split("=")[0]] = decodeURI(strs[i].split("=")[1]);
+        }
+    }
+    return theRequest;
 }
 
