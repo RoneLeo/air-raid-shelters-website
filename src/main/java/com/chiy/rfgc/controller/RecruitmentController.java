@@ -118,19 +118,11 @@ public class RecruitmentController {
 
     @ApiOperation("通过id查询")
     @RequestMapping("/findById")
-    public ApiResult<Object> findById(String uuid, HttpServletRequest request, Integer id) {
-//        String uuid = userController.getUuid(request);
-//        // 判断是否登录
-//        if ("".equals(uuid)) {
-//            return ApiResult.UNKNOWN();
-//        }
+    public ApiResult<Object> findById(Integer id) {
         if (id == null) {
-            return ApiResult.FAILURE("设备类型不能为空");
+            return ApiResult.FAILURE("id不能为空");
         }
         RecruitmentEntity entity = recruitmentRepository.findById(id);
-        if (entity.getGsid() != userRepository.findByUuid(uuid).getGsid()) {
-            return ApiResult.FAILURE("查询失败");
-        }
         return ApiResult.SUCCESS(entity);
 
     }
