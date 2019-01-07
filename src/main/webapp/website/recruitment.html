@@ -6,7 +6,7 @@
     <title id="headTitle"></title>
     <meta name="keywords" id="headKeywords" content="">
     <meta name="description" id="headDescription" content="">
-    <link rel="icon" type="image/x-icon" href="img/favicon.ico" />
+    <link rel="icon" type="image/x-icon" href="img/favicon.ico"/>
     <link rel="stylesheet" href="css/amazeui.min.css">
     <link rel="stylesheet" href="css/app.css?v=1.0">
     <link rel="stylesheet" href="css/index.css">
@@ -24,6 +24,7 @@
     以获得更好的体验！</p>
 <![endif]-->
 <!-- 代码区 -->
+<!--head-->
 <div id="head" class="M c">
     <div class="head_top c">
         <div class="head_top_box c" id="headTop"></div>
@@ -36,60 +37,57 @@
         </div>
     </div>
 </div>
+
+<!--main-->
 <div id="main">
-    <div class="n_banner c" style="background: url('img/pageTop/pageTop1.jpg') no-repeat center;"></div>
+    <div class="n_banner c" style="background: url('img/pageTop/pageTop3.jpg') no-repeat center;"></div>
     <div class="n_main c">
         <div class="n_main_nav">
             <div class="n_main_nav_title c">
-                <div class="n_main_nav_title1" class="go-in">走进公司</div>
-                <div class="n_main_nav_title2">ABOUT US</div>
+                <div class="n_main_nav_title1">人才招聘</div>
+                <div class="n_main_nav_title2">JOB</div>
             </div>
             <div class="n_main_nav_ul c">
                 <ul>
                     <li>
-                        <a class="" href="intro.html">公司简介</a>
-                        <div class="n_main_nav_erji c" style="">
-                        </div>
-                    </li>
-                    <li>
-                        <a class="n_main_nav_li_now" >资质证书</a>
+                        <a class="n_main_nav_li_now">招聘信息</a>
                         <div class="n_main_nav_erji c" style="display:block;">
                         </div>
                     </li>
                 </ul>
             </div>
-            <div class="n_main_nav_contact c">
-                <img src="http://www.ytrsrf.com/images/contactus.jpg" alt="">
-            </div>
         </div>
         <div class="n_main_con">
-            <div class="n_main_con_mbx c">
-                <a href="index.html">网站首页</a> > <a class="go-in">走进公司</a> > <a>资质证书</a>
-            </div>
-            <div class="product_main_list c">
-                <ul data-am-widget="gallery" class="am-gallery am-gallery-default"
-                    data-am-gallery="{ pureview:{target: 'a'} }" id="certificateList">
-
-                </ul>
-                <div id="yema">
-                    <div class="pages">
+            <div class="n_main_con_mbx c"><a href="index.html">网站首页</a> > <a>人才招聘</a> > <a>招聘信息</a></div>
+            <div class="zhaopin_list c">
+                <div class="zhaopin_list_box c">
+                    <div class="rl-img c">
+                        <img src="img/rl-img.jpg" alt="">
+                    </div>
+                    <div class="rl-table c">
+                        <table>
+                            <thead>
+                                <th>招聘职位</th>
+                                <th>招聘部门</th>
+                                <th>薪资水平</th>
+                                <th>招聘期限</th>
+                            </thead>
+                            <tbody id="recruitmentTable"></tbody>
+                        </table>
                     </div>
                 </div>
             </div>
-
         </div>
     </div>
 </div>
-<!--底部通过模板引入-->
+
+<!--foot-->
 <div id="foot"></div>
-<!-- 代码区 -->
+
 <script>
     $(function () {
-        createCertificate();
-        $('.pages_num').css('display', 'none');
-        $('.pages_prev ').text('<');
-        $('.pages_next').text('>');
-    })
+        recruitment(); //获取招聘信息
+    });
 </script>
 </body>
 </html>
