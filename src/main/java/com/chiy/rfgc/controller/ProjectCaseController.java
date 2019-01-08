@@ -129,7 +129,7 @@ public class ProjectCaseController {
         return ApiResult.SUCCESS(list);
     }
 
-    @ApiOperation("通过id公司信息")
+    @ApiOperation("通过id查询公司信息")
     @RequestMapping("/findById")
     public ApiResult<Object> findById(Integer id) {
         if (id == null) {

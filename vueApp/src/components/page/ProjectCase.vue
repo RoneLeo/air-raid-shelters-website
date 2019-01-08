@@ -8,6 +8,7 @@
         <div class="container" v-loading="loading">
             <el-table :data="tableData" class="table" ref="multipleTable">
                 <el-table-column prop="gcmc" label="工程名称"></el-table-column>
+                <el-table-column prop="aljs" label="案例介绍" :show-overflow-tooltip="true"></el-table-column>
                 <el-table-column label="展示图片">
                     <template slot-scope="scope">
                         <a target="_blank" :href='`http://182.151.22.247:8081${scope.row.tp}`'>{{scope.row.tp}}</a>
@@ -16,9 +17,9 @@
                 <el-table-column prop="cjsj" label="创建时间"></el-table-column>
                 <el-table-column label="操作" align="center">
                     <template slot-scope="scope">
-                        <!--<el-button type="text" icon="el-icon-lx-edit"-->
-                                   <!--@click="editFile(scope.$index, scope.row)">编辑-->
-                        <!--</el-button>-->
+                        <el-button type="text" icon="el-icon-lx-edit"
+                                   @click="editFile(scope.$index, scope.row)">编辑
+                        </el-button>
                         <el-button type="text" icon="el-icon-delete" class="red" @click="delFile(scope.$index, scope.row)">删除</el-button>
                     </template>
                 </el-table-column>
@@ -45,10 +46,22 @@
                               :rules="[{ required: true, message: '工程名称不能为空', trigger: 'blur' }]">
                     <el-input v-model="addForm.gcmc"></el-input>
                 </el-form-item>
+                <el-form-item label="案例介绍"
+                              prop="aljs"
+                              :rules="[{ required: true, message: '案例介绍不能为空', trigger: 'blur' }]">
+                    <el-input v-model="addForm.aljs" type="textarea" :autosize="{ minRows: 5, maxRows: 18}"></el-input>
+                </el-form-item>
                 <el-form-item label="展示图片"
-                              prop="file"
-                              :rules="[{ required: true, message: '展示图片为空', trigger: 'blur' }]">
+                              v-if="!addForm.id || !addForm.tp">
                     <input type="file" @change="getFile($event)" />
+                </el-form-item>
+                <el-form-item label="展示图片"
+                              v-if="addForm.tp">
+                    <div style="position: relative;display: inline-block;width: auto;height: auto;">
+                        <img :src="`http://182.151.22.247:8081${addForm.tp}`" alt="" style="width: 100px;height: 100px;">
+                        <i v-if="addForm.tp" class="el-icon-error" @click="deleteTP" style="font-size: 18px;font-weight: 600;position: absolute;top: -9px;right: -9px;color: #0095FF;"></i>
+                    </div>
+
                 </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
@@ -83,13 +96,28 @@
         },
         computed: {},
         methods: {
+            deleteTP() {
+                this.addForm.tp = '';
+                this.file = {};
+            },
             closeClear() {
                 this.$refs.addForm.resetFields()
             },
+            editFile(index, row) {
+                this.addForm = Object.assign({}, row);
+                this.modelVisible = true;
+            },
             delFile(index, row) {
-                this.$axios.post('/api/projectCase/delete', this.$qs.stringify({id: row.id})).then((res) => {
-                    this.$message.success('已删除！');
-                    this.getData();
+                this.$confirm('此操作将永久删除该案例, 是否继续?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    this.$axios.post('/api/projectCase/delete', this.$qs.stringify({id: row.id})).then((res) => {
+                        this.$message.success('已删除！');
+                        this.getData();
+                    });
+                }).catch(() => {
                 });
             },
             getFile(event) {
@@ -120,7 +148,7 @@
 
             // 保存编辑
             saveEdit(addForm) {
-                this.$refs[addForm].validate((valid) => {
+                this.$refs.addForm.validate((valid) => {
                     if (valid) {
                         this.addLoading = true;
                         let url = '/api/projectCase/add';

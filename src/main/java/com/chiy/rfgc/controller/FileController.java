@@ -4,6 +4,7 @@ import com.chiy.rfgc.common.ApiResult;
 import com.chiy.rfgc.entity.FileEntity;
 import com.chiy.rfgc.repository.FileRepository;
 import com.chiy.rfgc.repository.UserRepository;
+import com.chiy.rfgc.utils.FileUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -58,7 +59,11 @@ public class FileController {
         } else {
             wjlj = HOMEPAGE_PHOTO_PATH;
         }
-        FileEntity entity1 = addFile(request, file, wjlj, uuid);
+        FileUtils.addPhoto(request, wjlj, file);
+        entity.setGsid(userRepository.findByUuid(uuid).getGsid());
+        entity.setWjlj(wjlj + file.getOriginalFilename());
+        entity.setCjsj(new Date());
+        FileEntity entity1 = fileRepository.save(entity);
         if (entity1 == null) {
             return ApiResult.FAILURE("添加失败");
         }
@@ -119,25 +124,6 @@ public class FileController {
         return ApiResult.SUCCESS(list);
     }
 
-    /**
-     * 添加文件
-     */
-    public FileEntity addFile(HttpServletRequest request, MultipartFile file, String wjlj, String uuid) throws IOException {
-        String path = request.getSession().getServletContext().getRealPath(wjlj);
-        File dest = new File(path + file.getOriginalFilename());
-        if(!dest.getParentFile().exists()){
-            dest.getParentFile().mkdir();
-        }
-        file.transferTo(dest);
-
-        FileEntity entity = new FileEntity();
-
-        entity.setGsid(userRepository.findByUuid(uuid).getGsid());
-        entity.setWjlj(wjlj + file.getOriginalFilename());
-        entity.setCjsj(new Date());
-        FileEntity entity1 = fileRepository.save(entity);
-        return entity1;
-    }
 
 
 }

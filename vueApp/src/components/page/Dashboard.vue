@@ -34,7 +34,8 @@
                             <div class="grid-content grid-con-1">
                                 <i class="el-icon-lx-people grid-con-icon"></i>
                                 <div class="grid-cont-right">
-                                    <div class="grid-num">1234</div>
+                                    <count-to :start-val="0" :end-val="1234" :duration="3000" class="card-panel-num grid-num"/>
+                                    <!--<div class="grid-num">1234</div>-->
                                     <div>用户访问量</div>
                                 </div>
                             </div>
@@ -45,7 +46,8 @@
                             <div class="grid-content grid-con-2">
                                 <i class="el-icon-lx-notice grid-con-icon"></i>
                                 <div class="grid-cont-right">
-                                    <div class="grid-num">321</div>
+                                    <count-to :start-val="0" :end-val="321" :duration="2000" class="card-panel-num grid-num"/>
+                                    <!--<div class="grid-num">321</div>-->
                                     <div>系统消息</div>
                                 </div>
                             </div>
@@ -56,7 +58,8 @@
                             <div class="grid-content grid-con-3">
                                 <i class="el-icon-lx-goods grid-con-icon"></i>
                                 <div class="grid-cont-right">
-                                    <div class="grid-num">5000</div>
+                                    <count-to :start-val="0" :end-val="5000" :duration="5000" class="card-panel-num grid-num"/>
+                                    <!--<div class="grid-num">5000</div>-->
                                     <div>数量</div>
                                 </div>
                             </div>
@@ -106,6 +109,7 @@
 
 <script>
     import Schart from 'vue-schart';
+    import CountTo from 'vue-count-to'
     import bus from '../common/bus';
     export default {
         name: 'dashboard',
@@ -184,7 +188,8 @@
             }
         },
         components: {
-            Schart
+            Schart,
+            CountTo
         },
         computed: {
             role() {
@@ -240,6 +245,7 @@
         align-items: center;
         height: 100px;
     }
+
 
     .grid-cont-right {
         flex: 1;

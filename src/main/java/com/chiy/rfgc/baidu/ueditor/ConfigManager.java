@@ -11,6 +11,7 @@ import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.commons.io.IOUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -142,10 +143,11 @@ public final class ConfigManager {
 				break;
 				
 		}
-		
+
+		conf.put( "basePath", this.jsonConfig.getString("basePath") );
 		conf.put( "savePath", savePath );
 		conf.put( "rootPath", this.rootPath );
-		conf.put( "basePath", this.jsonConfig.getString("basePath") );
+
 		
 		return conf;
 		
@@ -161,8 +163,10 @@ public final class ConfigManager {
 		
 		this.parentPath = file.getParent();
 		
-		String configContent = this.readFile( this.getConfigPath() );
-		
+//		String configContent = this.readFile( this.getConfigPath() );
+		String configContent = this.filter(IOUtils.toString(this.getClass().getClassLoader().getResourceAsStream("config.json")));
+
+
 		try{
 			JSONObject jsonConfig = new JSONObject( configContent );
 			this.jsonConfig = jsonConfig;
