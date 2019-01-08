@@ -137,7 +137,7 @@ public class NewsController {
         return ApiResult.SUCCESS(list);
     }
 
-    @ApiOperation("通过id查询")
+    @ApiOperation("前端通过id查询")
     @RequestMapping("/findById")
     public ApiResult<Object> findById(Integer id) {
         if (id == null) {

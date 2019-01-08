@@ -11,6 +11,8 @@ public class EquipmenttypeEntity {
     private Integer id;
     @ApiModelProperty(value = "设备类型")
     private String name;
+    @ApiModelProperty(value = "公司id")
+    private Integer gsid;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,17 +35,28 @@ public class EquipmenttypeEntity {
         this.name = name;
     }
 
+    @Basic
+    @Column(name = "company_id")
+    public Integer getGsid() {
+        return gsid;
+    }
+
+    public void setGsid(Integer gsid) {
+        this.gsid = gsid;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof EquipmenttypeEntity)) return false;
         EquipmenttypeEntity that = (EquipmenttypeEntity) o;
         return Objects.equals(id, that.id) &&
-                Objects.equals(name, that.name);
+                Objects.equals(name, that.name) &&
+                Objects.equals(gsid, that.gsid);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name);
+        return Objects.hash(id, name, gsid);
     }
 }
