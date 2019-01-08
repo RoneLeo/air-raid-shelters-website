@@ -35,4 +35,10 @@ public interface ProductDetailsRepository extends CrudRepository<ProductdetailsE
     @Transactional
     int deleteByCpId(Integer cpid);
 
+    // 通过产品id查询所有
+    @Query(value = "select DISTINCT id from productdetails where product_id = ?1", nativeQuery = true)
+    @Modifying
+    @Transactional
+    List<Integer> findAllIdByCpid(Integer cpid);
+
 }

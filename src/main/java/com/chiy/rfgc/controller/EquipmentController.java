@@ -79,12 +79,12 @@ public class EquipmentController {
 
     @ApiOperation("修改")
     @RequestMapping("/update")
-    public ApiResult<Object> update(HttpServletRequest request, EquipmentEntity entity, String contents, MultipartFile file) throws IOException {
-        String uuid = userController.getUuid(request);
-        // 判断是否登录
-        if ("".equals(uuid)) {
-            return ApiResult.UNKNOWN();
-        }
+    public ApiResult<Object> update(String uuid, HttpServletRequest request, EquipmentEntity entity, String contents, MultipartFile file) throws IOException {
+//        String uuid = userController.getUuid(request);
+//        // 判断是否登录
+//        if ("".equals(uuid)) {
+//            return ApiResult.UNKNOWN();
+//        }
         // 判断设备类型
         if (entity.getSblx() == null || equipmentTypeRepository.findById(entity.getSblx()) == null) {
             return ApiResult.FAILURE("修改失败，设备类型不能为空或该设备类型不存在");
@@ -101,19 +101,38 @@ public class EquipmentController {
             return ApiResult.FAILURE("修改失败");
         }
         // 修改小标题
+        List<Integer> idList = productDetailsRepository.findAllIdByCpid(entity1.getId());
         for (ProductdetailsEntity entity2 : list) {
+            ProductdetailsEntity entity3 = null;
             // 如果id存在，则修改
-            if (entity2.getId() == null) {
-
+            if (entity2.getId() != null) {
+                entity3 = productDetailsRepository.findById(entity2.getId());
+                if (entity3 == null) {
+                    return ApiResult.FAILURE("不存在，修改失败");
+                }
+                entity2.setCpid(entity1.getId());
+                productDetailsRepository.save(entity2);
+            } else if (entity2.getId() == null) {
+                // 如果id不存在，则添加
+                entity3 = new ProductdetailsEntity();
+                entity3.setCpid(entity1.getId());
+                entity3.setBt(entity2.getBt());
+                entity3.setXxnr(entity2.getXxnr());
+                productDetailsRepository.save(entity3);
             }
-            // 如果id不存在，则添加
-            // 如果不存在，则删除
-            ProductdetailsEntity entity3 = productDetailsRepository.findById(entity2.getId());
-            if (entity3 == null) {
-                return ApiResult.FAILURE("不存在");
+            // 筛选删除的
+            for (Integer id : idList) {
+                if (id == entity2.getId()) {
+                    idList.remove(id);
+                }
             }
-            entity2.setCpid(entity1.getId());
-            productDetailsRepository.save(entity2);
+        }
+        // 删除修改删除的
+        for (Integer id : idList) {
+            int result = productDetailsRepository.deleteById(id);
+            if (result == 0) {
+                return ApiResult.FAILURE("删除失败");
+            }
         }
         return ApiResult.SUCCESS(entity1);
     }
