@@ -1,6 +1,5 @@
 package com.chiy.rfgc.controller;
 
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.chiy.rfgc.common.ApiResult;
 import com.chiy.rfgc.entity.EquipmentEntity;
@@ -69,8 +68,8 @@ public class EquipmentController {
         if (list.size() != 0) {
             for (ProductTitle title : list) {
                 ProductdetailsEntity entity2 = new ProductdetailsEntity();
-                entity2.setBt(title.getTitle());
-                entity2.setXxnr(title.getContent());
+                entity2.setBt(title.getBt());
+                entity2.setXxnr(title.getXxnr());
                 entity2.setCpid(entity1.getId());
                 productDetailsRepository.save(entity2);
             }
@@ -209,23 +208,23 @@ public class EquipmentController {
     }
 
     static class ProductTitle {
-        private String title;
-        private String content;
+        private String bt;
+        private String xxnr;
 
-        public String getTitle() {
-            return title;
+        public String getBt() {
+            return bt;
         }
 
-        public void setTitle(String title) {
-            this.title = title;
+        public void setBt(String bt) {
+            this.bt = bt;
         }
 
-        public String getContent() {
-            return content;
+        public String getXxnr() {
+            return xxnr;
         }
 
-        public void setContent(String content) {
-            this.content = content;
+        public void setXxnr(String xxnr) {
+            this.xxnr = xxnr;
         }
     }
 
