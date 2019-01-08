@@ -24,52 +24,53 @@ export default new Router({
                 {
                     path: '/user',
                     component: resolve => require(['../components/page/User.vue'], resolve),
-                    meta: { title: '用户信息' }
+                    meta: { title: '用户信息', keepAlive: true }
                 },
                 {
                     path: '/dashboard',
                     component: resolve => require(['../components/page/Dashboard.vue'], resolve),
-                    meta: { title: '系统首页' }
+                    meta: { title: '系统首页', keepAlive: true }
                 },
                 {
                     path: '/files',
                     component: resolve => require(['../components/page/Files.vue'], resolve),
-                    meta: { title: '文件管理' }
+                    meta: { title: '文件管理', keepAlive: true }
                 },
                 {
                     path: '/products',
                     component: resolve => require(['../components/page/Products.vue'], resolve),
-                    meta: { title: '产品管理' }
+                    meta: { title: '产品管理', keepAlive: false }
                 },
                 {
                     path: '/addProduct',
+                    name: 'addProduct',
                     component: resolve => require(['../components/page/AddProduct.vue'], resolve),
-                    meta: { title: '录入产品' }
+                    meta: { title: '产品详情', keepAlive: false }
                 },
                 {
                     path: '/news',
                     component: resolve => require(['../components/page/News.vue'], resolve),
-                    meta: { title: '新闻管理' }
+                    meta: { title: '新闻管理', keepAlive: true }
                 },
                 {
                     path: '/projectCase',
                     component: resolve => require(['../components/page/ProjectCase.vue'], resolve),
-                    meta: { title: '工程案例' }
+                    meta: { title: '工程案例', keepAlive: true }
                 },
                 {
                     path: '/recruitment',
                     component: resolve => require(['../components/page/Recruitment.vue'], resolve),
-                    meta: { title: '招聘信息管理' }
+                    meta: { title: '招聘信息管理', keepAlive: true }
                 },
                 {
                     path: '/services',
                     component: resolve => require(['../components/page/Services.vue'], resolve),
-                    meta: { title: '网上订购列表' }
+                    meta: { title: '网上订购列表', keepAlive: true }
                 },
                 {
                     path: '/company',
                     component: resolve => require(['../components/page/Company.vue'], resolve),
-                    meta: { title: '公司信息' }
+                    meta: { title: '公司信息', keepAlive: true }
                 },
                 {
                     path: '/icon',

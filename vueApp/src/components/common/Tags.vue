@@ -32,7 +32,8 @@
         },
         methods: {
             isActive(path) {
-                return path === this.$route.fullPath;
+//                return path === this.$route.fullPath;
+                return path === this.$route.path;
             },
             // 关闭单个标签
             closeTags(index) {
@@ -59,7 +60,8 @@
             // 设置标签
             setTags(route){
                 const isExist = this.tagsList.some(item => {
-                    return item.path === route.fullPath;
+//                    return item.path === route.fullPath;
+                    return item.path === route.path;
                 })
                 if(!isExist){
                     if(this.tagsList.length >= 8){
@@ -67,7 +69,8 @@
                     }
                     this.tagsList.push({
                         title: route.meta.title,
-                        path: route.fullPath,
+//                        path: route.fullPath,
+                        path: route.path,
                         name: route.matched[1].components.default.name
                     })
                 }
@@ -84,6 +87,9 @@
         },
         watch:{
             $route(newValue, oldValue){
+                if(newValue.path === '/products') {
+                    console.log('/products')
+                }
                 this.setTags(newValue);
             }
         },

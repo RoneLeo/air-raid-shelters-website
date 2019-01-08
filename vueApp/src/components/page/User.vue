@@ -13,7 +13,7 @@
                 <el-table-column prop="zh" label="账号"></el-table-column>
                 <el-table-column prop="xm" label="姓名"></el-table-column>
                 <!--<el-table-column prop="mm" label="密码"></el-table-column>-->
-                <el-table-column prop="gsid" label="公司ID"></el-table-column>
+                <el-table-column prop="gsid" label="公司ID" :formatter="formatterGS"></el-table-column>
                 <el-table-column prop="cjsj" label="创建时间"></el-table-column>
                 <el-table-column label="操作"  align="center">
                     <template slot-scope="scope">
@@ -28,25 +28,32 @@
         </div>
 
         <!-- 弹出框 -->
-        <el-dialog :title="modelTitle" :visible.sync="modelVisible" width="40%"
-                   :close-on-click-modal="false" @closed="modelClose(form)">
+        <el-dialog :title="modelTitle" :visible.sync="modelVisible" width="35%"
+                   :close-on-click-modal="false" @closed="closeClear">
             <el-form ref="form" :model="form" label-width="100px">
-                <el-form-item label="账号">
+                <el-form-item label="账号"
+                              prop="zh"
+                              :rules="[{ required: true, message: '登录账号不能为空', trigger: 'blur' }]">
                     <el-input v-model="form.zh"></el-input>
                 </el-form-item>
-                <el-form-item label="密码">
+                <el-form-item label="密码"
+                              v-if="!form.uuid"
+                              prop="mm"
+                              :rules="[{ required: true, message: '密码不能为空', trigger: 'blur' }]">
                     <el-input v-model="form.mm"></el-input>
                 </el-form-item>
-                <el-form-item label="姓名">
+                <el-form-item label="姓名"
+                              prop="xm"
+                              :rules="[{ required: true, message: '姓名不能为空', trigger: 'blur' }]">
                     <el-input v-model="form.xm"></el-input>
                 </el-form-item>
-                <el-form-item label="公司ID">
+                <el-form-item label="公司ID"
+                              v-if="!form.uuid"
+                              prop="gsid"
+                              :rules="[{ required: true, message: '所属公司不能为空', trigger: 'blur' }]">
                     <el-select v-model="form.gsid" placeholder="请选择">
                         <el-option v-for="item in this.$dict.company" :key="item.id" :label="item.name" :value="item.id"></el-option>
                     </el-select>
-                </el-form-item>
-                <el-form-item label="创建时间">
-                    <el-input v-model="form.cjsj"></el-input>
                 </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
@@ -94,8 +101,11 @@
 
         },
         methods: {
-            modelClose(form) {
-                this.$refs[form].resetFields();
+            formatterGS(row) {
+                return this.$common.dictParse(row.gsid, this.dict.company);
+            },
+            closeClear() {
+                this.$refs.form.resetFields()
             },
             // 分页导航
             handleCurrentChange(val) {
@@ -108,7 +118,6 @@
                     if(res.resCode == 200){
                         this.tableData = res.data;
                     }
-                    console.log(111,res);
                 });
             },
             search() {
@@ -125,18 +134,14 @@
                 return row.tag === value;
             },
             handleEdit(index, row) {
-                this.idx = index;
-                const item = this.tableData[index];
-                this.form = {
-                    name: item.name,
-                    date: item.date,
-                    address: item.address
-                }
+                this.form = Object.assign({}, row);
                 this.modelVisible = true;
             },
             handleDelete(index, row) {
-                this.idx = index;
-                this.delVisible = true;
+                this.$axios.post('/api/user/delete', this.$qs.stringify({id: row.id})).then((res) => {
+                    this.$message.success('已删除！');
+                    this.getData();
+                });
             },
             delAll() {
                 const length = this.multipleSelection.length;
@@ -153,13 +158,13 @@
             },
             // 保存编辑
             saveEdit() {
-                console.log(this.form)
-                    this.$set(this.tableData, this.idx, this.form);
-                    this.$message.success(`修改第 ${this.idx+1} 行成功`);
-
-                this.modelVisible = false;
-                this.$axios.post('/api/user/add',this.form).then((res) => {
-                    console.log(111,res);
+                let url = '/api/user/add';
+                if(this.form.uuid) {
+                    url = '/api/user/update';
+                }
+                this.$axios.post(url ,this.$qs.stringify(Object.assign({}, this.form))).then((res) => {
+                    this.modelVisible = false;
+                    this.getData();
                 });
             },
             // 确定删除

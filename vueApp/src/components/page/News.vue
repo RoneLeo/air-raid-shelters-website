@@ -10,10 +10,11 @@
                 <el-tab-pane label="公司新闻" name="first">
                     <el-table :data="tableData" class="table" :show-header="false" ref="multipleTable">
                         <el-table-column prop="xwbt" label="新闻标题"></el-table-column>
+
                         <el-table-column prop="xwnr" label="新闻内容" :show-overflow-tooltip="true"></el-table-column>
 
-                        <el-table-column prop="cjsj" label="创建时间" width="200"></el-table-column>
-                        <el-table-column label="操作" align="center" width="200">
+                        <el-table-column prop="cjsj" label="创建时间" width="160"></el-table-column>
+                        <el-table-column label="操作" align="center" width="160">
                             <template slot-scope="scope">
                                 <el-button type="text" icon="el-icon-lx-edit"
                                            @click="editFile(scope.$index, scope.row)">编辑
@@ -40,8 +41,8 @@
                     <el-table :data="tableData1" class="table" :show-header="false" ref="multipleTable">
                         <el-table-column prop="xwbt" label="新闻标题"></el-table-column>
                         <el-table-column prop="xwnr" label="新闻内容" :show-overflow-tooltip="true"></el-table-column>
-                        <el-table-column prop="cjsj" label="创建时间" width="200"></el-table-column>
-                        <el-table-column label="操作" align="center" width="200">
+                        <el-table-column prop="cjsj" label="创建时间" width="160"></el-table-column>
+                        <el-table-column label="操作" align="center" width="160">
                             <template slot-scope="scope">
                                 <el-button type="text" icon="el-icon-lx-edit"
                                            @click="editFile(scope.$index, scope.row)">编辑
@@ -77,6 +78,7 @@
                               :rules="[{ required: true, message: '新闻标题不能为空', trigger: 'blur' }]">
                     <el-input v-model="addForm.xwbt"></el-input>
                 </el-form-item>
+
                 <el-form-item label="新闻内容"
                               prop="xwnr"
                               :rules="[{ required: true, message: '新闻内容不能为空', trigger: 'blur' }]">
@@ -89,6 +91,18 @@
                         <el-option v-for="item in this.$dict.newType" :key="item.id*2.0395" :label="item.name"
                                    :value="item.id"></el-option>
                     </el-select>
+                </el-form-item>
+                <el-form-item label="新闻图片"
+                              v-if="!addForm.id || !addForm.xwtp">
+                    <input type="file" @change="getFile($event)" />
+                </el-form-item>
+                <el-form-item label="新闻图片"
+                              v-if="addForm.xwtp">
+                    <div style="position: relative;display: inline-block;width: auto;height: auto;">
+                        <img :src="`http://182.151.22.247:8081${addForm.xwtp}`" alt="" style="width: 100px;height: 100px;">
+                        <i v-if="addForm.xwtp" class="el-icon-error" @click="deleteTP" style="font-size: 18px;font-weight: 600;position: absolute;top: -9px;right: -9px;color: #0095FF;"></i>
+                    </div>
+
                 </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
@@ -112,10 +126,10 @@
                 modelVisible: false,
                 addForm: {},
                 file: {},
-                size: 2,
+                size: 10,
                 page: 1,
                 totalElements: 0,
-                size1: 1,
+                size1: 10,
                 page1: 1,
                 totalElements1: 0,
                 loading: true,
@@ -127,6 +141,14 @@
         },
         computed: {},
         methods: {
+            deleteTP() {
+                this.addForm.xwtp = '';
+                this.file = {};
+            },
+            getFile(event) {
+                this.file = event.target.files[0];
+                this.addForm.xwtp = this.file;
+            },
             closeClear() {
                 this.$refs.addForm.resetFields()
             },
@@ -138,14 +160,20 @@
                 }
             },
             delFile(index, row) {
-                this.$axios.post('/api/news/delete', this.$qs.stringify({id: row.id})).then((res) => {
-                    this.$message.success('已删除！');
-                    if(this.activeName == 'first') {
-                        this.getData(1, this.page, this.size);
-                    }else {
-                        this.getData(2, this.page1, this.size1);
-                    }
-
+                this.$confirm('是否确定删除该新闻?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    this.$axios.post('/api/news/delete', this.$qs.stringify({id: row.id})).then((res) => {
+                        this.$message.success('已删除！');
+                        if(this.activeName == 'first') {
+                            this.getData(1, this.page, this.size);
+                        }else {
+                            this.getData(2, this.page1, this.size1);
+                        }
+                    });
+                }).catch(() => {
                 });
             },
             formatterWjlx(row) {
@@ -153,6 +181,7 @@
             },
             editFile(index, row) {
                 this.addForm = Object.assign({}, row);
+                this.file = {};
                 this.modelVisible = true;
             },
             modelClose(addForm) {
@@ -196,14 +225,26 @@
             },
             // 保存编辑
             saveEdit(addForm) {
-                this.$refs[addForm].validate((valid) => {
+                this.$refs.addForm.validate((valid) => {
                     if (valid) {
                         this.addLoading = true;
                         let url = '/api/news/add';
                         if(this.addForm.id) {
                             url = '/api/news/update'
                         }
-                        this.$axios.post(url, this.$qs.stringify(Object.assign({}, this.addForm))).then(res => {
+                        let formData = new FormData();
+                        for (let key in this.addForm) {
+                            formData.append(key, this.addForm[key]);
+                        }
+                        for (var value of formData.values()) {
+                            console.log(value);
+                        }
+                        let config = {
+                            headers: {
+                                'Content-Type': 'multipart/form-data'
+                            }
+                        };
+                        this.$axios.post(url, formData, config).then(res => {
                             this.addLoading = false
                             this.modelVisible = false;
                             if(this.activeName == 'first') {
