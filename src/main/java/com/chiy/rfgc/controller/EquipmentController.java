@@ -50,6 +50,9 @@ public class EquipmentController {
         if (entity.getSblx() == null || equipmentTypeRepository.findById(entity.getSblx()) == null) {
             return ApiResult.FAILURE("添加失败，设备类型不能为空或该设备类型不存在");
         }
+        //
+        List<ProductTitle> list = new ArrayList<>();
+
         // 添加图片
         if (file != null) {
             FileUtils.addPhoto(request, EQUIPMENT_PHOTO_PATH, file);
@@ -126,11 +129,11 @@ public class EquipmentController {
             return ApiResult.FAILURE("删除失败");
         }
         // 删除小标题
-        boolean flag = productDetailsRepository.deleteByCpId(id);
-        if (flag) {
-            return ApiResult.SUCCESS("删除成功");
+        int flag = productDetailsRepository.deleteByCpId(id);
+        if (flag == 0) {
+            return ApiResult.SUCCESS("删除失败");
         }
-        return ApiResult.SUCCESS("删除失败");
+        return ApiResult.SUCCESS("删除成功");
     }
 
     @ApiOperation("通过公司id查询分页显示")

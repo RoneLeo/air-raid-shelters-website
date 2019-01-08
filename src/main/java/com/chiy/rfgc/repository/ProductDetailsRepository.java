@@ -33,6 +33,6 @@ public interface ProductDetailsRepository extends CrudRepository<ProductdetailsE
     @Query(value = "delete from productdetails where product_id = ?1", nativeQuery = true)
     @Modifying
     @Transactional
-    boolean deleteByCpId(Integer cpid);
+    int deleteByCpId(Integer cpid);
 
 }
