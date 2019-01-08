@@ -6,8 +6,10 @@
     <title id="headTitle"></title>
     <meta name="keywords" id="headKeywords" content="">
     <meta name="description" id="headDescription" content="">
-    <link rel="icon" type="image/x-icon" href="img/favicon.ico" />
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+    <link rel="icon" type="image/x-icon" href="img/favicon.ico"/>
     <link rel="stylesheet" href="css/amazeui.min.css">
+    <link rel="stylesheet" href="css/amazeui.page.css">
     <link rel="stylesheet" href="css/app.css?v=1.0">
     <link rel="stylesheet" href="css/index.css">
 
@@ -15,6 +17,7 @@
     <script src="js/jquery.min.js"></script>
     <!--<![endif]-->
     <script src="js/amazeui.min.js"></script>
+    <script src="js/amazeui.page.js"></script>
     <script src="js/common.js?v=1.0"></script>
 </head>
 <body>
@@ -24,6 +27,7 @@
     以获得更好的体验！</p>
 <![endif]-->
 <!-- 代码区 -->
+<!--head-->
 <div id="head" class="M c">
     <div class="head_top c">
         <div class="head_top_box c" id="headTop"></div>
@@ -36,60 +40,49 @@
         </div>
     </div>
 </div>
+
+<!--main-->
 <div id="main">
-    <div class="n_banner c" style="background: url('img/pageTop/pageTop1.jpg') no-repeat center;"></div>
+    <div class="n_banner c" style="background: url('img/pageTop/pageTop2.jpg') no-repeat center;"></div>
     <div class="n_main c">
         <div class="n_main_nav">
             <div class="n_main_nav_title c">
-                <div class="n_main_nav_title1 go-in">走进公司</div>
-                <div class="n_main_nav_title2">ABOUT US</div>
+                <div class="n_main_nav_title1">新闻动态</div>
+                <div class="n_main_nav_title2">NEWS</div>
             </div>
             <div class="n_main_nav_ul c">
                 <ul>
                     <li>
-                        <a class="" href="intro.html">公司简介</a>
-                        <div class="n_main_nav_erji c" style="">
+                        <a href="companyNews.html">公司新闻</a>
+                        <div class="n_main_nav_erji c" style="display:block;">
                         </div>
                     </li>
                     <li>
-                        <a class="n_main_nav_li_now" >资质证书</a>
+                        <a class="n_main_nav_li_now" >行业新闻</a>
                         <div class="n_main_nav_erji c" style="display:block;">
                         </div>
                     </li>
                 </ul>
             </div>
-            <div class="n_main_nav_contact c">
-                <img src="http://www.ytrsrf.com/images/contactus.jpg" alt="">
-            </div>
         </div>
         <div class="n_main_con">
-            <div class="n_main_con_mbx c">
-                <a href="index.html">网站首页</a> > <a class="go-in">走进公司</a> > <a>资质证书</a>
+            <div class="n_main_con_mbx c"><a href="index.html">网站首页</a> > <a>新闻动态</a> > <a>行业新闻</a></div>
+            <div class="news_main_list c">
+                <ul id="newsList"></ul>
             </div>
-            <div class="product_main_list c">
-                <ul data-am-widget="gallery" class="am-gallery am-gallery-default"
-                    data-am-gallery="{ pureview:{target: 'a'} }" id="certificateList">
-
-                </ul>
-                <div id="yema">
-                    <div class="pages">
-                    </div>
-                </div>
+            <div id="yema" class="">
+                <div id="newsPage"></div>
             </div>
-
         </div>
     </div>
 </div>
-<!--底部通过模板引入-->
+
+<!--foot-->
 <div id="foot"></div>
-<!-- 代码区 -->
 <script>
     $(function () {
-        createCertificate();
-        $('.pages_num').css('display', 'none');
-        $('.pages_prev ').text('<');
-        $('.pages_next').text('>');
-    })
+        news(2);//1-公司新闻,2-行业新闻
+    });
 </script>
 </body>
 </html>

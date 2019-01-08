@@ -42,17 +42,22 @@
 
 <!--main-->
 <div id="main">
-    <div class="n_banner c" style="background: url('img/pageTop/pageTop1.jpg') no-repeat center;"></div>
+    <div class="n_banner c" style="background: url('img/pageTop/pageTop2.jpg') no-repeat center;"></div>
     <div class="n_main c">
         <div class="n_main_nav">
             <div class="n_main_nav_title c">
-                <div class="n_main_nav_title1">工程案例</div>
-                <div class="n_main_nav_title2">CASE</div>
+                <div class="n_main_nav_title1">新闻动态</div>
+                <div class="n_main_nav_title2">NEWS</div>
             </div>
             <div class="n_main_nav_ul c">
                 <ul>
                     <li>
-                        <a class="n_main_nav_li_now">工程案例</a>
+                        <a href="companyNews.html">公司新闻</a>
+                        <div class="n_main_nav_erji c" style="">
+                        </div>
+                    </li>
+                    <li>
+                        <a href="industryNews.html" class="n_main_nav_li_now">行业新闻</a>
                         <div class="n_main_nav_erji c" style="display:block;">
                         </div>
                     </li>
@@ -60,13 +65,13 @@
             </div>
         </div>
         <div class="n_main_con">
-            <div class="n_main_con_mbx c"><a href="index.html">网站首页</a> > <a>工程案例</a> > <a>工程案例</a></div>
+            <div class="n_main_con_mbx c"><a href="index.html">网站首页</a> > <a>新闻动态</a> > <a>行业新闻</a></div>
             <div class="newshow c M">
                 <div class="newshowbox c">
                     <div class="newshow_title c">
-                        <div class="newshow_name c" id="caseName"></div>
+                        <div class="newshow_name c" id="newsTitle"></div>
                         <div class="newshow_zx c">
-                            <div class="newshow_timer">发布时间：<span id="caseTime"></span></div>
+                            <div class="newshow_timer">发布时间：<span id="newsTime"></span></div>
                             <div class="newshow_shu">&nbsp;&nbsp;|&nbsp;&nbsp;</div>
                             <div class="newshow_follow"></div>
                             <div class="newshow_ctrl">
@@ -75,16 +80,18 @@
                                 <a href="javascript:;">默认字号</a>
                             </div>
                             <div class="newshow_back">
-                                <a href="project.html">返回列表</a>
+                                <a href="industryNews.html">返回列表</a>
                             </div>
                         </div>
                     </div>
-                    <div class="newshow_cont c">
-                        <div style="text-align:center;">
-                            <img id="caseImg" style="height:400px;"/>
-                        </div>
-                        <div class="newshow_cont_txt" style="margin-top:15px;">
-                            <p id="caseTxt">项目介绍</p>
+                    <div style="text-align:center;">
+                        <img id="newsImg" style="height:360px;"/>
+                    </div>
+                    <pre class="newshow_cont c pre_content" id="newsContent"></pre>
+                    <div class="newshow_bottom c">
+                        <div class="newshow_pjs c">
+                            <div class="newshow_p">
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -95,10 +102,11 @@
 
 <!--foot-->
 <div id="foot"></div>
+
 <script>
     $(function () {
-        projectCaseDetails();//获取工程案例
-    })
+        newsDetails(); //获取招聘信息详情
+    });
 </script>
 </body>
 </html>
