@@ -121,11 +121,16 @@ public class EquipmentController {
                 productDetailsRepository.save(entity3);
             }
             // 筛选删除的
-            for (Integer id : idList) {
-                if (id == entity2.getId()) {
-                    idList.remove(id);
+            Iterator<Integer> iterator = idList.iterator();
+            if (idList.size() != 0) {
+                while (iterator.hasNext()) {
+                    Integer value = iterator.next();
+                        if (value == entity2.getId()) {
+                            iterator.remove();
+                        }
                 }
             }
+
         }
         // 删除修改删除的
         for (Integer id : idList) {
