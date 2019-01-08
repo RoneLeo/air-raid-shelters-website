@@ -191,7 +191,7 @@ public class EquipmentController {
 
     @ApiOperation("通过公司id和设备类型查询")
     @RequestMapping("/frontFindAllByGsidAndSblx")
-    public ApiResult<Object> findAllByGsidAndSblx(Integer gsid, Integer sblx) {
+    public ApiResult<Object> frontFindAllByGsidAndSblx(Integer gsid, Integer sblx) {
         if (gsid == null) {
             return ApiResult.FAILURE("公司id不能为空");
         }

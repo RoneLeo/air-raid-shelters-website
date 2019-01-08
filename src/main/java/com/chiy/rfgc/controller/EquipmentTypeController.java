@@ -30,13 +30,5 @@ public class EquipmentTypeController {
         return ApiResult.SUCCESS(list);
     }
 
-    @ApiOperation(value = "查询所以设备类型")
-    @RequestMapping("/findAll")
-    public ApiResult<Object> findAllBySblx() {
-
-        List<EquipmenttypeEntity> list = equipmentTypeRepository.findAll();
-
-        return ApiResult.SUCCESS(list);
-    }
 
 }
