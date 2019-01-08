@@ -121,19 +121,19 @@ public class NewsController {
 
     }
 
-    @ApiOperation("前端显示公司信息")
+    @ApiOperation("前端显示新闻信息")
     @RequestMapping("/findAllByGsid")
     public ApiResult<Object> findAllByGsid(Integer gsid, Integer xwlx, int page, int size) {
         if (gsid == null) {
             return ApiResult.FAILURE("公司id不能为空");
         }
-        if (xwlx == null) {
-            return ApiResult.FAILURE("新闻类型不能为空");
-        }
         Pageable pageable = PageRequest.of(page - 1, size);
-
-        Page<NewsEntity> list = newsRepository.findAllByGsidAndXwlxOrderByCjsjDesc(gsid, xwlx, pageable);
-
+        Page<NewsEntity> list = null;
+        if (xwlx == null) {
+            list = newsRepository.findAllByGsid(gsid, pageable);
+        } else {
+            list = newsRepository.findAllByGsidAndXwlxOrderByCjsjDesc(gsid, xwlx, pageable);
+        }
         return ApiResult.SUCCESS(list);
     }
 }

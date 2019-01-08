@@ -12,7 +12,6 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -41,12 +40,12 @@ public class EquipmentController {
 
     @ApiOperation(value = "添加")
     @RequestMapping("/add")
-    public ApiResult<Object> add(String uuid, EquipmentEntity entity, HttpServletRequest request, MultipartFile file, List<ProductTitle> contents) throws IOException {
-//        String uuid = userController.getUuid(request);
-//        // 判断是否登录
-//        if ("".equals(uuid)) {
-//            return ApiResult.UNKNOWN();
-//        }
+    public ApiResult<Object> add(EquipmentEntity entity, HttpServletRequest request, MultipartFile file, List<ProductTitle> contents) throws IOException {
+        String uuid = userController.getUuid(request);
+        // 判断是否登录
+        if ("".equals(uuid)) {
+            return ApiResult.UNKNOWN();
+        }
         // 判断设备类型
         if (entity.getSblx() == null || equipmentTypeRepository.findById(entity.getSblx()) == null) {
             return ApiResult.FAILURE("添加失败，设备类型不能为空或该设备类型不存在");
@@ -195,6 +194,7 @@ public class EquipmentController {
             map.put("gsid",equipmentEntity.getGsid());
             map.put("cpmc",equipmentEntity.getCpmc());
             map.put("cptp",equipmentEntity.getCptp());
+            map.put("sblx", equipmentEntity.getSblx());
             map.put("cpxq",cpxq);
             result.add(map);
         }
