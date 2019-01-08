@@ -702,6 +702,10 @@
     transition: all 0.4s;
 }
 .n_main_con_js{
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
     font-size: 14px;
     color: #888888;
 	margin:10px 0 0 0;

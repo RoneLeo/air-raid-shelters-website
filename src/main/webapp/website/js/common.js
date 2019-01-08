@@ -265,7 +265,7 @@ function projectCase() {
                 lastClass = 'product_main_li4';
             }
             projectCaseList += '<li class="'+lastClass+'">\n' +
-                '<a href="projectDetails.html">\n' +
+                '<a href="projectDetails.html?id='+item.id+'">\n' +
                 '    <div class="product_main_li c">\n' +
                 '        <div class="product_main_img c">\n' +
                 '            <img src="'+ ServerUrl + tp +'">\n' +
@@ -278,25 +278,85 @@ function projectCase() {
         $('#projectCaseList').html(projectCaseList);
     })
 }
+
 //工程案例详情
 function projectCaseDetails(){
-    $('#caseName').html('项目名称');
-    $('#caseImg').prop('src','http://www.ytrsrf.com/uploadfile/2017/0523/20170523120207948.jpg');
-    $('#caseTxt').html('项目介绍项目介绍项目介绍项目介绍项目介绍项目介绍项目介绍项目介绍');
-    $('#caseTime').text('2019-09-11 16:00:00');
-    return;
     var id = getUrlParam().id;
     if(id){
-        $.post(ServerUrl + 'recruitment/findById',{id:id},function (json) {
+        $.post(ServerUrl + 'projectCase/findById',{id:id},function (json) {
             var data = json.data;
-            var xxsm = data.xxsm;
-            $('#caseName').html(xxsm);
-            $('#positionName').text(data.zpgw);
-            $('#publicTime').text(data.cjsj);
-        })
+            $('#caseName').html(data.gcmc);
+            $('#caseImg').prop('src',ServerUrl + data.tp);
+            $('#caseTxt').html(data.aljs);
+            $('#caseTime').text(data.cjsj);
+        });
     }
 }
 
+//news
+function news(type) {
+    getNewsData(type,false);
+
+}
+//getNewsData
+function getNewsData(type,isPage,page) {
+    var page = page || 1;
+    var size = 2;
+    var detailsPage = 'companyNewsDetails.html';
+    if(type == 2){
+        detailsPage = 'industryNewsDetails.html'
+    }
+    $.post(ServerUrl + 'news/findAllByGsid',{gsid:Gsid,xwlx:type,page:page,size:size},function (json) {
+        console.log('news',json);
+        var content = json.data.content;
+        var pages = json.data.numberOfElements;
+        //加载分页效果
+        if(pages && !isPage ){
+            $("#newsPage").page({
+                pages: pages, //页数
+                curr: 1, //当前页
+                type: 'default', //主题
+                groups: 5, //连续显示分页数
+                prev: '<', //若不显示，设置false即可
+                next: '>', //若不显示，设置false即可
+                first: "首页",
+                last: "尾页", //false则不显示
+                jump: function(context, first) {
+                    var curr = context.option.curr;
+                    getNewsData(type,true,curr);
+                }
+            });
+        }else{
+            var newsList = '';
+            for(var i=0;i<content.length;i++){
+                var item = content[i];
+                newsList += '<li>\n' +
+                    '<a href="'+detailsPage+'?id='+item.id+'">\n' +
+                    '    <div class="n_main_con_list c">\n' +
+                    '        <div class="n_main_con_title c">'+item.xwbt+'</div>\n' +
+                    '        <div class="n_main_con_js c">'+item.xwnr+'</div>\n' +
+                    '        <div class="n_main_con_time c">'+item.cjsj+'</div>\n' +
+                    '    </div>\n' +
+                    '</a>\n' +
+                '</li>'
+            }
+            $('#newsList').html(newsList);
+        }
+    })
+}
+//新闻详情
+function newsDetails() {
+    var id = getUrlParam().id;
+    if(id){
+        $.post(ServerUrl + 'news/findById',{id:id},function (json) {
+            var data = json.data;
+            $('#newsTitle').html(data.xwbt);
+            $('#newsImg').prop('src', ServerUrl + data.xwtp);
+            $('#newsContent').text(data.xwnr);
+            $('#newsTime').text(data.cjsj);
+        });
+    }
+}
 
 
 
