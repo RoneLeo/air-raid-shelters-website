@@ -122,6 +122,16 @@ public class ProductDetailsController {
         return ApiResult.SUCCESS(list);
     }
 
+    @ApiOperation("通过id查询")
+    @RequestMapping("/findById")
+    public ApiResult<Object> findById(Integer id) {
+        if (id == null) {
+            return ApiResult.FAILURE("id不能为空");
+        }
+        ProductdetailsEntity entity = productDetailsRepository.findById(id);
+        return ApiResult.SUCCESS(entity);
+    }
+
 
 
 

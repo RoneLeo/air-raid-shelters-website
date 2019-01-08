@@ -125,6 +125,14 @@ public class ContactUsController {
         return ApiResult.SUCCESS(entity);
     }
 
-
+    @ApiOperation("通过id查询")
+    @RequestMapping("/findById")
+    public ApiResult<Object> findById(Integer id) {
+        if (id == null) {
+            return ApiResult.FAILURE("id不能为空");
+        }
+        ContactusEntity entity = contactUsRepository.findById(id);
+        return ApiResult.SUCCESS(entity);
+    }
 
 }

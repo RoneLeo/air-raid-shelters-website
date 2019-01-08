@@ -102,6 +102,12 @@ public class EquipmentController {
         }
         // 修改小标题
         for (ProductdetailsEntity entity2 : list) {
+            // 如果id存在，则修改
+            if (entity2.getId() == null) {
+
+            }
+            // 如果id不存在，则添加
+            // 如果不存在，则删除
             ProductdetailsEntity entity3 = productDetailsRepository.findById(entity2.getId());
             if (entity3 == null) {
                 return ApiResult.FAILURE("不存在");
