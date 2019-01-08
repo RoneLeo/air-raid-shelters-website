@@ -29,4 +29,6 @@ public class EquipmentTypeController {
 
         return ApiResult.SUCCESS(list);
     }
+
+
 }

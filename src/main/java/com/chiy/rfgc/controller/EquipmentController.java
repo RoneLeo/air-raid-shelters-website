@@ -169,9 +169,9 @@ public class EquipmentController {
         return ApiResult.SUCCESS("删除成功");
     }
 
-    @ApiOperation("通过公司id查询分页显示")
-    @RequestMapping("/findAllByGsidByPage")
-    public ApiResult<Object> findAllByGsidByPage(HttpServletRequest request, Integer sblx) {
+    @ApiOperation("通过公司id和设备类型查询")
+    @RequestMapping("/findAllByGsidAndSblx")
+    public ApiResult<Object> findAllByGsidAndSblx(HttpServletRequest request, Integer sblx) {
         String uuid = userController.getUuid(request);
         // 判断是否登录
         if ("".equals(uuid)) {
@@ -189,9 +189,9 @@ public class EquipmentController {
 
     }
 
-    @ApiOperation("前端显示公司信息")
-    @RequestMapping("/findAllByGsid")
-    public ApiResult<Object> findAllByGsid(Integer gsid, Integer sblx) {
+    @ApiOperation("通过公司id和设备类型查询")
+    @RequestMapping("/frontFindAllByGsidAndSblx")
+    public ApiResult<Object> frontFindAllByGsidAndSblx(Integer gsid, Integer sblx) {
         if (gsid == null) {
             return ApiResult.FAILURE("公司id不能为空");
         }

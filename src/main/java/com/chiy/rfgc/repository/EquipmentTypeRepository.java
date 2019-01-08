@@ -12,4 +12,7 @@ public interface EquipmentTypeRepository extends CrudRepository<EquipmenttypeEnt
 
     // 查询所以
     List<EquipmenttypeEntity> findAll();
+
+
+
 }
