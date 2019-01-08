@@ -1,5 +1,7 @@
 package com.chiy.rfgc.controller;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.chiy.rfgc.common.ApiResult;
 import com.chiy.rfgc.entity.EquipmentEntity;
 import com.chiy.rfgc.entity.ProductdetailsEntity;
@@ -40,7 +42,7 @@ public class EquipmentController {
 
     @ApiOperation(value = "添加")
     @RequestMapping("/add")
-    public ApiResult<Object> add(EquipmentEntity entity, HttpServletRequest request, MultipartFile file, List<ProductTitle> contents) throws IOException {
+    public ApiResult<Object> add(EquipmentEntity entity, HttpServletRequest request, MultipartFile file, String contents) throws IOException {
         String uuid = userController.getUuid(request);
         // 判断是否登录
         if ("".equals(uuid)) {
@@ -51,8 +53,7 @@ public class EquipmentController {
             return ApiResult.FAILURE("添加失败，设备类型不能为空或该设备类型不存在");
         }
         //
-        List<ProductTitle> list = new ArrayList<>();
-
+        List<ProductTitle> list = JSONObject.parseArray(contents, ProductTitle.class);
         // 添加图片
         if (file != null) {
             FileUtils.addPhoto(request, EQUIPMENT_PHOTO_PATH, file);
@@ -65,8 +66,8 @@ public class EquipmentController {
             return ApiResult.FAILURE("添加失败");
         }
         // 遍历添加小标题及内容
-        if (contents.size() != 0) {
-            for (ProductTitle title : contents) {
+        if (list.size() != 0) {
+            for (ProductTitle title : list) {
                 ProductdetailsEntity entity2 = new ProductdetailsEntity();
                 entity2.setBt(title.getTitle());
                 entity2.setXxnr(title.getContent());
@@ -79,7 +80,7 @@ public class EquipmentController {
 
     @ApiOperation("修改")
     @RequestMapping("/update")
-    public ApiResult<Object> update(HttpServletRequest request, EquipmentEntity entity, List<ProductdetailsEntity> list, MultipartFile file) throws IOException {
+    public ApiResult<Object> update(HttpServletRequest request, EquipmentEntity entity, String contents, MultipartFile file) throws IOException {
         String uuid = userController.getUuid(request);
         // 判断是否登录
         if ("".equals(uuid)) {
@@ -89,6 +90,8 @@ public class EquipmentController {
         if (entity.getSblx() == null || equipmentTypeRepository.findById(entity.getSblx()) == null) {
             return ApiResult.FAILURE("修改失败，设备类型不能为空或该设备类型不存在");
         }
+        //
+        List<ProductdetailsEntity> list = JSONObject.parseArray(contents, ProductdetailsEntity.class);
         // 添加图片
         if (file != null) {
             FileUtils.addPhoto(request, EQUIPMENT_PHOTO_PATH, file);
@@ -104,6 +107,7 @@ public class EquipmentController {
             if (entity3 == null) {
                 return ApiResult.FAILURE("不存在");
             }
+            entity2.setCpid(entity1.getId());
             productDetailsRepository.save(entity2);
         }
         return ApiResult.SUCCESS(entity1);
