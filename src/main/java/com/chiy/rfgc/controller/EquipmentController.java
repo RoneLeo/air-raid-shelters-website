@@ -10,11 +10,9 @@ import com.chiy.rfgc.repository.UserRepository;
 import com.chiy.rfgc.utils.FileUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -43,12 +41,12 @@ public class EquipmentController {
 
     @ApiOperation(value = "添加")
     @RequestMapping("/add")
-    public ApiResult<Object> add(EquipmentEntity entity, HttpServletRequest request, MultipartFile file, List<ProductTitle> contents) throws IOException {
-        String uuid = userController.getUuid(request);
-        // 判断是否登录
-        if ("".equals(uuid)) {
-            return ApiResult.UNKNOWN();
-        }
+    public ApiResult<Object> add(String uuid, EquipmentEntity entity, HttpServletRequest request, MultipartFile file, List<ProductTitle> contents) throws IOException {
+//        String uuid = userController.getUuid(request);
+//        // 判断是否登录
+//        if ("".equals(uuid)) {
+//            return ApiResult.UNKNOWN();
+//        }
         // 判断设备类型
         if (entity.getSblx() == null || equipmentTypeRepository.findById(entity.getSblx()) == null) {
             return ApiResult.FAILURE("添加失败，设备类型不能为空或该设备类型不存在");
@@ -128,7 +126,12 @@ public class EquipmentController {
         if (result == 0) {
             return ApiResult.FAILURE("删除失败");
         }
-        return ApiResult.SUCCESS("删除成功");
+        // 删除小标题
+        boolean flag = productDetailsRepository.deleteByCpId(id);
+        if (flag) {
+            return ApiResult.SUCCESS("删除成功");
+        }
+        return ApiResult.SUCCESS("删除失败");
     }
 
     @ApiOperation("通过公司id查询分页显示")
@@ -175,13 +178,12 @@ public class EquipmentController {
             return ApiResult.UNKNOWN();
         }
         if (id == null) {
-            return ApiResult.FAILURE("设备类型不能为空");
+            return ApiResult.FAILURE("id不能为空");
         }
         EquipmentEntity equipmentEntity = equipmentRepository.findById(id);
         List<EquipmentEntity> list = new ArrayList<>();
         list.add(equipmentEntity);
         return ApiResult.SUCCESS(addMap(list));
-
     }
 
     public List<Map> addMap(List<EquipmentEntity> list) {
@@ -199,25 +201,27 @@ public class EquipmentController {
         return result;
     }
 
+    static class ProductTitle {
+        private String title;
+        private String content;
+
+        public String getTitle() {
+            return title;
+        }
+
+        public void setTitle(String title) {
+            this.title = title;
+        }
+
+        public String getContent() {
+            return content;
+        }
+
+        public void setContent(String content) {
+            this.content = content;
+        }
+    }
+
 }
 
-class ProductTitle {
-    private String title;
-    private String content;
 
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getContent() {
-        return content;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
-    }
-}

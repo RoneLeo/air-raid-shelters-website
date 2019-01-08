@@ -11,16 +11,12 @@ import java.util.Objects;
 @Table(name = "productdetails", schema = "rfgc", catalog = "")
 public class ProductdetailsEntity {
     private Integer id;
-//    @ApiModelProperty(value = "公司id")
-//    private Integer gsid;
     @ApiModelProperty(value = "产品id")
     private Integer cpid;
     @ApiModelProperty(value = "标题")
     private String bt;
     @ApiModelProperty(value = "详细内容")
     private String xxnr;
-//    @ApiModelProperty(value = "创建时间")
-//    private Date cjsj;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,15 +29,6 @@ public class ProductdetailsEntity {
         this.id = id;
     }
 
-//    @Basic
-//    @Column(name = "company_id")
-//    public Integer getGsid() {
-//        return gsid;
-//    }
-//
-//    public void setGsid(Integer gsid) {
-//        this.gsid = gsid;
-//    }
 
     @Basic
     @Column(name = "product_id")
@@ -73,15 +60,6 @@ public class ProductdetailsEntity {
         this.xxnr = xxnr;
     }
 
-//    @Basic
-//    @Column(name = "create_time")
-//    public Date getCjsj() {
-//        return cjsj;
-//    }
-//
-//    public void setCjsj(Date cjsj) {
-//        this.cjsj = cjsj;
-//    }
 
 
     @Override

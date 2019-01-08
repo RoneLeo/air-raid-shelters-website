@@ -19,7 +19,7 @@ public interface ProductDetailsRepository extends CrudRepository<ProductdetailsE
     ProductdetailsEntity findById(Integer id);
 
     // 通过id删除
-    @Query(value = "delete from contactus where id = ?1", nativeQuery = true)
+    @Query(value = "delete from productdetails where id = ?1", nativeQuery = true)
     @Modifying
     @Transactional
     int deleteById(Integer id);
@@ -28,5 +28,11 @@ public interface ProductDetailsRepository extends CrudRepository<ProductdetailsE
     Page<ProductdetailsEntity> findAllByCpidOrderById(Integer cpid, Pageable pageable);
 
     List<ProductdetailsEntity> findAllByCpid(Integer cpid);
+
+    // 通过产品id删除
+    @Query(value = "delete from productdetails where product_id = ?1", nativeQuery = true)
+    @Modifying
+    @Transactional
+    boolean deleteByCpId(Integer cpid);
 
 }

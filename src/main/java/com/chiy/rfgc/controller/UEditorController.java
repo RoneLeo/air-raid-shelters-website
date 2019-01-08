@@ -39,20 +39,20 @@ public class UEditorController {
             writer.write(exec);
             writer.flush();
             writer.close();
-        } catch (IOException | JSONException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    @RequestMapping(value = "/imgUpload")
-    public Ueditor imgUpload(MultipartFile upfile) {
-        Ueditor ueditor = new Ueditor();
-        return ueditor;
-    }
+//    @RequestMapping(value = "/imgUpload")
+//    public Ueditor imgUpload(MultipartFile upfile) {
+//        Ueditor ueditor = new Ueditor();
+//        return ueditor;
+//    }
 
 
     @ApiOperation("添加图片")
-    @RequestMapping("/addPhoto")
+    @RequestMapping("/uploadimage")
     public ApiResult<Object> addPhoto(HttpServletRequest request, MultipartFile upfile) throws IOException {
         String wjlj = PRODUCT_PHOTO_PATH;
         String uuid = userController.getUuid(request);
