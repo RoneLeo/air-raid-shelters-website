@@ -5,11 +5,14 @@
         <div class="content-box" :class="{'content-collapse':collapse}">
             <v-tags></v-tags>
             <div class="content">
-                <transition name="move" mode="out-in">
-                    <keep-alive :include="tagsList">
-                        <router-view></router-view>
+                <!--<transition name="move" mode="out-in">-->
+
+                    <keep-alive :exclude="tagsList">
+                        <!--<router-view ></router-view>-->
+                        <router-view v-if="$route.meta.keepAlive"></router-view>
                     </keep-alive>
-                </transition>
+                    <router-view v-if="!$route.meta.keepAlive"></router-view>
+                <!--</transition>-->
             </div>
         </div>
     </div>

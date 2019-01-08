@@ -6,10 +6,26 @@
             </el-breadcrumb>
         </div>
         <div class="container" v-loading="loading">
+            <el-row>
+                <el-form :inline="true" class="demo-form-inline">
+                    <el-form-item label="产品类型">
+                        <el-select v-model="sblx" placeholder="请选择">
+                            <el-option
+                                    v-for="item in equipmentType"
+                                    :key="item.id*1.9098"
+                                    :label="item.name"
+                                    :value="item.id">
+                            </el-option>
+                        </el-select>
+                    </el-form-item>
+
+                </el-form>
+
+            </el-row>
             <el-table :data="tableData" class="table" ref="multipleTable">
                 <el-table-column prop="cpmc" label="产品名称"></el-table-column>
                 <el-table-column prop="sblx" label="产品类型" :formatter="formatterSBLX"></el-table-column>
-                <el-table-column prop="cjsj" label="创建时间"></el-table-column>
+                <el-table-column prop="cptp" label="产品图片"></el-table-column>
                 <el-table-column label="操作" align="center">
                     <template slot-scope="scope">
                         <el-button type="text" icon="el-icon-lx-attention" @click="look(scope.$index, scope.row)">点击查看
@@ -78,17 +94,20 @@
                 totalElements: 0,
                 loading: true,
                 addLoading: false,
-                equipmentType: []
+                equipmentType: [],
+                sblx: null
             }
         },
         mounted () {
             this.$axios.post('/api/equipmentType/findAll').then((res) => {
                 let data = res.data;
                 this.equipmentType = data;
+                this.sblx = this.equipmentType[0].id;
+                this.getData();
             });
         },
         created() {
-            this.getData();
+
         },
         computed: {},
         methods: {
@@ -96,16 +115,26 @@
                 return this.$common.dictParse(row.sblx, this.equipmentType);
             },
             delFile(index, row) {
-                this.$axios.post('/api/file/delete', this.$qs.stringify({id: row.id})).then((res) => {
-                    this.$message.success('已删除！');
-                    this.getData();
+                this.$confirm('是否确认删除该产品?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    this.$axios.post('/api/equipment/delete', this.$qs.stringify({id: row.id})).then((res) => {
+                        this.$message.success('已删除！');
+                        this.getData();
+                    });
+                }).catch(() => {
                 });
             },
             formatterWjlx(row) {
                 return this.$common.dictParse(row.wjlx, this.$dict.fileType);
             },
             look(index, row) {
-                window.open('http://182.151.22.247:8081' + row.wjlj);
+                this.$router.push({name: 'addProduct', params: {
+                    pId: row.id
+                }})
+//                window.open('http://182.151.22.247:8081' + row.wjlj);
             },
             modelClose(addForm) {
                 this.$refs[addForm].resetFields();
@@ -122,11 +151,11 @@
             // 获取 easy-mock 的模拟数据
             getData() {
                 this.loading = true;
-                this.$axios.post('/api/equipment/findAllByGsidByPage', this.$qs.stringify({ page: this.page, size: this.size})).then((res) => {
+                this.$axios.post('/api/equipment/findAllByGsidByPage', this.$qs.stringify({ sblx: this.sblx})).then((res) => {
                     if (res.resCode == 200) {
                         this.loading = false;
-                        this.tableData = res.data.content;
-                        this.totalElements = res.data.totalElements
+                        this.tableData = res.data;
+//                        this.totalElements = res.data.totalElements
                     }
                 });
             },
@@ -137,7 +166,7 @@
 
             // 保存编辑
             saveEdit(addForm) {
-                this.$refs[addForm].validate((valid) => {
+                this.$refs.addForm.validate((valid) => {
                     if (valid) {
                         this.addLoading = true;
                         let formData = new FormData();

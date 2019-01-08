@@ -136,13 +136,20 @@
                 console.log(tab, event);
             },
             delFile(index, row) {
-                this.$axios.post('/api/file/delete', this.$qs.stringify({id: row.id})).then((res) => {
-                    this.$message.success('已删除！');
-                    if(this.activeName == 'first') {
-                        this.getData(1, this.page, this.size);
-                    }else {
-                        this.getData(2, this.page1, this.size1);
-                    }
+                this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    this.$axios.post('/api/file/delete', this.$qs.stringify({id: row.id})).then((res) => {
+                        this.$message.success('已删除！');
+                        if(this.activeName == 'first') {
+                            this.getData(1, this.page, this.size);
+                        }else {
+                            this.getData(2, this.page1, this.size1);
+                        }
+                    });
+                }).catch(() => {
 
                 });
             },
@@ -194,7 +201,7 @@
             },
             // 保存编辑
             saveEdit(addForm) {
-                this.$refs[addForm].validate((valid) => {
+                this.$refs.addForm.validate((valid) => {
                     if (valid) {
                         this.addLoading = true;
                         let formData = new FormData();
