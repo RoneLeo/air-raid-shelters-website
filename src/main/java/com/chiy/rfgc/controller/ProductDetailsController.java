@@ -7,6 +7,7 @@ import com.chiy.rfgc.repository.EquipmentRepository;
 import com.chiy.rfgc.repository.FileRepository;
 import com.chiy.rfgc.repository.ProductDetailsRepository;
 import com.chiy.rfgc.repository.UserRepository;
+import com.chiy.rfgc.utils.FileUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.data.domain.Page;
@@ -36,10 +37,9 @@ public class ProductDetailsController {
     private UserController userController;
     @Resource
     private EquipmentRepository equipmentRepository;
-    @Resource
-    private FileRepository fileRepository;
 
-    private static final String PRODUCT_PHOTO_PATH = "/product/";
+    private static final String PRODUCT_PHOTO_PATH = "/equipment/";
+
 
     @ApiOperation(value = "添加")
     @RequestMapping("/add")
@@ -56,8 +56,6 @@ public class ProductDetailsController {
         if (equipmentRepository.findById(entity.getId()) == null) {
             return ApiResult.FAILURE("产品id不存在");
         }
-        entity.setGsid(userRepository.findByUuid(uuid).getGsid());
-        entity.setCjsj(new Date());
         ProductdetailsEntity entity1 = productDetailsRepository.save(entity);
         if (entity1 == null) {
             return ApiResult.FAILURE("添加失败");
@@ -106,47 +104,37 @@ public class ProductDetailsController {
         return ApiResult.SUCCESS("删除成功");
     }
 
-    @ApiOperation("通过公司id查询分页显示")
+    @ApiOperation("通过产品id查询分页显示")
     @RequestMapping("/findAllByGsidByPage")
-    public ApiResult<Object> findAllByGsidByPage(HttpServletRequest request, int page, int size) {
+    public ApiResult<Object> findAllByGsidByPage(HttpServletRequest request, Integer cpid, int page, int size) {
         String uuid = userController.getUuid(request);
         // 判断是否登录
         if ("".equals(uuid)) {
             return ApiResult.UNKNOWN();
         }
+        if (cpid == null) {
+            return ApiResult.FAILURE("产品id不能为空");
+        }
         Pageable pageable = PageRequest.of(page - 1, size);
 
-        Page<ProductdetailsEntity> list = productDetailsRepository.findAllByGsidOrderByCjsjDesc(userRepository.findByUuid(uuid).getGsid(), pageable);
+        Page<ProductdetailsEntity> list = productDetailsRepository.findAllByCpidOrderById(cpid, pageable);
 
         return ApiResult.SUCCESS(list);
     }
 
-    @ApiOperation("添加图片")
-    @RequestMapping("/addPhoto")
-    public ApiResult<Object> addPhoto(HttpServletRequest request, MultipartFile file) throws IOException {
-        String wjlj = PRODUCT_PHOTO_PATH;
-        String uuid = userController.getUuid(request);
-        // 判断是否登录
-        if ("".equals(uuid)) {
-            return ApiResult.UNKNOWN();
+    @ApiOperation("通过id查询")
+    @RequestMapping("/findById")
+    public ApiResult<Object> findById(Integer id) {
+        if (id == null) {
+            return ApiResult.FAILURE("id不能为空");
         }
-        String path = request.getSession().getServletContext().getRealPath(wjlj);
-        File dest = new File(path + file.getOriginalFilename());
-        if(!dest.getParentFile().exists()){
-            dest.getParentFile().mkdir();
-        }
-        file.transferTo(dest);
-        FileEntity entity = new FileEntity();
-        entity.setGsid(userRepository.findByUuid(uuid).getGsid());
-        entity.setWjmc("");
-        entity.setWjlj(wjlj + file.getOriginalFilename());
-        entity.setCjsj(new Date());
-        FileEntity entity1 = fileRepository.save(entity);
-        if (entity1 == null) {
-            return ApiResult.FAILURE("添加失败");
-        }
-        return ApiResult.SUCCESS(entity1.getWjlj());
+        ProductdetailsEntity entity = productDetailsRepository.findById(id);
+        return ApiResult.SUCCESS(entity);
     }
+
+
+
+
 
 
 }

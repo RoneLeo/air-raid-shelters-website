@@ -747,6 +747,7 @@
 }
 .product_main_img img{
     margin-top: 15px;
+    width:100%;
 }
 .product_main_list li{
     float: left;
@@ -1727,4 +1728,11 @@
     position: relative;
 }
 /*show_chanpin*/
+
+
+.pre_content{
+    border: 0;
+    background: #fff;
+    font-size: 15px;
+}
 

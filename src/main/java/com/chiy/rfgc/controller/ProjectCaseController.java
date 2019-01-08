@@ -5,6 +5,7 @@ import com.chiy.rfgc.common.ApiResult;
 import com.chiy.rfgc.entity.ProjectcaseEntity;
 import com.chiy.rfgc.repository.ProjectCaseRepository;
 import com.chiy.rfgc.repository.UserRepository;
+import com.chiy.rfgc.utils.FileUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.data.domain.Page;
@@ -17,7 +18,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import java.io.File;
 import java.io.IOException;
 import java.util.Date;
 
@@ -44,13 +44,10 @@ public class ProjectCaseController {
             return ApiResult.UNKNOWN();
         }
         // 添加图片
-        String path = request.getSession().getServletContext().getRealPath(PROJECT_PHOTO_PATH);
-        File dest = new File(path + file.getOriginalFilename());
-        if(!dest.getParentFile().exists()){
-            dest.getParentFile().mkdir();
+        if (file != null) {
+            FileUtils.addPhoto(request, PROJECT_PHOTO_PATH, file);
+            entity.setTp(PROJECT_PHOTO_PATH + file.getOriginalFilename());
         }
-        file.transferTo(dest);
-        entity.setTp(PROJECT_PHOTO_PATH + file.getOriginalFilename());
         entity.setGsid(userRepository.findByUuid(uuid).getGsid());
         entity.setCjsj(new Date());
         ProjectcaseEntity entity1 = projectCaseRepository.save(entity);
@@ -62,7 +59,7 @@ public class ProjectCaseController {
 
     @ApiOperation("修改")
     @RequestMapping("/update")
-    public ApiResult<Object> update(HttpServletRequest request, ProjectcaseEntity entity) {
+    public ApiResult<Object> update(HttpServletRequest request, ProjectcaseEntity entity, MultipartFile file) throws IOException {
         String uuid = userController.getUuid(request);
         // 判断是否登录
         if ("".equals(uuid)) {
@@ -71,6 +68,11 @@ public class ProjectCaseController {
         // 判断是否存在
         if (projectCaseRepository.findById(entity.getId()) == null) {
             return ApiResult.FAILURE("不存在，修改失败");
+        }
+        // 添加图片
+        if (file != null) {
+            FileUtils.addPhoto(request, PROJECT_PHOTO_PATH, file);
+            entity.setTp(PROJECT_PHOTO_PATH + file.getOriginalFilename());
         }
         ProjectcaseEntity entity1 = projectCaseRepository.save(entity);
         if (entity1 == null) {
@@ -125,5 +127,15 @@ public class ProjectCaseController {
         Page<ProjectcaseEntity> list = projectCaseRepository.findAllByGsidOrderByCjsjDesc(gsid, pageable);
 
         return ApiResult.SUCCESS(list);
+    }
+
+    @ApiOperation("通过id查询公司信息")
+    @RequestMapping("/findById")
+    public ApiResult<Object> findById(Integer id) {
+        if (id == null) {
+            return ApiResult.FAILURE("id不能为空");
+        }
+        ProjectcaseEntity entity = projectCaseRepository.findById(id);
+        return ApiResult.SUCCESS(entity);
     }
 }

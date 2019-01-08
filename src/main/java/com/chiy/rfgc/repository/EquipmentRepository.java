@@ -8,6 +8,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 public interface EquipmentRepository extends CrudRepository<EquipmentEntity, Long> {
 
     EquipmentEntity save(EquipmentEntity entity);
@@ -21,6 +23,6 @@ public interface EquipmentRepository extends CrudRepository<EquipmentEntity, Lon
     @Transactional
     int deleteById(Integer id);
 
-    // 通过公司id查询
-    Page<EquipmentEntity> findAllByGsidOrderByCjsjDesc(Integer gsid, Pageable pageable);
+    // 通过公司id和产品类型查询
+    List<EquipmentEntity> findAllByGsidAndSblxOrderByCjsjDesc(Integer gsid, Integer sblx);
 }

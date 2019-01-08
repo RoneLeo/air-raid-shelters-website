@@ -17,6 +17,8 @@ public class EquipmentEntity {
     private Integer sblx;
     @ApiModelProperty(value = "产品名称")
     private String cpmc;
+    @ApiModelProperty(value = "产品图片")
+    private String cptp;
     @ApiModelProperty(value = "创建时间")
     private Date cjsj;
 
@@ -62,6 +64,16 @@ public class EquipmentEntity {
     }
 
     @Basic
+    @Column(name = "product_photo")
+    public String getCptp() {
+        return cptp;
+    }
+
+    public void setCptp(String cptp) {
+        this.cptp = cptp;
+    }
+
+    @Basic
     @Column(name = "create_time")
     public Date getCjsj() {
         return cjsj;
@@ -80,11 +92,12 @@ public class EquipmentEntity {
                 Objects.equals(gsid, that.gsid) &&
                 Objects.equals(sblx, that.sblx) &&
                 Objects.equals(cpmc, that.cpmc) &&
+                Objects.equals(cptp, that.cptp) &&
                 Objects.equals(cjsj, that.cjsj);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, gsid, sblx, cpmc, cjsj);
+        return Objects.hash(id, gsid, sblx, cpmc, cptp, cjsj);
     }
 }

@@ -1,0 +1,113 @@
+<!doctype html>
+<html class="no-js">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=11"/>
+    <title id="headTitle"></title>
+    <meta name="keywords" id="headKeywords" content="">
+    <meta name="description" id="headDescription" content="">
+    <link rel="icon" type="image/x-icon" href="img/favicon.ico"/>
+    <link rel="stylesheet" href="css/amazeui.min.css">
+    <link rel="stylesheet" href="css/app.css?v=1.0">
+    <link rel="stylesheet" href="css/index.css">
+
+    <!--[if (gte IE 9)|!(IE)]><!-->
+    <script src="js/jquery.min.js"></script>
+    <!--<![endif]-->
+    <script src="js/amazeui.min.js"></script>
+    <script src="js/common.js?v=1.0"></script>
+    <script src="http://api.map.baidu.com/api?v=2.0&ak=0GS6spPtqOjBvV62S2xqPpFP"></script>
+</head>
+<body>
+<!--[if lte IE 9]>
+<p class="browsehappy">你正在使用<strong>过时</strong>的浏览器，Amaze UI 暂不支持。 请 <a
+        href="http://browsehappy.com/" target="_blank">升级浏览器</a>
+    以获得更好的体验！</p>
+<![endif]-->
+<!-- 代码区 -->
+<!--head-->
+<div id="head" class="M c">
+    <div class="head_top c">
+        <div class="head_top_box c" id="headTop"></div>
+    </div>
+    <div class="head_bottom c">
+        <div class="head_nav c">
+            <div class="head_nav_list">
+                <ul id="headNavList"></ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--main-->
+<div id="main">
+    <div class="n_banner c" style="background: url('img/pageTop/pageTop1.jpg') no-repeat center;"></div>
+    <div class="n_main c">
+        <div class="n_main_nav">
+            <div class="n_main_nav_title c">
+                <div class="n_main_nav_title1">工程案例</div>
+                <div class="n_main_nav_title2">CASE</div>
+            </div>
+            <div class="n_main_nav_ul c">
+                <ul>
+                    <li>
+                        <a class="n_main_nav_li_now">工程案例</a>
+                        <div class="n_main_nav_erji c" style="display:block;">
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="n_main_con">
+            <div class="n_main_con_mbx c"><a href="index.html">网站首页</a> > <a>工程案例</a> > <a>工程案例</a></div>
+            <div class="product_main_list c">
+                <ul id="projectCaseList">
+                    <li class="">
+                        <a href="content-40-5-1.html">
+                            <div class="product_main_li c">
+                                <div class="product_main_img c">
+                                    <img src="">
+                                </div>
+                                <div class="product_main_name c">牟平银座广场</div>
+                            </div>
+                        </a>
+                    </li>
+                    <li class="">
+                        <a href="content-40-4-1.html">
+                            <div class="product_main_li c">
+                                <div class="product_main_img c"><img
+                                        src="http://www.ytrsrf.com/uploadfile/2017/0523/thumb_180_180_20170523115911980.jpg"
+                                        alt=""></div>
+                                <div class="product_main_name c">福山御花园</div>
+                            </div>
+                        </a>
+                    </li>
+                    <li class="">
+                        <a href="content-40-3-1.html">
+                            <div class="product_main_li c">
+                                <div class="product_main_img c"><img
+                                        src="http://www.ytrsrf.com/uploadfile/2017/0523/thumb_180_180_20170523115705896.jpg"
+                                        alt=""></div>
+                                <div class="product_main_name c">莱山宝龙城市广场战时通风</div>
+                            </div>
+                        </a>
+                    </li>
+                </ul>
+                <div id="yema">
+                    <div class="pages">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--foot-->
+<div id="foot"></div>
+<script>
+    $(function () {
+        projectCase();//获取工程案例
+    })
+</script>
+</body>
+</html>

@@ -19,6 +19,8 @@ public class NewsEntity {
     private String xwbt;
     @ApiModelProperty(value = "新闻内容")
     private String xwnr;
+    @ApiModelProperty(value = "新闻图片")
+    private String xwtp;
     @ApiModelProperty(value = "创建时间")
     private Date cjsj;
 
@@ -74,6 +76,16 @@ public class NewsEntity {
     }
 
     @Basic
+    @Column(name = "news_photo")
+    public String getXwtp() {
+        return xwtp;
+    }
+
+    public void setXwtp(String xwtp) {
+        this.xwtp = xwtp;
+    }
+
+    @Basic
     @Column(name = "create_time")
     public Date getCjsj() {
         return cjsj;
@@ -86,18 +98,19 @@ public class NewsEntity {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (!(o instanceof NewsEntity)) return false;
         NewsEntity that = (NewsEntity) o;
-        return id == that.id &&
-                gsid == that.gsid &&
+        return Objects.equals(id, that.id) &&
+                Objects.equals(gsid, that.gsid) &&
                 Objects.equals(xwlx, that.xwlx) &&
                 Objects.equals(xwbt, that.xwbt) &&
                 Objects.equals(xwnr, that.xwnr) &&
+                Objects.equals(xwtp, that.xwtp) &&
                 Objects.equals(cjsj, that.cjsj);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, gsid, xwlx, xwbt, xwnr, cjsj);
+        return Objects.hash(id, gsid, xwlx, xwbt, xwnr, xwtp, cjsj);
     }
 }

@@ -4,6 +4,7 @@ import com.chiy.rfgc.common.ApiResult;
 import com.chiy.rfgc.entity.NewsEntity;
 import com.chiy.rfgc.repository.NewsRepository;
 import com.chiy.rfgc.repository.UserRepository;
+import com.chiy.rfgc.utils.FileUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.data.domain.Page;
@@ -12,9 +13,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 import java.util.Date;
 
 @Api(description = "新闻管理")
@@ -29,15 +32,21 @@ public class NewsController {
     @Resource
     private UserController userController;
 
+    private static final String NEWS_PHOTO_PATH = "/news/";
+
     @ApiOperation(value = "添加")
     @RequestMapping("/add")
-    public ApiResult<Object> add(HttpServletRequest request, NewsEntity entity) {
+    public ApiResult<Object> add(HttpServletRequest request, NewsEntity entity, MultipartFile file) throws IOException {
         String uuid = userController.getUuid(request);
         // 判断是否登录
         if ("".equals(uuid)) {
             return ApiResult.UNKNOWN();
         }
-        //
+        // 添加图片
+        if (file != null) {
+            FileUtils.addPhoto(request, NEWS_PHOTO_PATH, file);
+            entity.setXwtp(NEWS_PHOTO_PATH + file.getOriginalFilename());
+        }
         entity.setGsid(userRepository.findByUuid(uuid).getGsid());
         entity.setCjsj(new Date());
         NewsEntity entity1 = newsRepository.save(entity);
@@ -49,7 +58,7 @@ public class NewsController {
 
     @ApiOperation("修改")
     @RequestMapping("/update")
-    public ApiResult<Object> update(HttpServletRequest request, NewsEntity entity) {
+    public ApiResult<Object> update(HttpServletRequest request, NewsEntity entity, MultipartFile file) throws IOException {
         String uuid = userController.getUuid(request);
         // 判断是否登录
         if ("".equals(uuid)) {
@@ -58,6 +67,11 @@ public class NewsController {
         // 判断是否存在
         if (newsRepository.findById(entity.getId()) == null) {
             return ApiResult.FAILURE("不存在，修改失败");
+        }
+        // 添加图片
+        if (file != null) {
+            FileUtils.addPhoto(request, NEWS_PHOTO_PATH, file);
+            entity.setXwtp(NEWS_PHOTO_PATH + file.getOriginalFilename());
         }
         NewsEntity entity1 = newsRepository.save(entity);
         if (entity1 == null) {
@@ -107,16 +121,29 @@ public class NewsController {
 
     }
 
-    @ApiOperation("前端显示公司信息")
+    @ApiOperation("前端显示新闻信息")
     @RequestMapping("/findAllByGsid")
     public ApiResult<Object> findAllByGsid(Integer gsid, Integer xwlx, int page, int size) {
-        if (xwlx == null) {
-            return ApiResult.FAILURE("新闻类型不能为空");
+        if (gsid == null) {
+            return ApiResult.FAILURE("公司id不能为空");
         }
         Pageable pageable = PageRequest.of(page - 1, size);
-
-        Page<NewsEntity> list = newsRepository.findAllByGsidAndXwlxOrderByCjsjDesc(gsid, xwlx, pageable);
-
+        Page<NewsEntity> list = null;
+        if (xwlx == null) {
+            list = newsRepository.findAllByGsid(gsid, pageable);
+        } else {
+            list = newsRepository.findAllByGsidAndXwlxOrderByCjsjDesc(gsid, xwlx, pageable);
+        }
         return ApiResult.SUCCESS(list);
+    }
+
+    @ApiOperation("通过id查询")
+    @RequestMapping("/findById")
+    public ApiResult<Object> findById(Integer id) {
+        if (id == null) {
+            return ApiResult.FAILURE("id不能为空");
+        }
+        NewsEntity entity = newsRepository.findById(id);
+        return ApiResult.SUCCESS(entity);
     }
 }

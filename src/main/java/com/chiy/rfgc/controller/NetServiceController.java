@@ -116,4 +116,14 @@ public class NetServiceController {
 
     }
 
+    @ApiOperation("通过id查询")
+    @RequestMapping("/findById")
+    public ApiResult<Object> findById(Integer id) {
+        if (id == null) {
+            return ApiResult.FAILURE("id不能为空");
+        }
+        NetserviceEntity entity = netServiceRepository.findById(id);
+        return ApiResult.SUCCESS(entity);
+    }
+
 }

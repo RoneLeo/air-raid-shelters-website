@@ -1,0 +1,104 @@
+<!doctype html>
+<html class="no-js">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=11"/>
+    <title id="headTitle"></title>
+    <meta name="keywords" id="headKeywords" content="">
+    <meta name="description" id="headDescription" content="">
+    <link rel="icon" type="image/x-icon" href="img/favicon.ico"/>
+    <link rel="stylesheet" href="css/amazeui.min.css">
+    <link rel="stylesheet" href="css/app.css?v=1.0">
+    <link rel="stylesheet" href="css/index.css">
+
+    <!--[if (gte IE 9)|!(IE)]><!-->
+    <script src="js/jquery.min.js"></script>
+    <!--<![endif]-->
+    <script src="js/amazeui.min.js"></script>
+    <script src="js/common.js?v=1.0"></script>
+    <script src="js/font_size.js"></script>
+
+</head>
+<body>
+<!--[if lte IE 9]>
+<p class="browsehappy">你正在使用<strong>过时</strong>的浏览器，Amaze UI 暂不支持。 请 <a
+        href="http://browsehappy.com/" target="_blank">升级浏览器</a>
+    以获得更好的体验！</p>
+<![endif]-->
+<!-- 代码区 -->
+<!--head-->
+<div id="head" class="M c">
+    <div class="head_top c">
+        <div class="head_top_box c" id="headTop"></div>
+    </div>
+    <div class="head_bottom c">
+        <div class="head_nav c">
+            <div class="head_nav_list">
+                <ul id="headNavList"></ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--main-->
+<div id="main">
+    <div class="n_banner c" style="background: url('img/pageTop/pageTop1.jpg') no-repeat center;"></div>
+    <div class="n_main c">
+        <div class="n_main_nav">
+            <div class="n_main_nav_title c">
+                <div class="n_main_nav_title1">工程案例</div>
+                <div class="n_main_nav_title2">CASE</div>
+            </div>
+            <div class="n_main_nav_ul c">
+                <ul>
+                    <li>
+                        <a class="n_main_nav_li_now">工程案例</a>
+                        <div class="n_main_nav_erji c" style="display:block;">
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="n_main_con">
+            <div class="n_main_con_mbx c"><a href="index.html">网站首页</a> > <a>工程案例</a> > <a>工程案例</a></div>
+            <div class="newshow c M">
+                <div class="newshowbox c">
+                    <div class="newshow_title c">
+                        <div class="newshow_name c" id="caseName"></div>
+                        <div class="newshow_zx c">
+                            <div class="newshow_timer">发布时间：<span id="caseTime"></span></div>
+                            <div class="newshow_shu">&nbsp;&nbsp;|&nbsp;&nbsp;</div>
+                            <div class="newshow_follow"></div>
+                            <div class="newshow_ctrl">
+                                <a href="javascript:;">放大字号</a>
+                                <a href="javascript:;">缩小字号</a>
+                                <a href="javascript:;">默认字号</a>
+                            </div>
+                            <div class="newshow_back">
+                                <a href="project.html">返回列表</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="newshow_cont c">
+                        <div style="text-align:center;">
+                            <img id="caseImg"/>
+                        </div>
+                        <div class="newshow_cont_txt" style="margin-top:15px;">
+                            <p id="caseTxt">项目介绍</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--foot-->
+<div id="foot"></div>
+<script>
+    $(function () {
+        projectCaseDetails();//获取工程案例
+    })
+</script>
+</body>
+</html>
