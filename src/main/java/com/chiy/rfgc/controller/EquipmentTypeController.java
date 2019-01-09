@@ -92,7 +92,7 @@ public class EquipmentTypeController {
         return ApiResult.SUCCESS("删除成功");
     }
 
-    @ApiOperation("通过公司id查询所有")
+    @ApiOperation("后台通过公司id查询所有")
     @RequestMapping("/findAllByGsid")
     public ApiResult<Object> findAllByGsidByPage(HttpServletRequest request) {
         String uuid = userController.getUuid(request);
@@ -113,6 +113,16 @@ public class EquipmentTypeController {
         }
         EquipmenttypeEntity entity = equipmentTypeRepository.findById(id);
         return ApiResult.SUCCESS(entity);
+    }
+
+    @ApiOperation("前端通过公司id查询所有")
+    @RequestMapping("/findByGsid")
+    public ApiResult<Object> findByGsid(Integer gsid) {
+        if (gsid == null) {
+            return ApiResult.FAILURE("公司id不能为空");
+        }
+        List<EquipmenttypeEntity> list = equipmentTypeRepository.findAllByGsid(gsid);
+        return ApiResult.SUCCESS(list);
     }
 
 
