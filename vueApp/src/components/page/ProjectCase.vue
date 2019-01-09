@@ -7,15 +7,15 @@
         </div>
         <div class="container" v-loading="loading">
             <el-table :data="tableData" class="table" ref="multipleTable">
-                <el-table-column prop="gcmc" label="工程名称"></el-table-column>
+                <el-table-column prop="gcmc" label="工程名称" width="300" :show-overflow-tooltip="true"></el-table-column>
                 <el-table-column prop="aljs" label="案例介绍" :show-overflow-tooltip="true"></el-table-column>
-                <el-table-column label="展示图片">
-                    <template slot-scope="scope">
-                        <a target="_blank" :href='`http://182.151.22.247:8081${scope.row.tp}`'>{{scope.row.tp}}</a>
-                    </template>
-                </el-table-column>
-                <el-table-column prop="cjsj" label="创建时间"></el-table-column>
-                <el-table-column label="操作" align="center">
+                <!--<el-table-column label="展示图片">-->
+                    <!--<template slot-scope="scope">-->
+                        <!--<a target="_blank" :href='`http://182.151.22.247:8081${scope.row.tp}`'>{{scope.row.tp}}</a>-->
+                    <!--</template>-->
+                <!--</el-table-column>-->
+                <el-table-column prop="cjsj" label="创建时间" width="160"></el-table-column>
+                <el-table-column label="操作" align="center" width="160">
                     <template slot-scope="scope">
                         <el-button type="text" icon="el-icon-lx-edit"
                                    @click="editFile(scope.$index, scope.row)">编辑
@@ -58,8 +58,8 @@
                 <el-form-item label="展示图片"
                               v-if="addForm.tp">
                     <div style="position: relative;display: inline-block;width: auto;height: auto;">
-                        <img :src="`http://182.151.22.247:8081${addForm.tp}`" alt="" style="width: 100px;height: 100px;">
-                        <i v-if="addForm.tp" class="el-icon-error" @click="deleteTP" style="font-size: 18px;font-weight: 600;position: absolute;top: -9px;right: -9px;color: #0095FF;"></i>
+                        <img :src="`http://182.151.22.247:8081${addForm.tp}`" alt="" class="image">
+                        <i v-if="addForm.tp" class="el-icon-error image-icon" @click="deleteTP"></i>
                     </div>
 
                 </el-form-item>

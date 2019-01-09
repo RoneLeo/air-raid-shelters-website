@@ -48,6 +48,12 @@ export default new Router({
                     meta: { title: '产品详情', keepAlive: false }
                 },
                 {
+                    path: '/productType',
+                    name: 'productType',
+                    component: resolve => require(['../components/page/ProductType.vue'], resolve),
+                    meta: { title: '产品类型', keepAlive: true}
+                },
+                {
                     path: '/news',
                     component: resolve => require(['../components/page/News.vue'], resolve),
                     meta: { title: '新闻管理', keepAlive: true }

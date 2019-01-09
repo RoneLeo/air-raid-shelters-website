@@ -2,7 +2,7 @@
     <div class="table">
         <div class="crumbs">
             <el-breadcrumb separator="/">
-                <el-breadcrumb-item><i class="el-icon-lx-cascades"></i> 用户信息</el-breadcrumb-item>
+                <el-breadcrumb-item><i class="el-icon-lx-cascades"></i> 产品类型</el-breadcrumb-item>
             </el-breadcrumb>
         </div>
         <div class="handle-box">
@@ -10,12 +10,12 @@
         </div>
         <div class="container">
             <el-table :data="tableData" class="table" ref="multipleTable" @selection-change="handleSelectionChange">
-                <el-table-column prop="zh" label="账号"></el-table-column>
-                <el-table-column prop="xm" label="姓名"></el-table-column>
+                <el-table-column prop="name" label="类型名"></el-table-column>
+                <!--<el-table-column prop="xm" label="姓名"></el-table-column>-->
                 <!--<el-table-column prop="mm" label="密码"></el-table-column>-->
-                <el-table-column prop="gsid" label="公司ID" :formatter="formatterGS"></el-table-column>
-                <el-table-column prop="cjsj" label="创建时间"></el-table-column>
-                <el-table-column label="操作"  align="center">
+                <!--<el-table-column prop="gsid" label="公司ID" :formatter="formatterGS"></el-table-column>-->
+                <!--<el-table-column prop="cjsj" label="创建时间"></el-table-column>-->
+                <el-table-column label="操作"  align="left" width="200">
                     <template slot-scope="scope">
                         <el-button type="text" icon="el-icon-edit" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
                         <el-button type="text" icon="el-icon-delete" class="red" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
@@ -23,7 +23,7 @@
                 </el-table-column>
             </el-table>
             <div style="padding: 20px 8px">
-                <el-button type="primary" @click="add">添加用户</el-button>
+                <el-button type="primary" @click="add">增加产品类型</el-button>
             </div>
         </div>
 
@@ -91,7 +91,8 @@
                 delVisible: false,
                 form: {},
                 idx: -1,
-                dict: this.$dict
+                dict: this.$dict,
+                name: '',
             }
         },
         created() {
@@ -114,7 +115,7 @@
             },
             // 获取 easy-mock 的模拟数据
             getData() {
-                this.$axios.post('/api/user/findAllByGsid').then((res) => {
+                this.$axios.post('/api/equipmentType/findAllByGsid').then((res) => {
                     if(res.resCode == 200){
                         this.tableData = res.data;
                     }
@@ -124,8 +125,21 @@
                 this.is_search = true;
             },
             add(){
-                this.form = {};
-                this.modelVisible = true;
+                this.$prompt('请输入新的产品类型名称', '增加产品类型', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                }).then(({ value }) => {
+                    if(value != '') {
+                        this.$axios.post('/api/equipmentType/add', this.$qs.stringify({name: value})).then((res) => {
+                            this.getData();
+                            this.$message.success(res.resMsg);
+                        });
+                    }
+                }).catch(() => {
+
+                });
+//                this.form = {};
+//                this.modelVisible = true;
             },
             formatter(row, column) {
                 return row.address;
@@ -134,16 +148,29 @@
                 return row.tag === value;
             },
             handleEdit(index, row) {
-                this.form = Object.assign({}, row);
-                this.modelVisible = true;
+                this.$prompt('请输入新的产品类型名称', '修改产品类型 > ' + row.name, {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                }).then(({ value }) => {
+                    if(value != '') {
+                        this.$axios.post('/api/equipmentType/update', this.$qs.stringify({id: row.id, name: value, gsid: row.gsid})).then((res) => {
+                            this.getData();
+                            this.$message.success(res.resMsg);
+                        });
+                    }
+                }).catch(() => {
+
+                });
+//                this.form = Object.assign({}, row);
+//                this.modelVisible = true;
             },
             handleDelete(index, row) {
-                this.$confirm('此操作将永久删除该用户, 是否继续?', '提示', {
+                this.$confirm('此操作将删除<' + row.name + '>类型及其所有的产品, 是否继续?', '提示', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
                     type: 'warning'
                 }).then(() => {
-                    this.$axios.post('/api/user/delete', this.$qs.stringify({id: row.id})).then((res) => {
+                    this.$axios.post('/api/equipmentType/delete', this.$qs.stringify({id: row.id})).then((res) => {
                         this.getData();
                         this.$message.success('已删除！');
                     });
