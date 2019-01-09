@@ -80,7 +80,9 @@
         mounted() {
             this.$nextTick(() => {
                 this.initMap();
-                this.getData();
+                window.setTimeout(() => {
+                    this.getData();
+                },300)
             })
 
 
@@ -130,25 +132,37 @@
         },
         methods: {
             initMap() {
-                AMapUI.loadUI(['misc/PositionPicker'], (PositionPicker) => {
-                    this.map = new AMap.Map('AMap_container', {
-                        zoom: 16,
+                this.map = new AMap.Map('AMap_container', {
+                    zoom: 16,
+                })
+                let UIloaded = true;
+                if(typeof AMapUI == 'undefined') {
+                    UIloaded = false;
+                    this.$axios.get('http://webapi.amap.com/ui/1.0/main.js?v=1.0.11').then(res => {
+                        if(typeof AMapUI != 'undefined') {
+                            UIloaded = true;
+                        }else {
+                            this.$message.error('无法加载地图');
+                        }
                     })
-                    this.positionPicker = new PositionPicker({
-                        mode: 'dragMap',//设定为拖拽地图模式，可选'dragMap'、'dragMarker'，默认为'dragMap'
-                        map: this.map//依赖地图对象
+                }
+                if(UIloaded) {
+                    AMapUI.loadUI(['misc/PositionPicker'], (PositionPicker) => {
+                        this.positionPicker = new PositionPicker({
+                            mode: 'dragMap',//设定为拖拽地图模式，可选'dragMap'、'dragMarker'，默认为'dragMap'
+                            map: this.map//依赖地图对象
+                        });
+                        this.positionPicker.on('success', (positionResult) => {
+                            this.companyForm.jwd = positionResult.position.lat + ',' + positionResult.position.lng;
+                            this.companyForm.lxdz = positionResult.address;
+                        });
                     });
-                    this.positionPicker.on('success', (positionResult) => {
-                        this.companyForm.jwd = positionResult.position.lat + ',' + positionResult.position.lng;
-                        this.companyForm.lxdz = positionResult.address;
-                    });
-                });
+                }
+
             },
             setMarker() {
                 let positions = this.companyForm.jwd.split(',');
                 let position = new AMap.LngLat(positions[1], positions[0]);
-                console.log(this.map)
-                console.log(this.map.getCenter());
                 if(this.map) {
                     this.map.setCenter(position);
                     this.marker = new AMap.Marker({
@@ -189,9 +203,7 @@
             getData() {
                 this.$axios.post('/api/contactUs/findByGsid').then((res) => {
                     this.companyForm = res.data;
-                    this.$nextTick(function () {
-                        this.setMarker();
-                    })
+                    this.setMarker();
                 });
             },
 

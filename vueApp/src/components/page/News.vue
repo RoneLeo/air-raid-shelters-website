@@ -99,8 +99,8 @@
                 <el-form-item label="新闻图片"
                               v-if="addForm.xwtp">
                     <div style="position: relative;display: inline-block;width: auto;height: auto;">
-                        <img :src="`http://182.151.22.247:8081${addForm.xwtp}`" alt="" style="width: 100px;height: 100px;">
-                        <i v-if="addForm.xwtp" class="el-icon-error" @click="deleteTP" style="font-size: 18px;font-weight: 600;position: absolute;top: -9px;right: -9px;color: #0095FF;"></i>
+                        <img :src="`http://182.151.22.247:8081${addForm.xwtp}`" alt="" class="image">
+                        <i v-if="addForm.xwtp" class="el-icon-error image-icon" @click="deleteTP"></i>
                     </div>
 
                 </el-form-item>

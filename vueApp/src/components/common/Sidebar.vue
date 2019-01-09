@@ -79,6 +79,11 @@
                         title: '招聘信息管理'
                     },
                     {
+                        icon: 'el-icon-lx-shop',
+                        index: 'productType',
+                        title: '产品类型管理'
+                    },
+                    {
                         icon: 'el-icon-lx-calendar',
                         index: 'services',
                         title: '网上订购列表'

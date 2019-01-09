@@ -9,7 +9,7 @@
             <el-row>
                 <el-form :inline="true" class="demo-form-inline">
                     <el-form-item label="产品类型">
-                        <el-select v-model="sblx" placeholder="请选择">
+                        <el-select v-model="sblx" placeholder="请选择" @change="getData">
                             <el-option
                                     v-for="item in equipmentType"
                                     :key="item.id*1.9098"
@@ -25,12 +25,18 @@
             <el-table :data="tableData" class="table" ref="multipleTable">
                 <el-table-column prop="cpmc" label="产品名称"></el-table-column>
                 <el-table-column prop="sblx" label="产品类型" :formatter="formatterSBLX"></el-table-column>
-                <el-table-column prop="cptp" label="产品图片"></el-table-column>
+                <el-table-column label="产品图片">
+                    <template slot-scope="scope">
+                        <a target="_blank" :href='`http://182.151.22.247:8081${scope.row.cptp}`'>{{scope.row.cptp}}</a>
+                    </template>
+                </el-table-column>
+                <!--<el-table-column prop="cptp" label="产品图片"></el-table-column>-->
                 <el-table-column label="操作" align="center">
                     <template slot-scope="scope">
                         <el-button type="text" icon="el-icon-lx-attention" @click="look(scope.$index, scope.row)">点击查看
                         </el-button>
-                        <el-button type="text" icon="el-icon-delete" class="red" @click="delFile(scope.$index, scope.row)">删除
+                        <el-button type="text" icon="el-icon-delete" class="red"
+                                   @click="delFile(scope.$index, scope.row)">删除
                         </el-button>
                     </template>
                 </el-table-column>
@@ -61,13 +67,14 @@
                               prop="wjlx"
                               :rules="[{ required: true, message: '文件类型不能为空', trigger: 'blur' }]">
                     <el-select v-model="addForm.wjlx" placeholder="请选择文件类型">
-                        <el-option v-for="item in this.$dict.fileType" :key="item.id+Math.random()" :label="item.name" :value="item.id"></el-option>
+                        <el-option v-for="item in this.$dict.fileType" :key="item.id+Math.random()" :label="item.name"
+                                   :value="item.id"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="文件"
                               prop="file"
                               :rules="[{ required: true, message: '文件不能为空', trigger: 'blur' }]">
-                    <input type="file" @change="getFile($event)" />
+                    <input type="file" @change="getFile($event)"/>
                 </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
@@ -99,7 +106,7 @@
             }
         },
         mounted () {
-            this.$axios.post('/api/equipmentType/findAll').then((res) => {
+            this.$axios.post('/api/equipmentType/findAllByGsid').then((res) => {
                 let data = res.data;
                 this.equipmentType = data;
                 this.sblx = this.equipmentType[0].id;
@@ -131,9 +138,11 @@
                 return this.$common.dictParse(row.wjlx, this.$dict.fileType);
             },
             look(index, row) {
-                this.$router.push({name: 'addProduct', params: {
-                    pId: row.id
-                }})
+                this.$router.push({
+                    name: 'addProduct', params: {
+                        pId: row.id
+                    }
+                })
 //                window.open('http://182.151.22.247:8081' + row.wjlj);
             },
             modelClose(addForm) {
@@ -151,11 +160,15 @@
             // 获取 easy-mock 的模拟数据
             getData() {
                 this.loading = true;
-                this.$axios.post('/api/equipment/findAllByGsidByPage', this.$qs.stringify({ sblx: this.sblx})).then((res) => {
+                this.$axios.post('/api/equipment/findAllByGsidAndSblx', this.$qs.stringify({
+                    sblx: this.sblx,
+                    page: this.page,
+                    size: this.size
+                })).then((res) => {
                     if (res.resCode == 200) {
                         this.loading = false;
                         this.tableData = res.data;
-//                        this.totalElements = res.data.totalElements
+                        this.totalElements = res.data.totalElements
                     }
                 });
             },
@@ -170,8 +183,8 @@
                     if (valid) {
                         this.addLoading = true;
                         let formData = new FormData();
-                        for(let key in this.addForm) {
-                                formData.append(key, this.addForm[key]);
+                        for (let key in this.addForm) {
+                            formData.append(key, this.addForm[key]);
                         }
                         for (var value of formData.values()) {
                             console.log(value);
@@ -181,7 +194,7 @@
                                 'Content-Type': 'multipart/form-data'
                             }
                         };
-                        this.$axios.post( '/api/file/add', formData, config ).then( res=> {
+                        this.$axios.post('/api/file/add', formData, config).then(res => {
                             this.addLoading = false
                             this.modelVisible = false;
                             this.getData();
