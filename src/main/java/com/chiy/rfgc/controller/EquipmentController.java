@@ -11,6 +11,9 @@ import com.chiy.rfgc.repository.UserRepository;
 import com.chiy.rfgc.utils.FileUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -121,11 +124,16 @@ public class EquipmentController {
                 productDetailsRepository.save(entity3);
             }
             // 筛选删除的
-            for (Integer id : idList) {
-                if (id == entity2.getId()) {
-                    idList.remove(id);
+            Iterator<Integer> iterator = idList.iterator();
+            if (idList.size() != 0) {
+                while (iterator.hasNext()) {
+                    Integer value = iterator.next();
+                        if (value == entity2.getId()) {
+                            iterator.remove();
+                        }
                 }
             }
+
         }
         // 删除修改删除的
         for (Integer id : idList) {
@@ -164,9 +172,9 @@ public class EquipmentController {
         return ApiResult.SUCCESS("删除成功");
     }
 
-    @ApiOperation("通过公司id查询分页显示")
-    @RequestMapping("/findAllByGsidByPage")
-    public ApiResult<Object> findAllByGsidByPage(HttpServletRequest request, Integer sblx) {
+    @ApiOperation("后台通过公司id和设备类型查询")
+    @RequestMapping("/findAllByGsidAndSblx")
+    public ApiResult<Object> findAllByGsidAndSblx(HttpServletRequest request, Integer sblx, int page, int size) {
         String uuid = userController.getUuid(request);
         // 判断是否登录
         if ("".equals(uuid)) {
@@ -175,18 +183,18 @@ public class EquipmentController {
         if (sblx == null) {
             return ApiResult.FAILURE("设备类型不能为空");
         }
-//        Pageable pageable = PageRequest.of(page - 1, size);
+        Pageable pageable = PageRequest.of(page - 1, size);
 
-        List<EquipmentEntity> list = equipmentRepository.findAllByGsidAndSblxOrderByCjsjDesc(userRepository.findByUuid(uuid).getGsid(), sblx);
+        Page<EquipmentEntity> list = equipmentRepository.findAllByGsidAndSblxOrderByCjsjDesc(userRepository.findByUuid(uuid).getGsid(), sblx, pageable);
 
 
         return ApiResult.SUCCESS(addMap(list));
 
     }
 
-    @ApiOperation("前端显示公司信息")
-    @RequestMapping("/findAllByGsid")
-    public ApiResult<Object> findAllByGsid(Integer gsid, Integer sblx) {
+    @ApiOperation("前端通过公司id和设备类型查询")
+    @RequestMapping("/frontFindAllByGsidAndSblx")
+    public ApiResult<Object> frontFindAllByGsidAndSblx(Integer gsid, Integer sblx, int page, int size) {
         if (gsid == null) {
             return ApiResult.FAILURE("公司id不能为空");
         }
@@ -194,12 +202,13 @@ public class EquipmentController {
             return ApiResult.FAILURE("设备类型不能为空");
         }
 
-        List<EquipmentEntity> list = equipmentRepository.findAllByGsidAndSblxOrderByCjsjDesc(gsid, sblx);
+        Pageable pageable = PageRequest.of(page - 1, size);
+        Page<EquipmentEntity> list = equipmentRepository.findAllByGsidAndSblxOrderByCjsjDesc(gsid, sblx, pageable);
 
         return ApiResult.SUCCESS(addMap(list));
     }
 
-    @ApiOperation("通过id查询")
+    @ApiOperation("后台通过id查询")
     @RequestMapping("/findById")
     public ApiResult<Object> findById(HttpServletRequest request, Integer id) {
         String uuid = userController.getUuid(request);
@@ -210,13 +219,23 @@ public class EquipmentController {
         if (id == null) {
             return ApiResult.FAILURE("id不能为空");
         }
-        EquipmentEntity equipmentEntity = equipmentRepository.findById(id);
-        List<EquipmentEntity> list = new ArrayList<>();
-        list.add(equipmentEntity);
+        Pageable pageable = PageRequest.of(0, 1);
+        Page<EquipmentEntity> list = equipmentRepository.findById(id, pageable);
         return ApiResult.SUCCESS(addMap(list));
     }
 
-    public List<Map> addMap(List<EquipmentEntity> list) {
+    @ApiOperation("前端通过id查询")
+    @RequestMapping("/frontFindById")
+    public ApiResult<Object> findById(Integer id) {
+        if (id == null) {
+            return ApiResult.FAILURE("id不能为空");
+        }
+        Pageable pageable = PageRequest.of(0, 1);
+        Page<EquipmentEntity> list = equipmentRepository.findById(id, pageable);
+        return ApiResult.SUCCESS(addMap(list));
+    }
+
+    public List<Map> addMap(Page<EquipmentEntity> list) {
         List<Map> result = new ArrayList<>();
         for (EquipmentEntity equipmentEntity : list) {
             List<ProductdetailsEntity> cpxq = productDetailsRepository.findAllByCpid(equipmentEntity.getId());

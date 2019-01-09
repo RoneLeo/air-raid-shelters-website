@@ -25,4 +25,16 @@ public interface EquipmentRepository extends CrudRepository<EquipmentEntity, Lon
 
     // 通过公司id和产品类型查询
     List<EquipmentEntity> findAllByGsidAndSblxOrderByCjsjDesc(Integer gsid, Integer sblx);
+
+    Page<EquipmentEntity> findAllByGsidAndSblxOrderByCjsjDesc(Integer gsid, Integer sblx, Pageable pageable);
+
+    Page<EquipmentEntity> findById(Integer id, Pageable pageable);
+
+    // 通过设备类型删除
+    @Query(value = "delete from equipment where equipment_type = ?1", nativeQuery = true)
+    @Modifying
+    @Transactional
+    int deleteBySblx(Integer sblx);
+
+
 }
