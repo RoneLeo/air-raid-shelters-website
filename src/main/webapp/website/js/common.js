@@ -369,6 +369,7 @@ function getNewsData(type,isPage,page) {
         }
     })
 }
+
 //新闻详情
 function newsDetails() {
     var id = getUrlParam().id;
@@ -383,6 +384,118 @@ function newsDetails() {
     }
 }
 
+//product
+function product() {
+    //获取全部设备类型
+    $.post(ServerUrl + 'equipmentType/findByGsid',{gsid:Gsid},function (json) {
+        var data = json.data;
+        var productType = '';
+        for(var i=0;i<data.length;i++){
+            var item = data[i];
+            productType += '<p class="n_main_nav_erji_p">\n' +
+                '<a class="product-type-item" style="cursor: pointer;"  typeId="'+item.id+'">'+item.name+'</a>\n' +
+            '</p>';
+        }
+        //点击设备类型
+        $('#productType').html(productType).off('click.a').on('click.a','.product-type-item',function () {
+            var $this = $(this);
+            $('.product-type-item').removeClass('n_main_nav_li_now');
+            $this.addClass('n_main_nav_li_now');
+            var typeId = $this.attr('typeId');
+            var productType2 = $this.text();
+            $('#productType2,#productType3,#productType4').text(productType2);
+            $('#productListBox').show();
+            $('#productDetailsBox').hide();
+            getProduct(typeId,false);
+        }).find('.product-type-item')[0].click();
+    });
+
+    $('#productType2').off('click').on('click',function () {
+        $('#productListBox').show();
+        $('#productDetailsBox').hide();
+    })
+}
+function getProduct(sblx,isPage,page) {
+    var size = 3;
+    var page = page || 1;
+    $.post(ServerUrl + 'equipment/frontFindAllByGsidAndSblx',{gsid:Gsid,sblx:sblx,page:page,size:size},function (json) {
+        var data = json.data;
+        var pages = json.totalPages;
+        var totalElements = json.totalElements;
+        console.log(pages,json);
+        if(!isPage && (size < totalElements)){
+            $("#productPage").page({
+                pages: pages, //页数
+                curr: 1, //当前页
+                type: 'default', //主题
+                groups: 5, //连续显示分页数
+                prev: '<', //若不显示，设置false即可
+                next: '>', //若不显示，设置false即可
+                first: "首页",
+                last: "尾页", //false则不显示
+                jump: function(context, first) {
+                    var curr = context.option.curr;
+                    getProduct(sblx,true,curr);
+                }
+            });
+        }else{
+            var productList = '';
+            for(var i=0;i<data.length;i++){
+                var liClass = '';
+                if((i+1)%4 == 0){
+                    liClass = 'product_main_li4';
+                }
+                var item = data[i];
+                var imgSrc = ServerUrl + item.cptp;
+                var cpmc = item.cpmc;
+                productList += '<li index="'+i+'" class="product-item '+liClass+'">\n' +
+                    '<a style="cursor: pointer">\n' +
+                    '    <div class="product_main_li c">\n' +
+                    '        <div class="product_main_img c"><img src="'+imgSrc+'" alt=""></div>\n' +
+                    '        <div class="product_main_name c">'+cpmc+'</div>\n' +
+                    '    </div>\n' +
+                    '</a>\n' +
+                '</li>';
+                
+            }
+            $('#productList').html(productList).off('click.a').on('click.a','.product-item',function () {
+                var index = $(this).attr('index');
+                var product = data[index];
+                var name = product.cpmc;
+                var productDetailsArr = product.cpxq;
+                var imgSrc = ServerUrl + product.cptp;
+                $('#productImg,#productImg2').prop('src',imgSrc);
+                $('#productName,#productName2').text(name);
+                $('#productListBox').hide();
+                $('#productDetailsBox').show();
+                $('#productIntroTitle').text(productDetailsArr[0].bt);
+                $('#productIntroContent').html(productDetailsArr[0].xxnr);
+                var productIntroTitleList = '';
+                var productIntroContentList = '';
+                for(var i=0;i<productDetailsArr.length;i++){
+                    var item = productDetailsArr[i];
+                    productIntroTitleList += '<li class="">'+item.bt+'</li>';
+                    productIntroContentList += '<h1>'+item.bt+'</h1><p>'+item.xxnr+'</p>'
+                }
+                $('#productIntroTitleList').html(productIntroTitleList);
+                $('#productIntroContentList').html(productIntroContentList);
+                animateScroll();
+                console.log(product);
+            });
+        }
+
+
+    })
+}
+function animateScroll() {
+    $('.show_chanpin_nav_ul li').each(function (i) {
+        $(this).click(function () {
+            $('html,body').animate({scrollTop: $('.show_chanpin_content_box h1').eq(i).offset().top - 80}, 500);
+            $('.show_chanpin_nav_ul li:not(:eq(i))').removeClass('show_chanpin_nav_li_select');
+            $(this).addClass('show_chanpin_nav_li_select');
+        })
+    })
+}
 
 
 
@@ -392,9 +505,11 @@ function newsDetails() {
 //创建和初始化地图函数：
 var map;
 function initMap(companyInfo) {
-    var companyPosition = {lat: 30.5520405517, lng: 104.0737911656}; //经纬度
-    var companyName = '四川鑫旺人防科技有限公司'; //名称
-    var companyAddr = '四川省成都市高新区天府三街69号新希望国际B座28楼2811号'; //地址
+    console.log(companyInfo)
+    var jwdArr = companyInfo.jwd.split(',');
+    var companyPosition = {lat: jwdArr[0], lng: jwdArr[1]}; //经纬度
+    var companyName = companyInfo.gsmc; //名称
+    var companyAddr = companyInfo.lxdz; //地址
     createMap(companyPosition);//创建地图
     setMapEvent();//设置地图事件
     addMapControl();//向地图添加控件
@@ -423,7 +538,7 @@ function addMapOverlay(companyName,companyAddr,companyPosition) {
     var markers = [
         {
             title: companyName,
-            content: companyAddr,
+            content: '地址：' + companyAddr,
             position: companyPosition,
             imageOffset: {width: -46, height: -21}
         }

@@ -750,7 +750,6 @@
     transition: all 0.4s;
 }
 .product_main_img img{
-    margin-top: 15px;
     width:100%;
 }
 .product_main_list li{
