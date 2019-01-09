@@ -2,6 +2,7 @@ package com.chiy.rfgc.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.chiy.rfgc.common.ApiResult;
+import com.chiy.rfgc.common.ApiResultPage;
 import com.chiy.rfgc.config.PhotoTypeAndPath;
 import com.chiy.rfgc.entity.EquipmentEntity;
 import com.chiy.rfgc.entity.ProductdetailsEntity;
@@ -174,38 +175,35 @@ public class EquipmentController {
 
     @ApiOperation("后台通过公司id和设备类型查询")
     @RequestMapping("/findAllByGsidAndSblx")
-    public ApiResult<Object> findAllByGsidAndSblx(HttpServletRequest request, Integer sblx, int page, int size) {
+    public ApiResultPage<Object> findAllByGsidAndSblx(HttpServletRequest request, Integer sblx, int page, int size) {
         String uuid = userController.getUuid(request);
         // 判断是否登录
         if ("".equals(uuid)) {
-            return ApiResult.UNKNOWN();
+            return ApiResultPage.UNKNOWN();
         }
         if (sblx == null) {
-            return ApiResult.FAILURE("设备类型不能为空");
+            return ApiResultPage.FAILURE("设备类型不能为空");
         }
-        Pageable pageable = PageRequest.of(page - 1, size);
+//        Pageable pageable = PageRequest.of(page - 1, size);
+        List<EquipmentEntity> list = equipmentRepository.findAllByGsidAndSblxOrderByCjsjDesc(userRepository.findByUuid(uuid).getGsid(), sblx);
 
-        Page<EquipmentEntity> list = equipmentRepository.findAllByGsidAndSblxOrderByCjsjDesc(userRepository.findByUuid(uuid).getGsid(), sblx, pageable);
 
-
-        return ApiResult.SUCCESS(addMap(list));
+        return ApiResultPage.SUCCESS(addMap(list), page, size, list.size(), list.size()/size + 1);
 
     }
 
     @ApiOperation("前端通过公司id和设备类型查询")
     @RequestMapping("/frontFindAllByGsidAndSblx")
-    public ApiResult<Object> frontFindAllByGsidAndSblx(Integer gsid, Integer sblx, int page, int size) {
+    public ApiResultPage<Object> frontFindAllByGsidAndSblx(Integer gsid, Integer sblx, int page, int size) {
         if (gsid == null) {
-            return ApiResult.FAILURE("公司id不能为空");
+            return ApiResultPage.FAILURE("公司id不能为空");
         }
         if (sblx == null) {
-            return ApiResult.FAILURE("设备类型不能为空");
+            return ApiResultPage.FAILURE("设备类型不能为空");
         }
+        List<EquipmentEntity> list = equipmentRepository.findAllByGsidAndSblxOrderByCjsjDesc(gsid, sblx);
 
-        Pageable pageable = PageRequest.of(page - 1, size);
-        Page<EquipmentEntity> list = equipmentRepository.findAllByGsidAndSblxOrderByCjsjDesc(gsid, sblx, pageable);
-
-        return ApiResult.SUCCESS(addMap(list));
+        return ApiResultPage.SUCCESS(addMap(list), page, size, list.size(), list.size()/size + 1);
     }
 
     @ApiOperation("后台通过id查询")
@@ -219,8 +217,9 @@ public class EquipmentController {
         if (id == null) {
             return ApiResult.FAILURE("id不能为空");
         }
-        Pageable pageable = PageRequest.of(0, 1);
-        Page<EquipmentEntity> list = equipmentRepository.findById(id, pageable);
+        List<EquipmentEntity> list = new ArrayList<>();
+        EquipmentEntity entity = equipmentRepository.findById(id);
+        list.add(entity);
         return ApiResult.SUCCESS(addMap(list));
     }
 
@@ -230,12 +229,13 @@ public class EquipmentController {
         if (id == null) {
             return ApiResult.FAILURE("id不能为空");
         }
-        Pageable pageable = PageRequest.of(0, 1);
-        Page<EquipmentEntity> list = equipmentRepository.findById(id, pageable);
+        List<EquipmentEntity> list = new ArrayList<>();
+        EquipmentEntity entity = equipmentRepository.findById(id);
+        list.add(entity);
         return ApiResult.SUCCESS(addMap(list));
     }
 
-    public List<Map> addMap(Page<EquipmentEntity> list) {
+    public List<Map> addMap(List<EquipmentEntity> list) {
         List<Map> result = new ArrayList<>();
         for (EquipmentEntity equipmentEntity : list) {
             List<ProductdetailsEntity> cpxq = productDetailsRepository.findAllByCpid(equipmentEntity.getId());
