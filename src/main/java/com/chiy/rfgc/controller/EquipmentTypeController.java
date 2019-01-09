@@ -4,7 +4,9 @@ package com.chiy.rfgc.controller;
 import com.chiy.rfgc.common.ApiResult;
 import com.chiy.rfgc.entity.ContactusEntity;
 import com.chiy.rfgc.entity.EquipmenttypeEntity;
+import com.chiy.rfgc.repository.EquipmentRepository;
 import com.chiy.rfgc.repository.EquipmentTypeRepository;
+import com.chiy.rfgc.repository.ProductDetailsRepository;
 import com.chiy.rfgc.repository.UserRepository;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -31,6 +33,10 @@ public class EquipmentTypeController {
     private UserController userController;
     @Resource
     private UserRepository userRepository;
+    @Resource
+    private EquipmentRepository equipmentRepository;
+    @Resource
+    private ProductDetailsRepository productDetailsRepository;
 
     @ApiOperation(value = "添加")
     @RequestMapping("/add")
@@ -70,12 +76,12 @@ public class EquipmentTypeController {
 
     @ApiOperation("删除")
     @RequestMapping("/delete")
-    public ApiResult<Object> delete(HttpServletRequest request, Integer id) {
-        String uuid = userController.getUuid(request);
-        // 判断是否登录
-        if ("".equals(uuid)) {
-            return ApiResult.UNKNOWN();
-        }
+    public ApiResult<Object> delete(String uuid, HttpServletRequest request, Integer id) {
+//        String uuid = userController.getUuid(request);
+//        // 判断是否登录
+//        if ("".equals(uuid)) {
+//            return ApiResult.UNKNOWN();
+//        }
         if (id == null) {
             return ApiResult.FAILURE("id不能为空");
         }
@@ -83,11 +89,27 @@ public class EquipmentTypeController {
         if (equipmentTypeRepository.findById(id) == null) {
             return ApiResult.FAILURE("不存在，修改失败");
         }
+
         int result = equipmentTypeRepository.deleteById(id);
         if (result == 0) {
             return ApiResult.FAILURE("删除失败");
         }
-        // 删除相关
+
+        // 删除该设备类型的产品
+        // 查询所有产品id
+        List<Integer> cpids = equipmentRepository.findAllIdBySblx(id);
+        // 删除产品详情
+        for (Integer cpid : cpids) {
+            result = productDetailsRepository.deleteByCpId(cpid);
+            if (result == 0) {
+                return ApiResult.FAILURE("删除失败");
+            }
+        }
+        // 删除产品
+        result = equipmentRepository.deleteBySblx(id);
+        if (result == 0) {
+            return ApiResult.FAILURE("删除失败");
+        }
 
         return ApiResult.SUCCESS("删除成功");
     }

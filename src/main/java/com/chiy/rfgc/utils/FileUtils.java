@@ -11,12 +11,14 @@ public class FileUtils {
     /**
      * 上传图片
      */
-    public static void addPhoto(HttpServletRequest request, String wjlj, MultipartFile file) throws IOException {
+    public static String addPhoto(HttpServletRequest request, String wjlj, MultipartFile file) throws IOException {
         String path = request.getSession().getServletContext().getRealPath(wjlj);
-        File dest = new File(path + file.getOriginalFilename());
+        String realPath = System.currentTimeMillis() + file.getOriginalFilename().substring(file.getOriginalFilename().indexOf("."));
+        File dest = new File(path + realPath);
         if(!dest.getParentFile().exists()){
             dest.getParentFile().mkdir();
         }
         file.transferTo(dest);
+        return realPath;
     }
 }

@@ -36,5 +36,7 @@ public interface EquipmentRepository extends CrudRepository<EquipmentEntity, Lon
     @Transactional
     int deleteBySblx(Integer sblx);
 
+    @Query(value = "select distinct id from equipment where equipment_type = ?1", nativeQuery = true)
+    List<Integer> findAllIdBySblx(Integer sblx);
 
 }

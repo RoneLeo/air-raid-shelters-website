@@ -2,6 +2,7 @@ package com.chiy.rfgc.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.chiy.rfgc.common.ApiResult;
+import com.chiy.rfgc.config.PhotoTypeAndPath;
 import com.chiy.rfgc.entity.EquipmentEntity;
 import com.chiy.rfgc.entity.ProductdetailsEntity;
 import com.chiy.rfgc.repository.EquipmentRepository;
@@ -14,6 +15,7 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -40,8 +42,6 @@ public class EquipmentController {
     @Resource
     private ProductDetailsRepository productDetailsRepository;
 
-    private static final String EQUIPMENT_PHOTO_PATH = "/equipment/";
-
     @ApiOperation(value = "添加")
     @RequestMapping("/add")
     public ApiResult<Object> add(EquipmentEntity entity, HttpServletRequest request, MultipartFile file, String contents) throws IOException {
@@ -58,8 +58,8 @@ public class EquipmentController {
         List<ProductTitle> list = JSONObject.parseArray(contents, ProductTitle.class);
         // 添加图片
         if (file != null) {
-            FileUtils.addPhoto(request, EQUIPMENT_PHOTO_PATH, file);
-            entity.setCptp(EQUIPMENT_PHOTO_PATH + file.getOriginalFilename());
+            String path = FileUtils.addPhoto(request, PhotoTypeAndPath.EQUIPMENT_PHOTO_PATH, file);
+            entity.setCptp(PhotoTypeAndPath.EQUIPMENT_PHOTO_PATH + path);
         }
         entity.setGsid(userRepository.findByUuid(uuid).getGsid());
         entity.setCjsj(new Date());
@@ -82,12 +82,12 @@ public class EquipmentController {
 
     @ApiOperation("修改")
     @RequestMapping("/update")
-    public ApiResult<Object> update(String uuid, HttpServletRequest request, EquipmentEntity entity, String contents, MultipartFile file) throws IOException {
-//        String uuid = userController.getUuid(request);
-//        // 判断是否登录
-//        if ("".equals(uuid)) {
-//            return ApiResult.UNKNOWN();
-//        }
+    public ApiResult<Object> update(HttpServletRequest request, EquipmentEntity entity, String contents, MultipartFile file) throws IOException {
+        String uuid = userController.getUuid(request);
+        // 判断是否登录
+        if ("".equals(uuid)) {
+            return ApiResult.UNKNOWN();
+        }
         // 判断设备类型
         if (entity.getSblx() == null || equipmentTypeRepository.findById(entity.getSblx()) == null) {
             return ApiResult.FAILURE("修改失败，设备类型不能为空或该设备类型不存在");
@@ -96,8 +96,8 @@ public class EquipmentController {
         List<ProductdetailsEntity> list = JSONObject.parseArray(contents, ProductdetailsEntity.class);
         // 添加图片
         if (file != null) {
-            FileUtils.addPhoto(request, EQUIPMENT_PHOTO_PATH, file);
-            entity.setCptp(EQUIPMENT_PHOTO_PATH + file.getOriginalFilename());
+            String path = FileUtils.addPhoto(request, PhotoTypeAndPath.EQUIPMENT_PHOTO_PATH, file);
+            entity.setCptp(PhotoTypeAndPath.EQUIPMENT_PHOTO_PATH + path);
         }
         EquipmentEntity entity1 = equipmentRepository.save(entity);
         if (entity1 == null) {

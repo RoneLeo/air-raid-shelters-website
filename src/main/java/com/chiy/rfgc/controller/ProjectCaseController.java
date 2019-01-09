@@ -2,6 +2,7 @@ package com.chiy.rfgc.controller;
 
 
 import com.chiy.rfgc.common.ApiResult;
+import com.chiy.rfgc.config.PhotoTypeAndPath;
 import com.chiy.rfgc.entity.ProjectcaseEntity;
 import com.chiy.rfgc.repository.ProjectCaseRepository;
 import com.chiy.rfgc.repository.UserRepository;
@@ -33,8 +34,6 @@ public class ProjectCaseController {
     @Resource
     private UserController userController;
 
-    private static final String PROJECT_PHOTO_PATH = "/project/";
-
     @ApiOperation(value = "添加")
     @RequestMapping("/add")
     public ApiResult<Object> add(HttpServletRequest request, ProjectcaseEntity entity, MultipartFile file) throws IOException {
@@ -45,8 +44,8 @@ public class ProjectCaseController {
         }
         // 添加图片
         if (file != null) {
-            FileUtils.addPhoto(request, PROJECT_PHOTO_PATH, file);
-            entity.setTp(PROJECT_PHOTO_PATH + file.getOriginalFilename());
+            String path = FileUtils.addPhoto(request, PhotoTypeAndPath.PROJECT_PHOTO_PATH, file);
+            entity.setTp(PhotoTypeAndPath.PROJECT_PHOTO_PATH + path);
         }
         entity.setGsid(userRepository.findByUuid(uuid).getGsid());
         entity.setCjsj(new Date());
@@ -71,8 +70,8 @@ public class ProjectCaseController {
         }
         // 添加图片
         if (file != null) {
-            FileUtils.addPhoto(request, PROJECT_PHOTO_PATH, file);
-            entity.setTp(PROJECT_PHOTO_PATH + file.getOriginalFilename());
+            String path = FileUtils.addPhoto(request, PhotoTypeAndPath.PROJECT_PHOTO_PATH, file);
+            entity.setTp(PhotoTypeAndPath.PROJECT_PHOTO_PATH + path);
         }
         ProjectcaseEntity entity1 = projectCaseRepository.save(entity);
         if (entity1 == null) {
