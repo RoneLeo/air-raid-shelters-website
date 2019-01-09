@@ -28,7 +28,6 @@ public interface EquipmentRepository extends CrudRepository<EquipmentEntity, Lon
 
     Page<EquipmentEntity> findAllByGsidAndSblxOrderByCjsjDesc(Integer gsid, Integer sblx, Pageable pageable);
 
-    Page<EquipmentEntity> findById(Integer id, Pageable pageable);
 
     // 通过设备类型删除
     @Query(value = "delete from equipment where equipment_type = ?1", nativeQuery = true)
@@ -36,5 +35,7 @@ public interface EquipmentRepository extends CrudRepository<EquipmentEntity, Lon
     @Transactional
     int deleteBySblx(Integer sblx);
 
+    @Query(value = "select distinct id from equipment where equipment_type = ?1", nativeQuery = true)
+    List<Integer> findAllIdBySblx(Integer sblx);
 
 }

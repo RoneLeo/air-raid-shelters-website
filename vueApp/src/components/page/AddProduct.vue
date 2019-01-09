@@ -19,8 +19,8 @@
                                 <input type="file" @change="getFile($event)"/>
                             </el-form-item>
                             <el-form-item v-else="" label-width="150px" label="产品图片">
-                                <img :src="`http://182.151.22.247:8081${form.cptp}`" alt="" style="width: 100px;height: 100px;position: relative;">
-                                <i v-if="form.cptp" class="el-icon-error" @click="deleteTP" style="font-size: 18px;font-weight: 600;position: absolute;top: -9px;right: -9px;color: #0095FF;"></i>
+                                <img :src="`http://182.151.22.247:8081${form.cptp}`" alt="" style="width: 140px;height: 100px;position: relative;border-radius: 5px">
+                                <i v-if="form.cptp" class="el-icon-error image-icon" @click="deleteTP"></i>
                             </el-form-item>
                         </el-form>
                     </el-col>
@@ -113,7 +113,7 @@ import UEditor from '@/components/common/ueditor.vue'
                 this.editor = UE.getEditor("editor");
             })
 
-            this.$axios.post('/api/equipmentType/findAll').then((res) => {
+            this.$axios.post('/api/equipmentType/findAllByGsid').then((res) => {
                 let data = res.data;
                 this.equipmentType = data;
             });

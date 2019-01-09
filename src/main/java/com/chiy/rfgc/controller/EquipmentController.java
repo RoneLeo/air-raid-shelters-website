@@ -2,6 +2,8 @@ package com.chiy.rfgc.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.chiy.rfgc.common.ApiResult;
+import com.chiy.rfgc.common.ApiResultPage;
+import com.chiy.rfgc.config.PhotoTypeAndPath;
 import com.chiy.rfgc.entity.EquipmentEntity;
 import com.chiy.rfgc.entity.ProductdetailsEntity;
 import com.chiy.rfgc.repository.EquipmentRepository;
@@ -14,6 +16,7 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -40,8 +43,6 @@ public class EquipmentController {
     @Resource
     private ProductDetailsRepository productDetailsRepository;
 
-    private static final String EQUIPMENT_PHOTO_PATH = "/equipment/";
-
     @ApiOperation(value = "添加")
     @RequestMapping("/add")
     public ApiResult<Object> add(EquipmentEntity entity, HttpServletRequest request, MultipartFile file, String contents) throws IOException {
@@ -58,8 +59,8 @@ public class EquipmentController {
         List<ProductTitle> list = JSONObject.parseArray(contents, ProductTitle.class);
         // 添加图片
         if (file != null) {
-            FileUtils.addPhoto(request, EQUIPMENT_PHOTO_PATH, file);
-            entity.setCptp(EQUIPMENT_PHOTO_PATH + file.getOriginalFilename());
+            String path = FileUtils.addPhoto(request, PhotoTypeAndPath.EQUIPMENT_PHOTO_PATH, file);
+            entity.setCptp(PhotoTypeAndPath.EQUIPMENT_PHOTO_PATH + path);
         }
         entity.setGsid(userRepository.findByUuid(uuid).getGsid());
         entity.setCjsj(new Date());
@@ -82,12 +83,12 @@ public class EquipmentController {
 
     @ApiOperation("修改")
     @RequestMapping("/update")
-    public ApiResult<Object> update(String uuid, HttpServletRequest request, EquipmentEntity entity, String contents, MultipartFile file) throws IOException {
-//        String uuid = userController.getUuid(request);
-//        // 判断是否登录
-//        if ("".equals(uuid)) {
-//            return ApiResult.UNKNOWN();
-//        }
+    public ApiResult<Object> update(HttpServletRequest request, EquipmentEntity entity, String contents, MultipartFile file) throws IOException {
+        String uuid = userController.getUuid(request);
+        // 判断是否登录
+        if ("".equals(uuid)) {
+            return ApiResult.UNKNOWN();
+        }
         // 判断设备类型
         if (entity.getSblx() == null || equipmentTypeRepository.findById(entity.getSblx()) == null) {
             return ApiResult.FAILURE("修改失败，设备类型不能为空或该设备类型不存在");
@@ -96,8 +97,8 @@ public class EquipmentController {
         List<ProductdetailsEntity> list = JSONObject.parseArray(contents, ProductdetailsEntity.class);
         // 添加图片
         if (file != null) {
-            FileUtils.addPhoto(request, EQUIPMENT_PHOTO_PATH, file);
-            entity.setCptp(EQUIPMENT_PHOTO_PATH + file.getOriginalFilename());
+            String path = FileUtils.addPhoto(request, PhotoTypeAndPath.EQUIPMENT_PHOTO_PATH, file);
+            entity.setCptp(PhotoTypeAndPath.EQUIPMENT_PHOTO_PATH + path);
         }
         EquipmentEntity entity1 = equipmentRepository.save(entity);
         if (entity1 == null) {
@@ -174,38 +175,52 @@ public class EquipmentController {
 
     @ApiOperation("后台通过公司id和设备类型查询")
     @RequestMapping("/findAllByGsidAndSblx")
-    public ApiResult<Object> findAllByGsidAndSblx(HttpServletRequest request, Integer sblx, int page, int size) {
+    public ApiResultPage<Object> findAllByGsidAndSblx(HttpServletRequest request, Integer sblx, int page, int size) {
         String uuid = userController.getUuid(request);
         // 判断是否登录
         if ("".equals(uuid)) {
-            return ApiResult.UNKNOWN();
+            return ApiResultPage.UNKNOWN();
         }
         if (sblx == null) {
-            return ApiResult.FAILURE("设备类型不能为空");
+            return ApiResultPage.FAILURE("设备类型不能为空");
         }
         Pageable pageable = PageRequest.of(page - 1, size);
-
         Page<EquipmentEntity> list = equipmentRepository.findAllByGsidAndSblxOrderByCjsjDesc(userRepository.findByUuid(uuid).getGsid(), sblx, pageable);
 
-
-        return ApiResult.SUCCESS(addMap(list));
-
+        List<EquipmentEntity> list1 = equipmentRepository.findAllByGsidAndSblxOrderByCjsjDesc(userRepository.findByUuid(uuid).getGsid(), sblx);
+        int totalElements = list1.size();
+        int num = totalElements % size;
+        int totalPages = 0;
+        if (num == 0) {
+            totalPages = totalElements/size;
+        } else {
+            totalPages = totalElements/size + 1;
+        }
+        return ApiResultPage.SUCCESS(addMap(list), page, size, totalElements, totalPages);
     }
 
     @ApiOperation("前端通过公司id和设备类型查询")
     @RequestMapping("/frontFindAllByGsidAndSblx")
-    public ApiResult<Object> frontFindAllByGsidAndSblx(Integer gsid, Integer sblx, int page, int size) {
+    public ApiResultPage<Object> frontFindAllByGsidAndSblx(Integer gsid, Integer sblx, int page, int size) {
         if (gsid == null) {
-            return ApiResult.FAILURE("公司id不能为空");
+            return ApiResultPage.FAILURE("公司id不能为空");
         }
         if (sblx == null) {
-            return ApiResult.FAILURE("设备类型不能为空");
+            return ApiResultPage.FAILURE("设备类型不能为空");
         }
-
         Pageable pageable = PageRequest.of(page - 1, size);
         Page<EquipmentEntity> list = equipmentRepository.findAllByGsidAndSblxOrderByCjsjDesc(gsid, sblx, pageable);
 
-        return ApiResult.SUCCESS(addMap(list));
+        List<EquipmentEntity> list1 = equipmentRepository.findAllByGsidAndSblxOrderByCjsjDesc(gsid, sblx);
+        int totalElements = list1.size();
+        int num = totalElements % size;
+        int totalPages = 0;
+        if (num == 0) {
+            totalPages = totalElements/size;
+        } else {
+            totalPages = totalElements/size + 1;
+        }
+        return ApiResultPage.SUCCESS(addMap(list), page, size, totalElements, totalPages);
     }
 
     @ApiOperation("后台通过id查询")
@@ -219,8 +234,12 @@ public class EquipmentController {
         if (id == null) {
             return ApiResult.FAILURE("id不能为空");
         }
-        Pageable pageable = PageRequest.of(0, 1);
-        Page<EquipmentEntity> list = equipmentRepository.findById(id, pageable);
+        List<EquipmentEntity> list = new ArrayList<>();
+        EquipmentEntity entity = equipmentRepository.findById(id);
+        if (entity == null) {
+            return ApiResult.FAILURE("不存在");
+        }
+        list.add(entity);
         return ApiResult.SUCCESS(addMap(list));
     }
 
@@ -230,12 +249,32 @@ public class EquipmentController {
         if (id == null) {
             return ApiResult.FAILURE("id不能为空");
         }
-        Pageable pageable = PageRequest.of(0, 1);
-        Page<EquipmentEntity> list = equipmentRepository.findById(id, pageable);
+        List<EquipmentEntity> list = new ArrayList<>();
+        EquipmentEntity entity = equipmentRepository.findById(id);
+        if (entity == null) {
+            return ApiResult.FAILURE("不存在");
+        }
+        list.add(entity);
         return ApiResult.SUCCESS(addMap(list));
     }
 
     public List<Map> addMap(Page<EquipmentEntity> list) {
+        List<Map> result = new ArrayList<>();
+        for (EquipmentEntity equipmentEntity : list) {
+            List<ProductdetailsEntity> cpxq = productDetailsRepository.findAllByCpid(equipmentEntity.getId());
+            Map<String, Object> map = new HashMap<>();
+            map.put("id", equipmentEntity.getId());
+            map.put("gsid",equipmentEntity.getGsid());
+            map.put("cpmc",equipmentEntity.getCpmc());
+            map.put("cptp",equipmentEntity.getCptp());
+            map.put("sblx", equipmentEntity.getSblx());
+            map.put("cpxq",cpxq);
+            result.add(map);
+        }
+        return result;
+    }
+
+    public List<Map> addMap(List<EquipmentEntity> list) {
         List<Map> result = new ArrayList<>();
         for (EquipmentEntity equipmentEntity : list) {
             List<ProductdetailsEntity> cpxq = productDetailsRepository.findAllByCpid(equipmentEntity.getId());

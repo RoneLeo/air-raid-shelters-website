@@ -26,6 +26,20 @@ ul {
     padding: 0;
 }
 
+.image {
+    width: 100px;
+    height: 100px;
+    border-radius: 3px;
+}
+.image-icon {
+    font-size: 18px;
+    font-weight: 600;
+    position: absolute;
+    top: -6px;
+    right: -9px;
+    color: #0095FF;
+}
+
 .content-box {
     position: absolute;
     left: 200px;
