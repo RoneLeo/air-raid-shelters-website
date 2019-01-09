@@ -184,12 +184,19 @@ public class EquipmentController {
         if (sblx == null) {
             return ApiResultPage.FAILURE("设备类型不能为空");
         }
-//        Pageable pageable = PageRequest.of(page - 1, size);
-        List<EquipmentEntity> list = equipmentRepository.findAllByGsidAndSblxOrderByCjsjDesc(userRepository.findByUuid(uuid).getGsid(), sblx);
+        Pageable pageable = PageRequest.of(page - 1, size);
+        Page<EquipmentEntity> list = equipmentRepository.findAllByGsidAndSblxOrderByCjsjDesc(userRepository.findByUuid(uuid).getGsid(), sblx, pageable);
 
-
-        return ApiResultPage.SUCCESS(addMap(list), page, size, list.size(), list.size()/size + 1);
-
+        List<EquipmentEntity> list1 = equipmentRepository.findAllByGsidAndSblxOrderByCjsjDesc(userRepository.findByUuid(uuid).getGsid(), sblx);
+        int totalElements = list1.size();
+        int num = totalElements % size;
+        int totalPages = 0;
+        if (num == 0) {
+            totalPages = totalElements/size;
+        } else {
+            totalPages = totalElements/size + 1;
+        }
+        return ApiResultPage.SUCCESS(addMap(list), page, size, totalElements, totalPages);
     }
 
     @ApiOperation("前端通过公司id和设备类型查询")
@@ -201,9 +208,19 @@ public class EquipmentController {
         if (sblx == null) {
             return ApiResultPage.FAILURE("设备类型不能为空");
         }
-        List<EquipmentEntity> list = equipmentRepository.findAllByGsidAndSblxOrderByCjsjDesc(gsid, sblx);
+        Pageable pageable = PageRequest.of(page - 1, size);
+        Page<EquipmentEntity> list = equipmentRepository.findAllByGsidAndSblxOrderByCjsjDesc(gsid, sblx, pageable);
 
-        return ApiResultPage.SUCCESS(addMap(list), page, size, list.size(), list.size()/size + 1);
+        List<EquipmentEntity> list1 = equipmentRepository.findAllByGsidAndSblxOrderByCjsjDesc(gsid, sblx);
+        int totalElements = list1.size();
+        int num = totalElements % size;
+        int totalPages = 0;
+        if (num == 0) {
+            totalPages = totalElements/size;
+        } else {
+            totalPages = totalElements/size + 1;
+        }
+        return ApiResultPage.SUCCESS(addMap(list), page, size, totalElements, totalPages);
     }
 
     @ApiOperation("后台通过id查询")
@@ -219,6 +236,9 @@ public class EquipmentController {
         }
         List<EquipmentEntity> list = new ArrayList<>();
         EquipmentEntity entity = equipmentRepository.findById(id);
+        if (entity == null) {
+            return ApiResult.FAILURE("不存在");
+        }
         list.add(entity);
         return ApiResult.SUCCESS(addMap(list));
     }
@@ -231,8 +251,27 @@ public class EquipmentController {
         }
         List<EquipmentEntity> list = new ArrayList<>();
         EquipmentEntity entity = equipmentRepository.findById(id);
+        if (entity == null) {
+            return ApiResult.FAILURE("不存在");
+        }
         list.add(entity);
         return ApiResult.SUCCESS(addMap(list));
+    }
+
+    public List<Map> addMap(Page<EquipmentEntity> list) {
+        List<Map> result = new ArrayList<>();
+        for (EquipmentEntity equipmentEntity : list) {
+            List<ProductdetailsEntity> cpxq = productDetailsRepository.findAllByCpid(equipmentEntity.getId());
+            Map<String, Object> map = new HashMap<>();
+            map.put("id", equipmentEntity.getId());
+            map.put("gsid",equipmentEntity.getGsid());
+            map.put("cpmc",equipmentEntity.getCpmc());
+            map.put("cptp",equipmentEntity.getCptp());
+            map.put("sblx", equipmentEntity.getSblx());
+            map.put("cpxq",cpxq);
+            result.add(map);
+        }
+        return result;
     }
 
     public List<Map> addMap(List<EquipmentEntity> list) {
