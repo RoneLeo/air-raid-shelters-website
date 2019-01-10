@@ -205,12 +205,13 @@ public class EquipmentController {
         if (gsid == null) {
             return ApiResultPage.FAILURE("公司id不能为空");
         }
-        if (sblx == null) {
-            return ApiResultPage.FAILURE("设备类型不能为空");
-        }
         Pageable pageable = PageRequest.of(page - 1, size);
-        Page<EquipmentEntity> list = equipmentRepository.findAllByGsidAndSblxOrderByCjsjDesc(gsid, sblx, pageable);
-
+        Page<EquipmentEntity> list = null;
+        if (sblx == null) {
+            list = equipmentRepository.findAllByGsid(gsid, pageable);
+        } else {
+            list = equipmentRepository.findAllByGsidAndSblxOrderByCjsjDesc(gsid, sblx, pageable);
+        }
         List<EquipmentEntity> list1 = equipmentRepository.findAllByGsidAndSblxOrderByCjsjDesc(gsid, sblx);
         int totalElements = list1.size();
         int num = totalElements % size;

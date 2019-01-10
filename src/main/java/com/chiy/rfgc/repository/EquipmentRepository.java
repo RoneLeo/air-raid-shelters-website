@@ -38,4 +38,6 @@ public interface EquipmentRepository extends CrudRepository<EquipmentEntity, Lon
     @Query(value = "select distinct id from equipment where equipment_type = ?1", nativeQuery = true)
     List<Integer> findAllIdBySblx(Integer sblx);
 
+    Page<EquipmentEntity> findAllByGsid(Integer gsid, Pageable pageable);
+
 }
