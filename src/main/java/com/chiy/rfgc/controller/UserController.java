@@ -73,12 +73,32 @@ public class UserController {
         if (userRepository.findByUuid(entity.getUuid()) == null) {
             return ApiResult.FAILURE("修改失败，不存在");
         }
-        entity.setMm(MD5Utils.getMD5(entity.getMm()));
         UserEntity entity1 = userRepository.save(entity);
         if (entity1 == null) {
             return ApiResult.FAILURE("修改失败");
         }
         return ApiResult.SUCCESS(entity1);
+    }
+
+    @ApiOperation("修改密码")
+    @RequestMapping("/updateMm")
+    public ApiResult<Object> update(String mm, HttpServletRequest request) throws Exception {
+        String uuid = getUuid(request);
+        // 判断是否登录
+        if ("".equals(uuid)) {
+            return ApiResult.UNKNOWN();
+        }
+        // 判断是否存在
+        UserEntity entity = userRepository.findByUuid(uuid);
+        if (entity == null) {
+            return ApiResult.FAILURE("修改失败，不存在");
+        }
+        entity.setMm(MD5Utils.getMD5(mm));
+        UserEntity entity1 = userRepository.save(entity);
+        if (entity1 == null) {
+            return ApiResult.FAILURE("修改失败");
+        }
+        return ApiResult.SUCCESS("修改成功");
     }
 
     @ApiOperation("删除")
