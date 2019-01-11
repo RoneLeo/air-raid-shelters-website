@@ -189,7 +189,7 @@
                 this.$axios.post('/api/contactUs/findByGsid').then((res) => {
                     this.companyForm = res.data;
                     console.log(this.companyForm)
-                    if (this.companyForm) {
+                    if (this.companyForm !== null) {
 //                        console.log(111)
                         this.disabled = true
                         this.setMarker();

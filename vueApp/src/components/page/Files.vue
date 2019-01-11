@@ -82,9 +82,7 @@
                                    :value="item.id"></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="文件"
-                              prop="file"
-                              :rules="[{ required: true, message: '文件不能为空', trigger: 'blur' }]">
+                <el-form-item label="文件">
                     <input type="file" @change="getFile($event)"/>
                 </el-form-item>
             </el-form>
