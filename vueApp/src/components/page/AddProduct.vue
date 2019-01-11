@@ -111,24 +111,9 @@ import UEditor from '@/components/common/ueditor.vue'
             }
         },
         mounted () {
-//            this.editor = UE.getEditor('editor').ready(function() {
-                //this是当前创建的编辑器实例
-//                this.setContent('内容')
-//            })
-
             this.$nextTick(()=>{
-//                UE.Editor.prototype._bkGetActionUrl = UE.Editor.prototype.getActionUrl;
-//                UE.Editor.prototype.getActionUrl = function(action) {
-//                    console.log(action);
-//                    if (action == 'uploadimage' || action == 'uploadscrawl') {
-//                        return 'http://182.151.22.247:8081/upload';
-//                    } else {
-//                        return this._bkGetActionUrl.call(this, action);
-//                    }
-//                }
                 this.editor = UE.getEditor("editor");
             })
-
             this.$axios.post('/api/equipmentType/findAllByGsid').then((res) => {
                 let data = res.data;
                 this.equipmentType = data;
@@ -181,11 +166,7 @@ import UEditor from '@/components/common/ueditor.vue'
             },
             finishItem() {
                 if(this.content.index >= 0) {   //小标题修改
-//                    let item = Object.assign({}, this.content);
-//                    item.bt = this.bt;
-//                    item.xxnr = this.$refs.ueditor.getUEContent();
                     let index = this.content.index;
-//                    this.contents[index] = item;
                     this.contents[index].bt = this.bt;
                     this.contents[index].xxnr = this.$refs.ueditor.getUEContent();
                     this.updating = null;
@@ -220,7 +201,7 @@ import UEditor from '@/components/common/ueditor.vue'
                     }
                 };
                 this.$axios.post(url, formData, config).then(res => {
-                    this.$router.push('/products');
+                    this.$router.push({name:'products', params: {sblx: this.form.sblx}});
                 })
             },
 

@@ -50,7 +50,7 @@
                                 let data = res.data;
                                 localStorage.setItem('ms_username',data.xm);
                                 localStorage.setItem('uuid',data.uuid);
-                                this.$router.push('/');
+                                this.$router.push('/company');
                             }else{
                                 this.$message.error(res.resMsg);
                             }

@@ -48,7 +48,7 @@
             // 关闭全部标签
             closeAll(){
                 this.tagsList = [];
-                this.$router.push('/');
+                this.$router.push('/company');
             },
             // 关闭其他标签
             closeOther(){
@@ -87,9 +87,6 @@
         },
         watch:{
             $route(newValue, oldValue){
-                if(newValue.path === '/products') {
-                    console.log('/products')
-                }
                 this.setTags(newValue);
             }
         },
