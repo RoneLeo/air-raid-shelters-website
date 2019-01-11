@@ -1,4 +1,4 @@
-package com.chiy.rfgc.baidu.ueditor.hunter;
+package com.baidu.ueditor.hunter;
 
 import java.io.File;
 import java.util.Arrays;

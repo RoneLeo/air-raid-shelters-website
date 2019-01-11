@@ -1,4 +1,4 @@
-package com.chiy.rfgc.baidu.ueditor;
+package com.baidu.ueditor;
 
 public class Encoder {
 

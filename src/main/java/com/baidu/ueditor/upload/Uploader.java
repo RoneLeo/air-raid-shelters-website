@@ -1,4 +1,4 @@
-package com.chiy.rfgc.baidu.ueditor.upload;
+package com.baidu.ueditor.upload;
 
 import com.baidu.ueditor.define.State;
 import com.baidu.ueditor.upload.Base64Uploader;

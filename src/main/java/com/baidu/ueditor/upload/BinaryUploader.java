@@ -1,4 +1,4 @@
-package com.chiy.rfgc.baidu.ueditor.upload;
+package com.baidu.ueditor.upload;
 
 import com.baidu.ueditor.PathFormat;
 import com.baidu.ueditor.define.AppInfo;
@@ -60,6 +60,7 @@ public class BinaryUploader {
 			if(multipartFile==null){
 				return new BaseState(false, AppInfo.NOTFOUND_UPLOAD_DATA);
 			}
+
 			String savePath = (String) conf.get("savePath");
 //			String originFileName = fileStream.getName();
 			String originFileName = multipartFile.getOriginalFilename();
@@ -77,13 +78,11 @@ public class BinaryUploader {
 
 			savePath = PathFormat.parse(savePath, originFileName);
 
-//			String physicalPath = (String) conf.get("rootPath") + savePath;
 			String basePath=(String) conf.get("basePath");
 			String physicalPath = basePath + savePath;
 
 //			InputStream is = fileStream.openStream();
 			InputStream is = multipartFile.getInputStream();
-
 			State storageState = StorageManager.saveFileByInputStream(is,
 					physicalPath, maxSize);
 			is.close();

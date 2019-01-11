@@ -1,38 +1,24 @@
 package com.chiy.rfgc.controller;
 import com.baidu.ueditor.ActionEnter;
-import com.chiy.rfgc.common.ApiResult;
-import com.chiy.rfgc.config.Ueditor;
-import com.chiy.rfgc.entity.FileEntity;
-import com.chiy.rfgc.repository.FileRepository;
-import com.chiy.rfgc.repository.UserRepository;
-import com.chiy.rfgc.utils.FileUtils;
-import io.swagger.annotations.ApiOperation;
-import org.json.JSONException;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.apache.commons.fileupload.disk.DiskFileItemFactory;
+import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.File;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.Date;
+import java.io.*;
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 public class UEditorController {
-    @Autowired
-    private HttpServletRequest request;
-    @Resource
-    private UserController userController;
 
-    private static final String PRODUCT_PHOTO_PATH = "/product/";
-
-    @RequestMapping("/ueditorConfig")
-    public void getUEditorConfig(HttpServletResponse response) {
-        String rootPath = "src/main/resources/static";
+    @RequestMapping(value="/config")
+    public void config(HttpServletRequest request, HttpServletResponse response) {
+        response.setContentType("application/json");
+        String rootPath = request.getSession().getServletContext().getRealPath("/");
         try {
             String exec = new ActionEnter(request, rootPath).exec();
             PrintWriter writer = response.getWriter();
@@ -44,27 +30,51 @@ public class UEditorController {
         }
     }
 
-//    @RequestMapping(value = "/imgUpload")
-//    public Ueditor imgUpload(MultipartFile upfile) {
-//        Ueditor ueditor = new Ueditor();
-//        return ueditor;
-//    }
 
 
-    @ApiOperation("添加图片")
-    @RequestMapping("/uploadimage")
-    public ApiResult<Object> addPhoto(HttpServletRequest request, MultipartFile upfile) throws IOException {
-        String wjlj = PRODUCT_PHOTO_PATH;
-        String uuid = userController.getUuid(request);
-        // 判断是否登录
-        if ("".equals(uuid)) {
-            return ApiResult.UNKNOWN();
+    @RequestMapping(value = "/upload")
+    public Map upload(HttpServletRequest request, HttpServletResponse response, MultipartFile file) throws Exception {
+        request.setCharacterEncoding("utf-8");
+        response.setCharacterEncoding("utf-8");
+        Map<String, String> result = new HashMap<>();
+        try {
+            String wjlj = "/product/";
+            String path = request.getSession().getServletContext().getRealPath(wjlj);
+            String realPath = System.currentTimeMillis() + file.getOriginalFilename().substring(file.getOriginalFilename().indexOf("."));
+            File dest = new File(path + realPath);
+            if(!dest.getParentFile().exists()){
+                dest.getParentFile().mkdir();
+            }
+            file.transferTo(dest);
+
+            result.put("state", "SUCCESS");
+            result.put("title", file.getName());
+            result.put("url", realPath);
+            result.put("original", file.getName());
+        } catch (IOException e) {
+            result.put("state", "图片上传失败");
         }
-        if (upfile != null) {
-            FileUtils.addPhoto(request, wjlj, upfile);
-        }
-
-        return ApiResult.SUCCESS(wjlj + upfile.getOriginalFilename());
+        return result;
     }
+
+    @RequestMapping(value="/show")
+    public void show(String filename, HttpServletResponse response) throws IOException {
+//        String name = System.currentTimeMillis() + filename.substring(filename.indexOf("."));
+        File file = new File("D:/image/" + filename);
+        response.setHeader("content-disposition", "attachment;filename=" + filename);
+        response.setCharacterEncoding("UTF-8");
+        InputStream is = new FileInputStream(file);
+        int len = 0;
+        byte[] data = new byte[1024];
+        OutputStream os = response.getOutputStream();
+        while ((len = is.read(data)) > 0) {
+            os.write(data, 0, len);
+        }
+        os.flush();
+        os.close();
+        is.close();
+    }
+
+
 
 }
