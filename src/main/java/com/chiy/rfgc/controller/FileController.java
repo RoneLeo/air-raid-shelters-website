@@ -1,6 +1,7 @@
 package com.chiy.rfgc.controller;
 
 import com.chiy.rfgc.common.ApiResult;
+import com.chiy.rfgc.config.PhotoTypeAndPath;
 import com.chiy.rfgc.entity.FileEntity;
 import com.chiy.rfgc.repository.FileRepository;
 import com.chiy.rfgc.repository.UserRepository;
@@ -35,8 +36,6 @@ public class FileController {
     @Resource
     private UserController userController;
 
-    private static final String CERTIFICATE_PATH = "/certificate/";
-    private static final String HOMEPAGE_PHOTO_PATH = "/homepage/";
 
     @ApiOperation("添加")
     @RequestMapping("/add")
@@ -55,13 +54,13 @@ public class FileController {
         }
         String wjlj = "";
         if (entity.getWjlx() == 1) {
-            wjlj = CERTIFICATE_PATH;
+            wjlj = PhotoTypeAndPath.CERTIFICATE_PATH;
         } else {
-            wjlj = HOMEPAGE_PHOTO_PATH;
+            wjlj = PhotoTypeAndPath.HOMEPAGE_PHOTO_PATH;
         }
-        FileUtils.addPhoto(request, wjlj, file);
+        String path = FileUtils.addPhoto(request, wjlj, file);
         entity.setGsid(userRepository.findByUuid(uuid).getGsid());
-        entity.setWjlj(wjlj + file.getOriginalFilename());
+        entity.setWjlj(wjlj + path);
         entity.setCjsj(new Date());
         FileEntity entity1 = fileRepository.save(entity);
         if (entity1 == null) {

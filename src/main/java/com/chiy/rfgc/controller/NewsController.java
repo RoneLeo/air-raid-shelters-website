@@ -1,6 +1,7 @@
 package com.chiy.rfgc.controller;
 
 import com.chiy.rfgc.common.ApiResult;
+import com.chiy.rfgc.config.PhotoTypeAndPath;
 import com.chiy.rfgc.entity.NewsEntity;
 import com.chiy.rfgc.repository.NewsRepository;
 import com.chiy.rfgc.repository.UserRepository;
@@ -18,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 @Api(description = "新闻管理")
@@ -34,6 +36,7 @@ public class NewsController {
 
     private static final String NEWS_PHOTO_PATH = "/news/";
 
+
     @ApiOperation(value = "添加")
     @RequestMapping("/add")
     public ApiResult<Object> add(HttpServletRequest request, NewsEntity entity, MultipartFile file) throws IOException {
@@ -44,8 +47,8 @@ public class NewsController {
         }
         // 添加图片
         if (file != null) {
-            FileUtils.addPhoto(request, NEWS_PHOTO_PATH, file);
-            entity.setXwtp(NEWS_PHOTO_PATH + file.getOriginalFilename());
+            String path = FileUtils.addPhoto(request, PhotoTypeAndPath.NEWS_PHOTO_PATH, file);
+            entity.setXwtp(PhotoTypeAndPath.NEWS_PHOTO_PATH + path);
         }
         entity.setGsid(userRepository.findByUuid(uuid).getGsid());
         entity.setCjsj(new Date());
@@ -70,8 +73,8 @@ public class NewsController {
         }
         // 添加图片
         if (file != null) {
-            FileUtils.addPhoto(request, NEWS_PHOTO_PATH, file);
-            entity.setXwtp(NEWS_PHOTO_PATH + file.getOriginalFilename());
+            String path = FileUtils.addPhoto(request, PhotoTypeAndPath.NEWS_PHOTO_PATH, file);
+            entity.setXwtp(PhotoTypeAndPath.NEWS_PHOTO_PATH + path);
         }
         NewsEntity entity1 = newsRepository.save(entity);
         if (entity1 == null) {
