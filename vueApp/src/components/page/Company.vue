@@ -158,7 +158,6 @@
                         });
                     });
                 }
-
             },
             setMarker() {
                 let positions = this.companyForm.jwd.split(',');

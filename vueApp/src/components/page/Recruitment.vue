@@ -93,7 +93,7 @@
         name: 'basetable',
         data() {
             return {
-                modelTitle: '添加招聘信息',
+                modelTitle: '招聘信息详情',
                 url: './static/vuetable.json',
                 tableData: [],
                 cur_page: 1,

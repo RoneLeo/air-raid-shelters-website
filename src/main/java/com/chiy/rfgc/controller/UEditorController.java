@@ -1,38 +1,18 @@
 package com.chiy.rfgc.controller;
 import com.baidu.ueditor.ActionEnter;
-import com.chiy.rfgc.common.ApiResult;
-import com.chiy.rfgc.config.Ueditor;
-import com.chiy.rfgc.entity.FileEntity;
-import com.chiy.rfgc.repository.FileRepository;
-import com.chiy.rfgc.repository.UserRepository;
-import com.chiy.rfgc.utils.FileUtils;
-import io.swagger.annotations.ApiOperation;
-import org.json.JSONException;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
+import org.apache.commons.fileupload.disk.DiskFileItemFactory;
+import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
 
-import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.File;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.Date;
+import java.io.*;
 
-@Controller
+@RestController
 public class UEditorController {
-    @Autowired
-    private HttpServletRequest request;
-    @Resource
-    private UserController userController;
 
-    private static final String PRODUCT_PHOTO_PATH = "/product/";
-
-    @RequestMapping(value = "/config", method = {RequestMethod.GET, RequestMethod.POST})
+    @RequestMapping(value="/config")
     public void config(HttpServletRequest request, HttpServletResponse response) {
         response.setContentType("application/json");
         String rootPath = request.getSession().getServletContext().getRealPath("/");
@@ -47,27 +27,24 @@ public class UEditorController {
         }
     }
 
-//    @RequestMapping(value = "/imgUpload")
-//    public Ueditor imgUpload(MultipartFile upfile) {
-//        Ueditor ueditor = new Ueditor();
-//        return ueditor;
-//    }
 
-
-    @ApiOperation("添加图片")
-    @RequestMapping(value = "/uploadimage", method = {RequestMethod.GET, RequestMethod.POST})
-    public ApiResult<Object> addPhoto(HttpServletRequest request, MultipartFile upfile) throws IOException {
-        String wjlj = PRODUCT_PHOTO_PATH;
-        String uuid = userController.getUuid(request);
-        // 判断是否登录
-        if ("".equals(uuid)) {
-            return ApiResult.UNKNOWN();
+    @RequestMapping(value="/show")
+    public void show(String filename, HttpServletResponse response) throws IOException {
+        File file = new File("D:/image/" + filename);
+        response.setHeader("content-disposition", "attachment;filename=" + filename);
+        response.setCharacterEncoding("UTF-8");
+        InputStream is = new FileInputStream(file);
+        int len = 0;
+        byte[] data = new byte[1024];
+        OutputStream os = response.getOutputStream();
+        while ((len = is.read(data)) > 0) {
+            os.write(data, 0, len);
         }
-        if (upfile != null) {
-            FileUtils.addPhoto(request, wjlj, upfile);
-        }
-
-        return ApiResult.SUCCESS(wjlj + upfile.getOriginalFilename());
+        os.flush();
+        os.close();
+        is.close();
     }
+
+
 
 }
