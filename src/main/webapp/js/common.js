@@ -497,6 +497,92 @@ function animateScroll() {
     })
 }
 
+function getInfoForHome() {
+    //产品
+    $.post(ServerUrl + 'equipment/frontFindAllByGsidAndSblx',{gsid:Gsid,sblx:'',page:1,size:4},function (json){
+        var data = json.data;
+        $('#productListHome').find('li').each(function (index) {
+            var $this = $(this);
+            $this.find('.product_list_li_bg span').text(data[index].cpmc);
+            $this.find('.product_list_li_name').text(data[index].cpmc);
+            $this.find('img').prop('src',ServerUrl + data[index].cptp);
+        });
+    });
+
+    //新闻
+    $.post(ServerUrl + 'news/findAllByGsid',{gsid:Gsid,xwlx:'',page:1,size:10},function (json) {
+        var newsType = {1: '公司新闻',2: '行业新闻'};
+        var data = json.data.content;
+        var newsListHome = '';
+        var newsListHome2 = '';
+        for(var i=0;i<data.length;i++){
+            var item = data[i];
+            var type = newsType[item.xwlx];
+            var title = item.xwbt;
+            var time = item.cjsj;
+            var content = item.xwnr;
+            var imgSrc = ServerUrl + item.xwtp;
+            var id = item.id;
+            var detailsUrl = 'companyNewsDetails.html?id=' + id;
+            if(item.xwlx == 2){
+                detailsUrl = 'industryNewsDetails.html?id=' + id;
+            }
+            if(i<2){
+                newsListHome += '<li>\n' +
+                    '<a href="'+detailsUrl+'">\n' +
+                    '<div class="news_list_li c">\n' +
+                    '    <div class="news_list_li_img"><img src="'+imgSrc+'"></div>\n' +
+                    '    <div class="news_list_li_con">\n' +
+                    '        <div class="news_list_li_name c"><span>['+type+']</span>'+title+'</div>\n' +
+                    '        <div class="news_list_li_time c">'+time+'</div>\n' +
+                    '        <div class="news_list_li_js c">'+content+'</div>\n' +
+                    '        <div class="news_list_li_more c">[ 查看详情 ]</div>\n' +
+                    '    </div>\n' +
+                    '</div>\n' +
+                    '</a>\n' +
+                '</li>';
+            }else{
+                var scrollCount = data.length+1 - 2;
+                var curr = i+1 - 2;
+                newsListHome2 += '<li>\n' +
+                    '<a href="'+detailsUrl+'">\n' +
+                    '<div class="news_list_ban_li c" style="background: url('+imgSrc+') no-repeat center;">\n' +
+                    '    <div class="am-slider-desc">\n' +
+                    '        <div class="am-slider-counter"><span class="am-active">'+curr+'</span>/'+scrollCount+'</div>\n' + title +
+                    '    </div>\n' +
+                    '</div>\n' +
+                    '</a>\n' +
+                '</li>';
+            }
+
+        }
+        $('#newsListHome').html(newsListHome);
+        $('#newsListHome2').html(newsListHome2);
+        $('#newsListHome22').flexslider()
+
+    });
+
+    //案例
+    $.post(ServerUrl + 'projectCase/findAllByGsid',{gsid:Gsid,page:1,size:3},function (json){
+        var data = json.data.content;
+        var projectListHome = ''
+        for(var i=0;i<data.length;i++){
+            var imgSrc = ServerUrl + data[i].tp;
+            projectListHome += '<li>\n' +
+                '<a href="projectDetails.html?id='+data[i].id+'">\n' +
+                '    <div class="application_li c">\n' +
+                '        <div class="application_li_img c"><img style="width:100%;height: 100%" src="'+imgSrc+'" ></div>\n' +
+                '        <div class="application_li_name c">'+data[i].gcmc+'</div>\n' +
+                '    </div>\n' +
+                '</a>\n' +
+            '</li>'
+        }
+        $('#projectListHome').html(projectListHome);
+        $('#projectListHome').parent().flexslider({itemWidth: 384, itemMargin: 22, slideshow: false});
+
+    });
+}
+
 
 
 
