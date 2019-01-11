@@ -3,7 +3,6 @@
  * version: ueditor
  * build: Wed Aug 10 2016 11:06:16 GMT+0800 (CST)
  */
-
 (function(){
 
 // editor.js
@@ -8017,6 +8016,7 @@ var fillCharReg = new RegExp(domUtils.fillChar, 'g');
          * ```
          */
         getActionUrl: function(action){
+            console.log(action);
             var actionName = this.getOpt(action) || action,
                 imageUrl = this.getOpt('imageUrl'),
                 serverUrl = this.getOpt('serverUrl');
@@ -17653,7 +17653,7 @@ UE.plugins['video'] = function (){
         switch (type){
             case 'image':
                 str = '<img ' + (id ? 'id="' + id+'"' : '') + ' width="'+ width +'" height="' + height + '" _url="'+url+'" class="' + classname.replace(/\bvideo-js\b/, '') + '"'  +
-                    ' src="' + me.options.UEDITOR_HOME_URL+'themes/default/images/spacer.gif" style="background:url('+me.options.UEDITOR_HOME_URL+'themes/default/images/videologo.gif) no-repeat center center; border:1px solid gray;'+(align ? 'float:' + align + ';': '')+'" />'
+                    ' src=' + me.options.UEDITOR_HOME_URL+'"../../../static/ueditor/themes/default/images/spacer.gif" style="background:url('+me.options.UEDITOR_HOME_URL+'../../../static/ueditor/themes/default/images/videologo.gif) no-repeat center center; border:1px solid gray;'+(align ? 'float:' + align + ';': '')+'" />'
                 break;
             case 'embed':
                 str = '<embed type="application/x-shockwave-flash" class="' + classname + '" pluginspage="http://www.macromedia.com/go/getflashplayer"' +
@@ -23511,7 +23511,7 @@ UE.plugin.register('webapp', function (){
     function createInsertStr(obj,toEmbed){
         return  !toEmbed ?
             '<img title="'+obj.title+'" width="' + obj.width + '" height="' + obj.height + '"' +
-                ' src="' + me.options.UEDITOR_HOME_URL + 'themes/default/images/spacer.gif" _logo_url="'+obj.logo+'" style="background:url(' + obj.logo
+                ' src=' + me.options.UEDITOR_HOME_URL + '"../../../static/ueditor/themes/default/images/spacer.gif" _logo_url="'+obj.logo+'" style="background:url(' + obj.logo
                 +') no-repeat center center; border:1px solid gray;" class="edui-faked-webapp" _url="' + obj.url + '" ' +
                 (obj.align && !obj.cssfloat? 'align="' + obj.align + '"' : '') +
                 (obj.cssfloat ? 'style="float:' + obj.cssfloat + '"' : '') +
@@ -24538,7 +24538,9 @@ UE.plugin.register('simpleupload', function (){
                 processData: false,
                 contentType: false,
                 success: function (data) {
-                  data = JSON.parse(data);
+                    console.log(data);
+                    // data = $.parseJSON(data);
+                  // data = JSON.parse(data);
                   var link, loader,
                     body = (iframe.contentDocument || iframe.contentWindow.document).body,
                     result = body.innerText || body.textContent || '';

@@ -143,7 +143,7 @@
                     cancelButtonText: '取消',
                     type: 'warning'
                 }).then(() => {
-                    this.$axios.post('/api/user/delete', this.$qs.stringify({id: row.id})).then((res) => {
+                    this.$axios.post('/api/user/delete', this.$qs.stringify({uuid: row.uuid})).then((res) => {
                         this.getData();
                         this.$message.success('已删除！');
                     });

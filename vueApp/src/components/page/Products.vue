@@ -9,7 +9,7 @@
             <el-row>
                 <el-form :inline="true" class="demo-form-inline">
                     <el-form-item label="产品类型">
-                        <el-select v-model="sblx" placeholder="请选择" @change="getData">
+                        <el-select v-model="sblx" placeholder="请选择" @change="getSblxData">
                             <el-option
                                     v-for="item in equipmentType"
                                     :key="item.id*1.9098"
@@ -118,6 +118,10 @@
         },
         computed: {},
         methods: {
+            getSblxData() {
+                this.page = 1;
+                this.getData();
+            },
             formatterSBLX(row) {
                 return this.$common.dictParse(row.sblx, this.equipmentType);
             },
@@ -168,7 +172,7 @@
                     if (res.resCode == 200) {
                         this.loading = false;
                         this.tableData = res.data;
-                        this.totalElements = res.data.totalElements
+                        this.totalElements = res.totalElements
                     }
                 });
             },
