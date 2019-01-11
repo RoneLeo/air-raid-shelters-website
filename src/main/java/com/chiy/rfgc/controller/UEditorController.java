@@ -9,7 +9,9 @@ import com.chiy.rfgc.utils.FileUtils;
 import io.swagger.annotations.ApiOperation;
 import org.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -21,7 +23,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Date;
 
-@RestController
+@Controller
 public class UEditorController {
     @Autowired
     private HttpServletRequest request;
@@ -30,9 +32,10 @@ public class UEditorController {
 
     private static final String PRODUCT_PHOTO_PATH = "/product/";
 
-    @RequestMapping("/ueditorConfig")
-    public void getUEditorConfig(HttpServletResponse response) {
-        String rootPath = "src/main/resources/static";
+    @RequestMapping(value = "/config", method = {RequestMethod.GET, RequestMethod.POST})
+    public void config(HttpServletRequest request, HttpServletResponse response) {
+        response.setContentType("application/json");
+        String rootPath = request.getSession().getServletContext().getRealPath("/");
         try {
             String exec = new ActionEnter(request, rootPath).exec();
             PrintWriter writer = response.getWriter();
@@ -52,7 +55,7 @@ public class UEditorController {
 
 
     @ApiOperation("添加图片")
-    @RequestMapping("/uploadimage")
+    @RequestMapping(value = "/uploadimage", method = {RequestMethod.GET, RequestMethod.POST})
     public ApiResult<Object> addPhoto(HttpServletRequest request, MultipartFile upfile) throws IOException {
         String wjlj = PRODUCT_PHOTO_PATH;
         String uuid = userController.getUuid(request);

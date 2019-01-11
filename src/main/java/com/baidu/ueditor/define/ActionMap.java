@@ -1,4 +1,4 @@
-package com.chiy.rfgc.baidu.ueditor.define;
+package com.baidu.ueditor.define;
 
 import java.util.Map;
 import java.util.HashMap;

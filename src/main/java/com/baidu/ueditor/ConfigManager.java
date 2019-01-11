@@ -1,4 +1,4 @@
-package com.chiy.rfgc.baidu.ueditor;
+package com.baidu.ueditor;
 
 import java.io.BufferedReader;
 import java.io.File;

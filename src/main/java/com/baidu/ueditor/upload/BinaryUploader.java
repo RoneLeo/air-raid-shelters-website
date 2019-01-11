@@ -1,4 +1,4 @@
-package com.chiy.rfgc.baidu.ueditor.upload;
+package com.baidu.ueditor.upload;
 
 import com.baidu.ueditor.PathFormat;
 import com.baidu.ueditor.define.AppInfo;
@@ -14,11 +14,6 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
-import com.baidu.ueditor.upload.StorageManager;
-import org.apache.commons.fileupload.FileItemIterator;
-import org.apache.commons.fileupload.FileItemStream;
-import org.apache.commons.fileupload.FileUploadException;
-import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;

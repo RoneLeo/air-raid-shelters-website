@@ -1,8 +1,6 @@
-package com.chiy.rfgc.baidu.ueditor.upload;
+package com.baidu.ueditor.upload;
 
 import com.baidu.ueditor.define.State;
-import com.baidu.ueditor.upload.Base64Uploader;
-import com.baidu.ueditor.upload.BinaryUploader;
 
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;

@@ -1,4 +1,4 @@
-package com.chiy.rfgc.baidu.ueditor.hunter;
+package com.baidu.ueditor.hunter;
 
 import java.net.HttpURLConnection;
 import java.net.InetAddress;
