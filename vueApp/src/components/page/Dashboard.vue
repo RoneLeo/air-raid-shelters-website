@@ -34,7 +34,7 @@
                             <div class="grid-content grid-con-1">
                                 <i class="el-icon-lx-people grid-con-icon"></i>
                                 <div class="grid-cont-right">
-                                    <count-to :start-val="0" :end-val="1234" :duration="3000" class="card-panel-num grid-num"/>
+                                    <count-to :start-val="0" :end-val="1234" :duration="1200" class="card-panel-num grid-num"/>
                                     <!--<div class="grid-num">1234</div>-->
                                     <div>用户访问量</div>
                                 </div>
@@ -46,7 +46,7 @@
                             <div class="grid-content grid-con-2">
                                 <i class="el-icon-lx-notice grid-con-icon"></i>
                                 <div class="grid-cont-right">
-                                    <count-to :start-val="0" :end-val="321" :duration="2000" class="card-panel-num grid-num"/>
+                                    <count-to :start-val="0" :end-val="321" :duration="1000" class="card-panel-num grid-num"/>
                                     <!--<div class="grid-num">321</div>-->
                                     <div>系统消息</div>
                                 </div>
@@ -58,7 +58,7 @@
                             <div class="grid-content grid-con-3">
                                 <i class="el-icon-lx-goods grid-con-icon"></i>
                                 <div class="grid-cont-right">
-                                    <count-to :start-val="0" :end-val="5000" :duration="5000" class="card-panel-num grid-num"/>
+                                    <count-to :start-val="0" :end-val="5000" :duration="2500" class="card-panel-num grid-num"/>
                                     <!--<div class="grid-num">5000</div>-->
                                     <div>数量</div>
                                 </div>
@@ -93,14 +93,16 @@
             </el-col>
         </el-row>
         <el-row :gutter="20">
-            <el-col :span="12">
+            <el-col :span="12" >
                 <el-card shadow="hover">
-                    <schart ref="bar" class="schart" canvasId="bar" :data="data" type="bar" :options="options"></schart>
+                    <line-chart :chart-data="lineChartData" />
+                    <!--<schart ref="bar" class="schart" canvasId="bar" :data="data" type="bar" :options="options"></schart>-->
                 </el-card>
             </el-col>
-            <el-col :span="12">
+            <el-col :span="12" style="height: 100%">
                 <el-card shadow="hover">
-                    <schart ref="line" class="schart" canvasId="line" :data="data" type="line" :options="options2"></schart>
+                    <bar-chart/>
+                    <!--<schart ref="line" class="schart" canvasId="line" :data="data" type="line" :options="options2"></schart>-->
                 </el-card>
             </el-col>
         </el-row>
@@ -111,10 +113,34 @@
     import Schart from 'vue-schart';
     import CountTo from 'vue-count-to'
     import bus from '../common/bus';
+    import LineChart from '../common/LineChart'
+    import BarChart from '../common/BarChart'
+
+
+    const lineChartData = {
+        newVisitis: {
+            expectedData: [100, 120, 161, 134, 105, 160, 165],
+            actualData: [120, 82, 91, 154, 162, 140, 145]
+        },
+        messages: {
+            expectedData: [200, 192, 120, 144, 160, 130, 140],
+            actualData: [180, 160, 151, 106, 145, 150, 130]
+        },
+        purchases: {
+            expectedData: [80, 100, 121, 104, 105, 90, 100],
+            actualData: [120, 90, 100, 138, 142, 130, 130]
+        },
+        shoppings: {
+            expectedData: [130, 140, 141, 142, 145, 150, 160],
+            actualData: [120, 82, 91, 154, 162, 140, 130]
+        }
+    }
+
     export default {
         name: 'dashboard',
         data() {
             return {
+                lineChartData: lineChartData.newVisitis,
                 name: localStorage.getItem('ms_username'),
                 todoList: [{
                         title: '今天要修复100个bug',
@@ -189,7 +215,9 @@
         },
         components: {
             Schart,
-            CountTo
+            CountTo,
+            LineChart,
+            BarChart
         },
         computed: {
             role() {
@@ -197,17 +225,20 @@
             }
         },
         created(){
-            this.handleListener();
+//            this.handleListener();
             this.changeDate();
         },
         activated(){
-            this.handleListener();
+//            this.handleListener();
         },
         deactivated(){
             window.removeEventListener('resize', this.renderChart);
             bus.$off('collapse', this.handleBus);
         },
         methods: {
+            handleSetLineChartData(type) {
+                this.lineChartData = lineChartData[type]
+            },
             changeDate(){
                 const now = new Date().getTime();
                 this.data.forEach((item, index) => {

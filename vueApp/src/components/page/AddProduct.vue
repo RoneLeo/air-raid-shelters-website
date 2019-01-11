@@ -12,7 +12,7 @@
                                 </el-select>
                             </el-form-item>
                             <el-form-item label-width="150px" label="产品名称">
-                                <el-input v-model="form.cpmc" placeholder="产品名称"></el-input>
+                                <el-input v-model="form.cpmc" placeholder="产品名称" clearable></el-input>
                             </el-form-item>
 
                             <el-form-item v-if="!form.id || !form.cptp" label-width="150px" label="产品图片">
@@ -42,9 +42,9 @@
                                 <h3 style="padding: 0 10px;color: #0095FF">{{item.bt}}</h3>
                             </el-col>
                             <el-col :span="6" style="text-align: right">
-                                <el-button type="warning" icon="el-icon-delete" @click="deleteItem(item, index)">删除</el-button>
+                                <el-button type="warning" icon="el-icon-delete" @click="deleteItem(item, index)" :disabled="updating === index">删除</el-button>
 
-                                <el-button icon="el-icon-edit" @click="editItem(item, index)" type="primary">编辑</el-button>
+                                <el-button icon="el-icon-edit" @click="editItem(item, index)" type="primary" :disabled="updating === index">编辑</el-button>
                             </el-col>
                         </el-row>
                         <div v-html="item.xxnr" style="padding:3px 10px;"></div>
@@ -53,9 +53,9 @@
             <div style="margin-top: 30px;">
                 <el-row>
                     <el-col :span="18">
-                        <el-form :inline="true" :model="content" class="demo-form-inline"  label-position="right">
+                        <el-form :inline="true" class="demo-form-inline"  label-position="right">
                             <el-form-item label-width="70px" label="小标题">
-                                <el-input v-model="content.bt" placeholder="请输入介绍标题"></el-input>
+                                <el-input v-model="bt" placeholder="请输入介绍标题" clearable></el-input>
                             </el-form-item>
                         </el-form>
                     </el-col>
@@ -96,20 +96,36 @@ import UEditor from '@/components/common/ueditor.vue'
                     autoFloatEnabled: true,
                     initialContent:'请输入内容',   //初始化编辑器的内容,也可以通过textarea/script给值，看官网例子
                     autoClearinitialContent:true, //是否自动清除编辑器初始内容，注意：如果focus属性设置为true,这个也为真，那么编辑器一上来就会触发导致初始化的内容看不到了
-                    initialFrameWidth: 1100,
+                    initialFrameWidth: 1200,
                     initialFrameHeight: 450,
 //                    BaseUrl: '',
                     UEDITOR_HOME_URL: '../../../static/ueditor/'
                 },
                 form: {},
                 contents: [],
+                bt: '',
                 content: {},
                 equipmentType: [],
-                pId: null
+                pId: null,
+                updating: null
             }
         },
         mounted () {
+//            this.editor = UE.getEditor('editor').ready(function() {
+                //this是当前创建的编辑器实例
+//                this.setContent('内容')
+//            })
+
             this.$nextTick(()=>{
+//                UE.Editor.prototype._bkGetActionUrl = UE.Editor.prototype.getActionUrl;
+//                UE.Editor.prototype.getActionUrl = function(action) {
+//                    console.log(action);
+//                    if (action == 'uploadimage' || action == 'uploadscrawl') {
+//                        return 'http://182.151.22.247:8081/upload';
+//                    } else {
+//                        return this._bkGetActionUrl.call(this, action);
+//                    }
+//                }
                 this.editor = UE.getEditor("editor");
             })
 
@@ -154,33 +170,37 @@ import UEditor from '@/components/common/ueditor.vue'
                 this.form.file = this.file;
             },
             editItem(item, index) {
-                console.log(index)
-                console.log()
+                this.updating = index;
+                this.bt = item.bt;
                 this.content.bt = item.bt;
                 this.content.xxnr = '';
                 this.content.index = index;
-                console.log(this.content.bt);
                 window.setTimeout(() => {
                     this.editor.setContent(this.contents[index].xxnr);
                 }, 50)
             },
             finishItem() {
-                console.log(this.content.index, this.contents);
-                if(this.content.index >= 0) {
-                    let item = Object.assign({}, this.content);
-                    item.xxnr = this.$refs.ueditor.getUEContent();
+                if(this.content.index >= 0) {   //小标题修改
+//                    let item = Object.assign({}, this.content);
+//                    item.bt = this.bt;
+//                    item.xxnr = this.$refs.ueditor.getUEContent();
                     let index = this.content.index;
-                    this.contents[index] = item;
-                }else {
+//                    this.contents[index] = item;
+                    this.contents[index].bt = this.bt;
+                    this.contents[index].xxnr = this.$refs.ueditor.getUEContent();
+                    this.updating = null;
+                }else {    //新建小标题
                     if(this.pId) {
                         this.content.id = null;
                         this.content.cpid = null;
                     }
+                    this.content.bt = this.bt;
                     this.content.xxnr = this.$refs.ueditor.getUEContent();
                     this.contents.push(this.content);
                 }
                 window.setTimeout(() => {
                     this.content = {};
+                    this.bt = '';
                     this.editor.setContent('');
                 }, 300)
             },
@@ -193,15 +213,7 @@ import UEditor from '@/components/common/ueditor.vue'
                 for (let key in this.form) {
                     formData.append(key, this.form[key]);
                 }
-//                for(let i = 0; i < this.contents.length; i++) {
-//                    this.contents[i].title = this.contents[i].bt;
-//                    this.contents[i].content = this.contents[i].xxnr;
-//                }
                 formData.append('contents', JSON.stringify(this.contents));
-//                for (var value of formData.values()) {
-//                    console.log(value);
-//                }
-//                this.form.contents = this.contents;
                 let config = {
                     headers: {
                         'Content-Type': 'multipart/form-data'
@@ -209,13 +221,8 @@ import UEditor from '@/components/common/ueditor.vue'
                 };
                 this.$axios.post(url, formData, config).then(res => {
                     this.$router.push('/products');
-                    console.log(res);
                 })
             },
-            getContent: function(){
-                let content = this.$refs.ueditor.getUEContent();
-            },
-
 
         }
     }
