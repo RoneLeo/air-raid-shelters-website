@@ -1,7 +1,9 @@
 package com.chiy.rfgc.controller;
 
 import com.chiy.rfgc.common.ApiResult;
+import com.chiy.rfgc.entity.CompanyEntity;
 import com.chiy.rfgc.entity.UserEntity;
+import com.chiy.rfgc.repository.CompanyRepository;
 import com.chiy.rfgc.repository.UserRepository;
 import com.chiy.rfgc.utils.MD5Utils;
 import com.chiy.rfgc.utils.StringUtils;
@@ -24,6 +26,8 @@ public class UserController {
 
     @Resource
     private UserRepository userRepository;
+    @Resource
+    private CompanyRepository companyRepository;
 
     @ApiOperation("添加用户")
     @RequestMapping("/add")
@@ -58,6 +62,7 @@ public class UserController {
             return ApiResult.FAILURE("登录失败，账号或密码不正确");
         }
         session.setAttribute("Admin", entity.getZh());
+        session.setAttribute("uuid", entity.getUuid());
         return ApiResult.SUCCESS(entity);
     }
 
@@ -131,6 +136,34 @@ public class UserController {
         }
         List<UserEntity> list = userRepository.findAllByGsidOrderByCjsjDesc(userRepository.findByUuid(uuid).getGsid());
         return ApiResult.SUCCESS(list);
+    }
+
+    @ApiOperation(value = "添加公司及设置初始账户")
+    @RequestMapping("/setGsAndZh")
+    public ApiResult<Object> setGsAndZh(String gsmc, String zh, HttpSession session) throws Exception {
+        // 判断是否登录
+        String uuid = (String) session.getAttribute("uuid");
+        if (StringUtils.isEmpty(uuid) || userRepository.findByUuid(uuid) == null) {
+            return ApiResult.FAILURE("未登录");
+        }
+        // 添加公司
+        CompanyEntity entity = new CompanyEntity();
+        entity.setGsmc(gsmc);
+        CompanyEntity entity1 = companyRepository.save(entity);
+        if (entity1 == null) {
+            return ApiResult.FAILURE("添加失败");
+        }
+        // 设置初始账号
+        UserEntity entity2 = new UserEntity();
+        entity2.setZh(zh);
+        entity2.setMm(MD5Utils.getMD5("123456"));
+        entity2.setGsid(entity1.getId());
+        entity2.setCjsj(new Date());
+        UserEntity entity3 = userRepository.save(entity2);
+        if (entity3 == null) {
+            return ApiResult.FAILURE("添加失败");
+        }
+        return ApiResult.SUCCESS(entity3);
     }
 
     // 获取请求头
