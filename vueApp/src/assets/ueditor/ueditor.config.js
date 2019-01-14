@@ -20,8 +20,8 @@
      * window.UEDITOR_HOME_URL = "/xxxx/xxxx/";
      */
     //window.UEDITOR_HOME_URL = "/static/ueditor/";
-    // var URL = window.UEDITOR_HOME_URL || getUEBasePath();
-    var URL = '../../static/ueditor/';
+    var URL = window.UEDITOR_HOME_URL || '/static/ueditor/';
+    // var URL = '/static/ueditor/';
     // console.log(URL);
 
     /**
