@@ -10,7 +10,7 @@ import 'element-ui/lib/theme-chalk/index.css';    // 默认主题
 // import '../static/css/theme-green/index.css';       // 浅绿色主题
 import '../static/css/icon.css';
 import '../static/ueditor/ueditor.config.js'
-import '../static/ueditor/ueditor.all.min.js'
+import '../static/ueditor/ueditor.all.js'
 import '../static/ueditor/lang/zh-cn/zh-cn.js'
 import "babel-polyfill";
 
