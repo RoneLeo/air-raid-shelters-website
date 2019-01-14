@@ -4,6 +4,12 @@
     list-style: none;
     text-decoration: none;
 }
+@media screen and (max-width:1200px){
+    body {
+        width: 1200px;
+    }
+}
+
 .clearfix, .c {
     zoom: 1;
     clear: both;
@@ -27,7 +33,7 @@
     width: 100%;
 }
 .head_top_box{
-    width: 1200px;
+    width: 100%;
     margin: 20px auto 0 auto;
 }
 .head_logo{
@@ -535,14 +541,15 @@
     color: #cc0000;
 }
 .footer_li1{
-    width: 295px;
+    width: 355px;
     height: 255px;
+    padding-left: 20px;
     background: url("http://www.ytrsrf.com/images/footer_li_border.png") no-repeat right center;
 }
 .footer_li2{
-    width: 460px;
+    width: 450px;
     height: 255px;
-    padding-left: 86px;
+    padding-left: 76px;
     background: url("http://www.ytrsrf.com/images/footer_li_border.png") no-repeat right center;
 }
 .footer_li3{

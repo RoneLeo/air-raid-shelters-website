@@ -12,8 +12,6 @@
             <el-table :data="tableData" class="table" ref="multipleTable" @selection-change="handleSelectionChange">
                 <el-table-column prop="zh" label="账号"></el-table-column>
                 <el-table-column prop="xm" label="姓名"></el-table-column>
-                <!--<el-table-column prop="mm" label="密码"></el-table-column>-->
-                <el-table-column prop="gsid" label="公司ID" :formatter="formatterGS"></el-table-column>
                 <el-table-column prop="cjsj" label="创建时间"></el-table-column>
                 <el-table-column label="操作"  align="center">
                     <template slot-scope="scope">
@@ -47,14 +45,7 @@
                               :rules="[{ required: true, message: '姓名不能为空', trigger: 'blur' }]">
                     <el-input v-model="form.xm"></el-input>
                 </el-form-item>
-                <el-form-item label="公司ID"
-                              v-if="!form.uuid"
-                              prop="gsid"
-                              :rules="[{ required: true, message: '所属公司不能为空', trigger: 'blur' }]">
-                    <el-select v-model="form.gsid" placeholder="请选择">
-                        <el-option v-for="item in this.$dict.company" :key="item.id" :label="item.name" :value="item.id"></el-option>
-                    </el-select>
-                </el-form-item>
+
             </el-form>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="modelVisible = false">取 消</el-button>
@@ -101,9 +92,9 @@
 
         },
         methods: {
-            formatterGS(row) {
-                return this.$common.dictParse(row.gsid, this.dict.company);
-            },
+//            formatterGS(row) {
+//                return this.$common.dictParse(row.gsid, this.dict.company);
+//            },
             closeClear() {
                 this.$refs.form.resetFields()
             },
@@ -114,7 +105,7 @@
             },
             // 获取 easy-mock 的模拟数据
             getData() {
-                this.$axios.post('/api/user/findAllByGsid').then((res) => {
+                this.$axios.post('/user/findAllByGsid').then((res) => {
                     if(res.resCode == 200){
                         this.tableData = res.data;
                     }
@@ -143,7 +134,7 @@
                     cancelButtonText: '取消',
                     type: 'warning'
                 }).then(() => {
-                    this.$axios.post('/api/user/delete', this.$qs.stringify({uuid: row.uuid})).then((res) => {
+                    this.$axios.post('/user/delete', this.$qs.stringify({uuid: row.uuid})).then((res) => {
                         this.getData();
                         this.$message.success('已删除！');
                     });
@@ -165,9 +156,9 @@
             },
             // 保存编辑
             saveEdit() {
-                let url = '/api/user/add';
+                let url = '/user/add';
                 if(this.form.uuid) {
-                    url = '/api/user/update';
+                    url = '/user/update';
                 }
                 this.$axios.post(url ,this.$qs.stringify(Object.assign({}, this.form))).then((res) => {
                     this.$message.success(res.resMsg);

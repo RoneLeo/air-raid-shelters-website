@@ -129,7 +129,7 @@
             },
             // 获取 easy-mock 的模拟数据
             getData() {
-                this.$axios.post('/api/recruitment/findAllByGsidByPage', this.$qs.stringify({page: this.page, size: this.size})).then((res) => {
+                this.$axios.post('/recruitment/findAllByGsidByPage', this.$qs.stringify({page: this.page, size: this.size})).then((res) => {
                         this.tableData = res.data.content;
                         this.totalElements = res.data.totalElements;
                 });
@@ -155,7 +155,7 @@
                     cancelButtonText: '取消',
                     type: 'warning'
                 }).then(() => {
-                    this.$axios.post('/api/recruitment/delete', this.$qs.stringify({id: row.id})).then(res => {
+                    this.$axios.post('/recruitment/delete', this.$qs.stringify({id: row.id})).then(res => {
                         this.getData();
                         this.$message({
                             type: 'success',
@@ -180,9 +180,9 @@
             },
             // 保存编辑
             saveEdit() {
-                let url = '/api/recruitment/add';
+                let url = '/recruitment/add';
                 if(this.form.id) {
-                    url = '/api/recruitment/update'
+                    url = '/recruitment/update'
                 }
                 this.$axios.post(url, this.$qs.stringify(Object.assign({},this.form))).then(res => {
 //                    this.addLoading = false

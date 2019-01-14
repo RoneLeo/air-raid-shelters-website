@@ -45,12 +45,12 @@
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
                         let param = this.ruleForm;
-                        this.$axios.post('/api/user/login', this.$qs.stringify({zh: param.username,mm: param.password})).then( (res) => {
+                        this.$axios.post('/user/login', this.$qs.stringify({zh: param.username,mm: param.password})).then( (res) => {
                             if(res.resCode == 200){
                                 let data = res.data;
                                 localStorage.setItem('ms_username',data.xm);
                                 localStorage.setItem('uuid',data.uuid);
-                                this.$router.push('/');
+                                this.$router.push('/company');
                             }else{
                                 this.$message.error(res.resMsg);
                             }

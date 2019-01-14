@@ -9,8 +9,16 @@ import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';    // 默认主题
 // import '../static/css/theme-green/index.css';       // 浅绿色主题
 import '../static/css/icon.css';
+import '../static/ueditor/ueditor.config.js'
+import '../static/ueditor/ueditor.all.js'
+import '../static/ueditor/lang/zh-cn/zh-cn.js'
 import "babel-polyfill";
 
+console.log(process.env.NODE_ENV)
+// if(process.env.NODE_ENV === 'development') {
+//     console.log(111);
+// }
+axios.defaults.baseURL= process.env.NODE_ENV === 'development' ? '/api' : 'http://182.151.22.247:8081';
 // http request 拦截器（所有发送的请求都要从这儿过一次）
 axios.interceptors.request.use(
     config => {

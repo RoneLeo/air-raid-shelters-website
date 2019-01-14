@@ -7,11 +7,9 @@
 
 <script>
 //    import '@/assets/ueditor/jquery-2.2.3.min.js'
-    import '@/assets/ueditor/ueditor.config.js'
-    import '@/assets/ueditor/ueditor.all.js'
-    import 'static/ueditor/lang/zh-cn/zh-cn.js'
-
-
+//    import '@/assets/ueditor/ueditor.config.js'
+//    import '@/assets/ueditor/ueditor.all.js'
+//    import 'static/ueditor/lang/zh-cn/zh-cn.js'
     export default {
         name: "UEditor",
         props: {
