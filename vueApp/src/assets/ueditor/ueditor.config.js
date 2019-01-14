@@ -20,8 +20,9 @@
      * window.UEDITOR_HOME_URL = "/xxxx/xxxx/";
      */
     //window.UEDITOR_HOME_URL = "/static/ueditor/";
-    var URL = window.UEDITOR_HOME_URL || getUEBasePath();
+    // var URL = window.UEDITOR_HOME_URL || getUEBasePath();
     // var URL = '/static/ueditor/';
+    var URL = '/air-raid-shelters-website/src/main/webapp/admin/static/ueditor/';
     // console.log(URL);
 
     /**
