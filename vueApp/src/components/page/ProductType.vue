@@ -9,7 +9,7 @@
 
         </div>
         <div class="container">
-            <el-table :data="tableData" class="table" ref="multipleTable" @selection-change="handleSelectionChange">
+            <el-table :data="tableData" class="table" ref="multipleTable" >
                 <el-table-column prop="name" label="类型名"></el-table-column>
                 <el-table-column label="操作"  align="left" width="200">
                     <template slot-scope="scope">
@@ -46,7 +46,7 @@
         methods: {
 
             getData() {
-                this.$axios.post('/api/equipmentType/findAllByGsid').then((res) => {
+                this.$axios.post('/equipmentType/findAllByGsid').then((res) => {
                     if(res.resCode == 200){
                         this.tableData = res.data;
                     }
@@ -59,7 +59,7 @@
                     cancelButtonText: '取消',
                 }).then(({ value }) => {
                     if(value != '') {
-                        this.$axios.post('/api/equipmentType/add', this.$qs.stringify({name: value})).then((res) => {
+                        this.$axios.post('/equipmentType/add', this.$qs.stringify({name: value})).then((res) => {
                             this.getData();
                             this.$message.success(res.resMsg);
                         });
@@ -75,7 +75,7 @@
                     cancelButtonText: '取消',
                 }).then(({ value }) => {
                     if(value != '') {
-                        this.$axios.post('/api/equipmentType/update', this.$qs.stringify({id: row.id, name: value, gsid: row.gsid})).then((res) => {
+                        this.$axios.post('/equipmentType/update', this.$qs.stringify({id: row.id, name: value, gsid: row.gsid})).then((res) => {
                             this.getData();
                             this.$message.success(res.resMsg);
                         });
@@ -90,7 +90,7 @@
                     cancelButtonText: '取消',
                     type: 'warning'
                 }).then(() => {
-                    this.$axios.post('/api/equipmentType/delete', this.$qs.stringify({id: row.id})).then((res) => {
+                    this.$axios.post('/equipmentType/delete', this.$qs.stringify({id: row.id})).then((res) => {
                         this.getData();
                         this.$message.success('已删除！');
                     });

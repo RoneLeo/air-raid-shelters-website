@@ -105,7 +105,7 @@
             },
             // 获取 easy-mock 的模拟数据
             getData() {
-                this.$axios.post('/api/user/findAllByGsid').then((res) => {
+                this.$axios.post('/user/findAllByGsid').then((res) => {
                     if(res.resCode == 200){
                         this.tableData = res.data;
                     }
@@ -134,7 +134,7 @@
                     cancelButtonText: '取消',
                     type: 'warning'
                 }).then(() => {
-                    this.$axios.post('/api/user/delete', this.$qs.stringify({uuid: row.uuid})).then((res) => {
+                    this.$axios.post('/user/delete', this.$qs.stringify({uuid: row.uuid})).then((res) => {
                         this.getData();
                         this.$message.success('已删除！');
                     });
@@ -156,9 +156,9 @@
             },
             // 保存编辑
             saveEdit() {
-                let url = '/api/user/add';
+                let url = '/user/add';
                 if(this.form.uuid) {
-                    url = '/api/user/update';
+                    url = '/user/update';
                 }
                 this.$axios.post(url ,this.$qs.stringify(Object.assign({}, this.form))).then((res) => {
                     this.$message.success(res.resMsg);

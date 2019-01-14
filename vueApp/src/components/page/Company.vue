@@ -125,14 +125,14 @@
                     })
                 }
                 if (UIloaded) {
-                    console.log(this.map);
+//                    console.log(this.map);
                     AMapUI.loadUI(['misc/PositionPicker'], (PositionPicker) => {
                         this.positionPicker = new PositionPicker({
                             mode: 'dragMap',//设定为拖拽地图模式，可选'dragMap'、'dragMarker'，默认为'dragMap'
                             map: this.map//依赖地图对象
                         });
                         this.positionPicker.start(this.map.getCenter());
-                        console.log(this.positionPicker);
+//                        console.log(this.positionPicker);
                         this.positionPicker.on('success', (positionResult) => {
                             this.companyForm.jwd = positionResult.position.lat + ',' + positionResult.position.lng;
                             this.companyForm.lxdz = positionResult.address;
@@ -161,9 +161,9 @@
                 this.positionPicker.start(position)
             },
             save() {
-                let url = '/api/contactUs/add';
+                let url = '/contactUs/add';
                 if(this.companyForm.id) {
-                    url = '/api/contactUs/update'
+                    url = '/contactUs/update'
                 }
                 this.$axios.post(url , this.$qs.stringify(Object.assign({}, this.companyForm))).then((res) => {
                     this.disabled = true;
@@ -172,7 +172,7 @@
                 });
             },
             getData() {
-                this.$axios.post('/api/contactUs/findByGsid').then((res) => {
+                this.$axios.post('/contactUs/findByGsid').then((res) => {
                     this.companyForm = res.data;
                     console.log(this.companyForm)
                     if (this.companyForm !== null) {

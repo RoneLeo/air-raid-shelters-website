@@ -165,7 +165,7 @@
                     cancelButtonText: '取消',
                     type: 'warning'
                 }).then(() => {
-                    this.$axios.post('/api/news/delete', this.$qs.stringify({id: row.id})).then((res) => {
+                    this.$axios.post('/news/delete', this.$qs.stringify({id: row.id})).then((res) => {
                         this.$message.success('已删除！');
                         if(this.activeName == 'first') {
                             this.getData(1, this.page, this.size);
@@ -202,7 +202,7 @@
             },
             getData(type,page,size) {
                 this.loading = true;
-                this.$axios.post('/api/news/findAllByGsidByPage', this.$qs.stringify({
+                this.$axios.post('/news/findAllByGsidByPage', this.$qs.stringify({
                     xwlx: type,
                     page: page,
                     size: size
@@ -228,9 +228,9 @@
                 this.$refs.addForm.validate((valid) => {
                     if (valid) {
                         this.addLoading = true;
-                        let url = '/api/news/add';
+                        let url = '/news/add';
                         if(this.addForm.id) {
-                            url = '/api/news/update'
+                            url = '/news/update'
                         }
                         let formData = new FormData();
                         for (let key in this.addForm) {

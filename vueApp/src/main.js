@@ -11,6 +11,11 @@ import 'element-ui/lib/theme-chalk/index.css';    // 默认主题
 import '../static/css/icon.css';
 import "babel-polyfill";
 
+console.log(process.env.NODE_ENV)
+// if(process.env.NODE_ENV === 'development') {
+//     console.log(111);
+// }
+axios.defaults.baseURL= process.env.NODE_ENV === 'development' ? '/api' : 'http://182.151.22.247:8081';
 // http request 拦截器（所有发送的请求都要从这儿过一次）
 axios.interceptors.request.use(
     config => {

@@ -66,7 +66,7 @@
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
                 }).then(({ value }) => {
-                    this.$axios.post('/api/user/updateMm', this.$qs.stringify({mm: value})).then(res => {
+                    this.$axios.post('/user/updateMm', this.$qs.stringify({mm: value})).then(res => {
                         this.$message({
                             type: 'success',
                             message: res.resMsg

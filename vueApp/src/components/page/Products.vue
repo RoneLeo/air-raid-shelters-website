@@ -106,7 +106,7 @@
             }
         },
         mounted () {
-            this.$axios.post('/api/equipmentType/findAllByGsid').then((res) => {
+            this.$axios.post('/equipmentType/findAllByGsid').then((res) => {
                 let data = res.data;
                 this.equipmentType = data;
                 if(this.$route.params.sblx) {
@@ -135,7 +135,7 @@
                     cancelButtonText: '取消',
                     type: 'warning'
                 }).then(() => {
-                    this.$axios.post('/api/equipment/delete', this.$qs.stringify({id: row.id})).then((res) => {
+                    this.$axios.post('/equipment/delete', this.$qs.stringify({id: row.id})).then((res) => {
                         this.$message.success('已删除！');
                         this.getData();
                     });
@@ -168,7 +168,7 @@
             // 获取 easy-mock 的模拟数据
             getData() {
                 this.loading = true;
-                this.$axios.post('/api/equipment/findAllByGsidAndSblx', this.$qs.stringify({
+                this.$axios.post('/equipment/findAllByGsidAndSblx', this.$qs.stringify({
                     sblx: this.sblx,
                     page: this.page,
                     size: this.size
@@ -200,7 +200,7 @@
                                 'Content-Type': 'multipart/form-data'
                             }
                         };
-                        this.$axios.post('/api/file/add', formData, config).then(res => {
+                        this.$axios.post('/file/add', formData, config).then(res => {
                             this.addLoading = false
                             this.modelVisible = false;
                             this.getData();

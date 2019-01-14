@@ -114,7 +114,7 @@ import UEditor from '@/components/common/ueditor.vue'
             this.$nextTick(()=>{
                 this.editor = UE.getEditor("editor");
             })
-            this.$axios.post('/api/equipmentType/findAllByGsid').then((res) => {
+            this.$axios.post('/equipmentType/findAllByGsid').then((res) => {
                 let data = res.data;
                 this.equipmentType = data;
             });
@@ -123,7 +123,7 @@ import UEditor from '@/components/common/ueditor.vue'
             console.log(this.$route.params.pId);
             this.pId = this.$route.params.pId;
             if(this.$route.params.pId) {
-                this.$axios.post('/api/equipment/findById?id=' + this.$route.params.pId).then((res) => {
+                this.$axios.post('/equipment/findById?id=' + this.$route.params.pId).then((res) => {
                     console.log(res)
                     let data = res.data[0];
                     this.form = {
@@ -186,9 +186,9 @@ import UEditor from '@/components/common/ueditor.vue'
                 }, 300)
             },
             prelook() {
-                let url = '/api/equipment/add';
+                let url = '/equipment/add';
                 if(this.pId) {
-                    url = '/api/equipment/update'
+                    url = '/equipment/update'
                 }
                 let formData = new FormData();
                 for (let key in this.form) {

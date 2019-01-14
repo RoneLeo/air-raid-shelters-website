@@ -113,7 +113,7 @@
                     cancelButtonText: '取消',
                     type: 'warning'
                 }).then(() => {
-                    this.$axios.post('/api/projectCase/delete', this.$qs.stringify({id: row.id})).then((res) => {
+                    this.$axios.post('/projectCase/delete', this.$qs.stringify({id: row.id})).then((res) => {
                         this.$message.success('已删除！');
                         this.getData();
                     });
@@ -132,7 +132,7 @@
             // 获取 easy-mock 的模拟数据
             getData() {
                 this.loading = true;
-                this.$axios.post('/api/projectCase/findAllByGsidByPage', this.$qs.stringify({ page: this.page, size: this.size})).then((res) => {
+                this.$axios.post('/projectCase/findAllByGsidByPage', this.$qs.stringify({ page: this.page, size: this.size})).then((res) => {
                     if (res.resCode == 200) {
                         this.loading = false;
                         this.tableData = res.data.content;
@@ -151,9 +151,9 @@
                 this.$refs.addForm.validate((valid) => {
                     if (valid) {
                         this.addLoading = true;
-                        let url = '/api/projectCase/add';
+                        let url = '/projectCase/add';
                         if(this.addForm.id) {
-                            url = '/api/projectCase/update'
+                            url = '/projectCase/update'
                         }
                         let formData = new FormData();
                         for(let key in this.addForm) {

@@ -152,7 +152,7 @@
                     cancelButtonText: '取消',
                     type: 'warning'
                 }).then(() => {
-                    this.$axios.post('/api/file/delete', this.$qs.stringify({id: row.id})).then((res) => {
+                    this.$axios.post('/file/delete', this.$qs.stringify({id: row.id})).then((res) => {
                         this.$message.success('已删除！');
                         if(this.activeName == 'first') {
                             this.getData(1, this.page, this.size);
@@ -191,7 +191,7 @@
             },
             getData(type,page,size) {
                 this.loading = true;
-                this.$axios.post('/api/file/findAllByGsidByPage', this.$qs.stringify({
+                this.$axios.post('/file/findAllByGsidByPage', this.$qs.stringify({
                     wjlx: type,
                     page: page,
                     size: size
@@ -227,7 +227,7 @@
                                 'Content-Type': 'multipart/form-data'
                             }
                         };
-                        this.$axios.post('/api/file/add', formData, config).then(res => {
+                        this.$axios.post('/file/add', formData, config).then(res => {
                             this.addLoading = false
                             this.modelVisible = false;
                             if(this.activeName == 'first') {

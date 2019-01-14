@@ -104,7 +104,7 @@
 
             // 获取 easy-mock 的模拟数据
             getData() {
-                this.$axios.post('/api/netService/findAllByGsidByPage', this.$qs.stringify({page: this.page, size: this.size})).then((res) => {
+                this.$axios.post('/netService/findAllByGsidByPage', this.$qs.stringify({page: this.page, size: this.size})).then((res) => {
                         this.tableData = res.data.content;
                         this.totalElements = res.data.totalElements;
                 });
@@ -156,7 +156,7 @@
                     this.$message.success(`修改第 ${this.idx+1} 行成功`);
 
                 this.modelVisible = false;
-                this.$axios.post('/api/user/add',this.form).then((res) => {
+                this.$axios.post('/user/add',this.form).then((res) => {
                     console.log(111,res);
                 });
             },
