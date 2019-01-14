@@ -191,7 +191,8 @@
                     console.log(this.companyForm)
                     if (this.companyForm !== null) {
 //                        console.log(111)
-                        this.disabled = true
+                        this.disabled = true;
+                        this.positionPicker.stop();
                         this.setMarker();
                     }else {
                         this.companyForm = {

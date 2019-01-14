@@ -12,10 +12,10 @@ module.exports = {
     proxyTable: {
       '/api':{
           //target:'http://jsonplaceholder.typicode.com',
-          target:'http://182.151.22.247:8081',
+          target:'http://182.151.22.247:8081/',
           changeOrigin:true,
           pathRewrite:{
-              '^/api':''
+              '^/api':'/'
           }
       },
       '/ms':{
