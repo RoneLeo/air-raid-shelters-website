@@ -152,15 +152,12 @@
                     });
                     this.marker.setMap(this.map);
                 }
-
             },
-
             edit() {
                 this.disabled = false;
                 this.map.remove(this.marker);
                 let positions = this.companyForm.jwd.split(',');
                 let position = new AMap.LngLat(positions[1], positions[0]);
-//                this.positionPicker.start(this.map.getBounds().getSouthWest())
                 this.positionPicker.start(position)
             },
             save() {
@@ -174,23 +171,11 @@
                     this.setMarker();
                 });
             },
-            showAddBox() {
-//                this.companyForm = {
-//                    gsmc: '',
-//                    lxdh: '',
-//                    lxdz:'',
-//                    lxcz: '',
-//                    gswz: '',
-//                    lxyb: '',
-//                    lxyx: '',
-//                }
-            },
             getData() {
                 this.$axios.post('/api/contactUs/findByGsid').then((res) => {
                     this.companyForm = res.data;
                     console.log(this.companyForm)
                     if (this.companyForm !== null) {
-//                        console.log(111)
                         this.disabled = true
                         this.setMarker();
                     }else {
