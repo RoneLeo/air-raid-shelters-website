@@ -5,9 +5,7 @@
                 <el-breadcrumb-item><i class="el-icon-lx-cascades"></i> 产品类型</el-breadcrumb-item>
             </el-breadcrumb>
         </div>
-        <div class="handle-box">
-
-        </div>
+        <div class="handle-box"></div>
         <div class="container">
             <el-table :data="tableData" class="table" ref="multipleTable" >
                 <el-table-column prop="name" label="类型名"></el-table-column>
@@ -22,7 +20,6 @@
                 <el-button type="primary" @click="add">增加产品类型</el-button>
             </div>
         </div>
-
     </div>
 </template>
 
