@@ -38,33 +38,38 @@
             return {
                 collapse: false,
                 items: [
+//                    {
+//                        icon: 'el-icon-lx-home',
+//                        index: 'dashboard',
+//                        title: '系统首页'
+//                    },
                     {
-                        icon: 'el-icon-lx-home',
-                        index: 'dashboard',
-                        title: '系统首页'
+                        icon: 'iconfont icon-gongsi',
+                        index: 'company',
+                        title: '公司信息'
                     },
                     {
-                        icon: 'el-icon-lx-group',
+                        icon: 'iconfont icon-yonghu',
                         index: 'user',
                         title: '用户信息'
                     },
                     {
-                        icon: 'el-icon-lx-file',
+                        icon: 'iconfont icon-wenjian',
                         index: 'files',
                         title: '文件管理'
                     },
                     {
-                        icon: 'el-icon-lx-vipcard',
+                        icon: 'iconfont icon-xinwen',
                         index: 'news',
                         title: '新闻管理'
                     },
                     {
-                        icon: 'el-icon-lx-punch',
+                        icon: 'iconfont icon-gongcheng',
                         index: 'projectCase',
                         title: '工程案例'
                     },
                     {
-                        icon: 'el-icon-lx-shop',
+                        icon: 'iconfont icon-chanpinC',
                         index: 'products',
                         title: '产品管理'
                     },
@@ -74,25 +79,21 @@
 //                        title: '录入产品'
 //                    },
                     {
-                        icon: 'el-icon-lx-profile',
+                        icon: 'iconfont icon-daogouzhaopin',
                         index: 'recruitment',
                         title: '招聘信息管理'
                     },
                     {
-                        icon: 'el-icon-lx-shop',
+                        icon: 'iconfont icon-chanpinguanli',
                         index: 'productType',
                         title: '产品类型管理'
                     },
-                    {
-                        icon: 'el-icon-lx-calendar',
-                        index: 'services',
-                        title: '网上订购列表'
-                    },
-                    {
-                        icon: 'el-icon-lx-cart',
-                        index: 'company',
-                        title: '公司信息'
-                    },
+//                    {
+//                        icon: 'el-icon-lx-calendar',
+//                        index: 'services',
+//                        title: '网上订购列表'
+//                    },
+
 //                    {
 //                        icon: 'el-icon-lx-cascades',
 //                        index: 'table',
@@ -178,6 +179,11 @@
         }
     }
 </script>
+<style>
+    .sidebar-el-menu .el-menu-item i {
+        margin-right: 8px;
+    }
+</style>
 
 <style scoped>
     .sidebar{

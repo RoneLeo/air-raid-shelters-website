@@ -38,7 +38,7 @@
         </div>
 
         <!-- 弹出框 -->
-        <el-dialog :title="modelTitle" :visible.sync="modelVisible" width="40%"
+        <el-dialog :title="modelTitle" :visible.sync="modelVisible" width="60%"
                    :close-on-click-modal="false" @closed="closeClear">
             <el-form ref="addForm" :model="addForm" label-width="100px">
                 <el-form-item label="工程名称"

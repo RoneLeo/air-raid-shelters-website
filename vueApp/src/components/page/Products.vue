@@ -25,11 +25,11 @@
             <el-table :data="tableData" class="table" ref="multipleTable">
                 <el-table-column prop="cpmc" label="产品名称"></el-table-column>
                 <el-table-column prop="sblx" label="产品类型" :formatter="formatterSBLX"></el-table-column>
-                <el-table-column label="产品图片">
-                    <template slot-scope="scope">
-                        <a target="_blank" :href='`http://182.151.22.247:8081${scope.row.cptp}`'>{{scope.row.cptp}}</a>
-                    </template>
-                </el-table-column>
+                <!--<el-table-column label="产品图片">-->
+                    <!--<template slot-scope="scope">-->
+                        <!--<a target="_blank" :href='`http://182.151.22.247:8081${scope.row.cptp}`'>{{scope.row.cptp}}</a>-->
+                    <!--</template>-->
+                <!--</el-table-column>-->
                 <!--<el-table-column prop="cptp" label="产品图片"></el-table-column>-->
                 <el-table-column label="操作" align="center">
                     <template slot-scope="scope">
@@ -99,7 +99,7 @@
                 size: 10,
                 page: 1,
                 totalElements: 0,
-                loading: true,
+                loading: false,
                 addLoading: false,
                 equipmentType: [],
                 sblx: null
@@ -109,7 +109,11 @@
             this.$axios.post('/api/equipmentType/findAllByGsid').then((res) => {
                 let data = res.data;
                 this.equipmentType = data;
-                this.sblx = this.equipmentType[0].id;
+                if(this.$route.params.sblx) {
+                    this.sblx = this.$route.params.sblx;
+                }else {
+                    this.sblx = this.equipmentType && this.equipmentType.length ? this.equipmentType[0].id : '';
+                }
                 this.getData();
             });
         },
@@ -169,11 +173,9 @@
                     page: this.page,
                     size: this.size
                 })).then((res) => {
-                    if (res.resCode == 200) {
                         this.loading = false;
                         this.tableData = res.data;
                         this.totalElements = res.totalElements
-                    }
                 });
             },
 

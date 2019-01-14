@@ -82,9 +82,7 @@
                                    :value="item.id"></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="文件"
-                              prop="file"
-                              :rules="[{ required: true, message: '文件不能为空', trigger: 'blur' }]">
+                <el-form-item label="文件">
                     <input type="file" @change="getFile($event)"/>
                 </el-form-item>
             </el-form>
@@ -92,6 +90,12 @@
                 <el-button @click="modelVisible = false">取 消</el-button>
                 <el-button type="primary" :loading="addLoading" @click="saveEdit(addForm)">确 定</el-button>
             </span>
+        </el-dialog>
+        <el-dialog :title="wjmc" :visible.sync="dialogTPVisible" width="60%" @closed="reset">
+                <div style="width: 100%;height: 400px;display: flex;justify-content: center;align-items: center;">
+                    <img :src="wjlj" alt="" style="max-width:100%;max-height: 100%;margin:auto;border-radius: 5px;">
+                </div>
+
         </el-dialog>
     </div>
 </template>
@@ -116,7 +120,10 @@
                 page1: 1,
                 totalElements1: 0,
                 loading: true,
-                addLoading: false
+                addLoading: false,
+                dialogTPVisible: false,
+                wjlj: '',
+                wjmc: ''
             }
         },
         created() {
@@ -124,6 +131,10 @@
         },
         computed: {},
         methods: {
+            reset() {
+                this.wjlj = '';
+                this.wjmc = '';
+            },
             closeClear() {
                 this.$refs.addForm.resetFields()
             },
@@ -157,7 +168,10 @@
                 return this.$common.dictParse(row.wjlx, this.$dict.fileType);
             },
             lookFile(index, row) {
-                window.open('http://182.151.22.247:8081' + row.wjlj);
+                this.wjmc = row.wjmc;
+                this.wjlj = 'http://182.151.22.247:8081' + row.wjlj;
+                this.dialogTPVisible = true;
+//                window.open('http://182.151.22.247:8081' + row.wjlj);
             },
             modelClose(addForm) {
                 this.$refs[addForm].resetFields();
@@ -207,9 +221,6 @@
                         let formData = new FormData();
                         for (let key in this.addForm) {
                             formData.append(key, this.addForm[key]);
-                        }
-                        for (var value of formData.values()) {
-                            console.log(value);
                         }
                         let config = {
                             headers: {

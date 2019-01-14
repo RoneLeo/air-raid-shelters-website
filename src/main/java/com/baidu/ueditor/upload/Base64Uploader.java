@@ -8,7 +8,6 @@ import com.baidu.ueditor.define.State;
 
 import java.util.Map;
 
-import com.baidu.ueditor.upload.StorageManager;
 import org.apache.commons.codec.binary.Base64;
 
 public final class Base64Uploader {

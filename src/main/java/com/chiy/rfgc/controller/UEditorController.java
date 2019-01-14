@@ -2,6 +2,7 @@ package com.chiy.rfgc.controller;
 import com.baidu.ueditor.ActionEnter;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -28,9 +29,9 @@ public class UEditorController {
     }
 
 
-    @RequestMapping(value="/show")
-    public void show(String filename, HttpServletResponse response) throws IOException {
-        File file = new File("D:/image/" + filename);
+    @RequestMapping(value="/show/{filename}")
+    public void show(@PathVariable String filename, HttpServletResponse response) throws IOException {
+        File file = new File("C:/image/" + filename);
         response.setHeader("content-disposition", "attachment;filename=" + filename);
         response.setCharacterEncoding("UTF-8");
         InputStream is = new FileInputStream(file);

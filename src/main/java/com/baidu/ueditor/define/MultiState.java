@@ -7,8 +7,6 @@ import java.util.List;
 import java.util.Map;
 
 import com.baidu.ueditor.Encoder;
-import com.baidu.ueditor.define.AppInfo;
-import com.baidu.ueditor.define.State;
 
 /**
  * 多状态集合状态
