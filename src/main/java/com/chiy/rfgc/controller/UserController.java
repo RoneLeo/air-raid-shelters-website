@@ -143,8 +143,13 @@ public class UserController {
     public ApiResult<Object> setGsAndZh(String gsmc, String zh, HttpSession session) throws Exception {
         // 判断是否登录
         String uuid = (String) session.getAttribute("uuid");
-        if (StringUtils.isEmpty(uuid) || userRepository.findByUuid(uuid) == null) {
+        if (StringUtils.isEmpty(uuid)) {
             return ApiResult.FAILURE("未登录");
+        }
+        UserEntity userEntity = userRepository.findByUuid(uuid);
+        // 判断是否为admin
+        if (userEntity == null || !"admin".equals(userEntity.getZh())) {
+            return ApiResult.FAILURE("用户不存在或非管理员不可操作");
         }
         // 添加公司
         CompanyEntity entity = new CompanyEntity();

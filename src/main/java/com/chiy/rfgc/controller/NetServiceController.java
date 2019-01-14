@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
+import java.util.regex.Pattern;
 
 @Api(description = "网上服务")
 @RestController
@@ -37,7 +38,16 @@ public class NetServiceController {
         if ("".equals(uuid)) {
             return ApiResult.UNKNOWN();
         }
-        //
+        // 验证手机号码
+        String phone = "(\\+\\d+)?1[3458]\\d{9}$";
+        if (!Pattern.matches(phone, entity.getLxdh())) {
+            return ApiResult.FAILURE("请输入正确联系电话");
+        }
+        // 验证邮箱
+        String email = "^([a-z0-9A-Z]+[-|\\.]?)+[a-z0-9A-Z]@([a-z0-9A-Z]+(-[a-z0-9A-Z]+)?\\.)+[a-zA-Z]{2,}$";
+        if (!Pattern.matches(email, entity.getDzyx())) {
+            return ApiResult.FAILURE("请输入正确电子邮箱");
+        }
         entity.setGsid(userRepository.findByUuid(uuid).getGsid());
         entity.setCjsj(new Date());
         NetserviceEntity entity1 = netServiceRepository.save(entity);
@@ -50,6 +60,16 @@ public class NetServiceController {
     @ApiOperation(value = "前端添加接口")
     @RequestMapping("/addFront")
     public ApiResult<Object> addFront(Integer gsid, NetserviceEntity entity) {
+        // 验证手机号码
+        String phone = "(\\+\\d+)?1[3458]\\d{9}$";
+        if (!Pattern.matches(phone, entity.getLxdh())) {
+            return ApiResult.FAILURE("请输入正确联系电话");
+        }
+        // 验证邮箱
+        String email = "^([a-z0-9A-Z]+[-|\\.]?)+[a-z0-9A-Z]@([a-z0-9A-Z]+(-[a-z0-9A-Z]+)?\\.)+[a-zA-Z]{2,}$";
+        if (!Pattern.matches(email, entity.getDzyx())) {
+            return ApiResult.FAILURE("请输入正确电子邮箱");
+        }
         entity.setGsid(gsid);
         entity.setCjsj(new Date());
         NetserviceEntity entity1 = netServiceRepository.save(entity);
@@ -70,6 +90,16 @@ public class NetServiceController {
         // 判断是否存在
         if (netServiceRepository.findById(entity.getId()) == null) {
             return ApiResult.FAILURE("不存在，修改失败");
+        }
+        // 验证手机号码
+        String phone = "(\\+\\d+)?1[3458]\\d{9}$";
+        if (!Pattern.matches(phone, entity.getLxdh())) {
+            return ApiResult.FAILURE("请输入正确联系电话");
+        }
+        // 验证邮箱
+        String email = "^([a-z0-9A-Z]+[-|\\.]?)+[a-z0-9A-Z]@([a-z0-9A-Z]+(-[a-z0-9A-Z]+)?\\.)+[a-zA-Z]{2,}$";
+        if (!Pattern.matches(email, entity.getDzyx())) {
+            return ApiResult.FAILURE("请输入正确电子邮箱");
         }
         NetserviceEntity entity1 = netServiceRepository.save(entity);
         if (entity1 == null) {

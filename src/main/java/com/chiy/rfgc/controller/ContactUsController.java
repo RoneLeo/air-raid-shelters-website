@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
+import java.util.regex.Pattern;
 
 @Api(description = "联系我们")
 @RestController
@@ -37,7 +38,21 @@ public class ContactUsController {
         if ("".equals(uuid)) {
             return ApiResult.UNKNOWN();
         }
-        //
+        // 验证邮编
+        String post = "[1-9]\\d{5}";
+        if (entity.getLxyb().length() != 6 || !Pattern.matches(post, entity.getLxyb())) {
+            return ApiResult.FAILURE("请输入正确邮编");
+        }
+        // 验证手机号码
+        String phone = "(\\+\\d+)?1[3458]\\d{9}$";
+        if (!Pattern.matches(phone, entity.getLxdh())) {
+            return ApiResult.FAILURE("请输入正确联系电话");
+        }
+        // 验证邮箱
+        String email = "^([a-z0-9A-Z]+[-|\\.]?)+[a-z0-9A-Z]@([a-z0-9A-Z]+(-[a-z0-9A-Z]+)?\\.)+[a-zA-Z]{2,}$";
+        if (!Pattern.matches(email, entity.getLxyx())) {
+            return ApiResult.FAILURE("请输入正确联系邮箱");
+        }
         entity.setGsid(userRepository.findByUuid(uuid).getGsid());
         entity.setCjsj(new Date());
         ContactusEntity entity1 = contactUsRepository.save(entity);
@@ -58,6 +73,21 @@ public class ContactUsController {
         // 判断是否存在
         if (contactUsRepository.findById(entity.getId()) == null) {
             return ApiResult.FAILURE("不存在，修改失败");
+        }
+        // 验证邮编
+        String post = "[1-9]\\d{5}";
+        if (entity.getLxyb().length() != 6 || !Pattern.matches(post, entity.getLxyb())) {
+            return ApiResult.FAILURE("请输入正确邮编");
+        }
+        // 验证手机号码
+        String phone = "(\\+\\d+)?1[3458]\\d{9}$";
+        if (!Pattern.matches(phone, entity.getLxdh())) {
+            return ApiResult.FAILURE("请输入正确联系电话");
+        }
+        // 验证邮箱
+        String email = "^([a-z0-9A-Z]+[-|\\.]?)+[a-z0-9A-Z]@([a-z0-9A-Z]+(-[a-z0-9A-Z]+)?\\.)+[a-zA-Z]{2,}$";
+        if (!Pattern.matches(email, entity.getLxyx())) {
+            return ApiResult.FAILURE("请输入正确联系邮箱");
         }
         ContactusEntity entity1 = contactUsRepository.save(entity);
         if (entity1 == null) {
