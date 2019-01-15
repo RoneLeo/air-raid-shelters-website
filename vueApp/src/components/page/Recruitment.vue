@@ -139,12 +139,8 @@
                 this.form = {};
                 this.modelVisible = true;
             },
-            formatter(row, column) {
-                return row.address;
-            },
-            filterTag(value, row) {
-                return row.tag === value;
-            },
+
+
             handleEdit(index, row) {
                 this.form = Object.assign({}, row);
                 this.modelVisible = true;
@@ -180,19 +176,17 @@
             },
             // 保存编辑
             saveEdit() {
-                let url = '/recruitment/add';
-                if(this.form.id) {
-                    url = '/recruitment/update'
-                }
-                this.$axios.post(url, this.$qs.stringify(Object.assign({},this.form))).then(res => {
-//                    this.addLoading = false
-                    this.modelVisible = false;
-                    this.getData();
-//                    if(this.activeName == 'first') {
-//                        this.getData(1, this.page, this.size);
-//                    }else {
-//                        this.getData(2, this.page1, this.size1);
-//                    }
+                this.$refs.form.validate((valid) => {
+                    if (valid) {
+                        let url = '/recruitment/add';
+                        if(this.form.id) {
+                            url = '/recruitment/update'
+                        }
+                        this.$axios.post(url, this.$qs.stringify(Object.assign({},this.form))).then(res => {
+                            this.modelVisible = false;
+                            this.getData();
+                        })
+                    }
                 })
             },
             // 确定删除

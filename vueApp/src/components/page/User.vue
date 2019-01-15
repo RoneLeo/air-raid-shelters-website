@@ -16,6 +16,7 @@
                 <el-table-column label="操作"  align="center">
                     <template slot-scope="scope">
                         <el-button type="text" icon="el-icon-edit" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+                        <el-button type="text" style="color: green" @click="resetMM(scope.$index, scope.row)">重置密码</el-button>
                         <el-button type="text" icon="el-icon-delete" class="red" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
                     </template>
                 </el-table-column>
@@ -115,7 +116,9 @@
                 this.is_search = true;
             },
             add(){
-                this.form = {};
+                this.form = {
+                    mm: '123456'
+                };
                 this.modelVisible = true;
             },
             formatter(row, column) {
@@ -127,6 +130,14 @@
             handleEdit(index, row) {
                 this.form = Object.assign({}, row);
                 this.modelVisible = true;
+            },
+            resetMM(index, row) {
+                row.mm = '123456';
+                this.$axios.post('/user/update' ,this.$qs.stringify(Object.assign({}, row))).then((res) => {
+                    this.$message.success('已将密码重置为123456，请告知用户尽快修改密码！');
+//                    this.modelVisible = false;
+                    this.getData();
+                });
             },
             handleDelete(index, row) {
                 this.$confirm('此操作将永久删除该用户, 是否继续?', '提示', {

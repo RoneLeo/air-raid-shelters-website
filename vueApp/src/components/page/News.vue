@@ -94,7 +94,7 @@
                 </el-form-item>
                 <el-form-item label="新闻图片"
                               v-if="!addForm.id || !addForm.xwtp">
-                    <input type="file" @change="getFile($event)" />
+                    <input type="file" @change="getFile($event)" accept="image/*"/>
                 </el-form-item>
                 <el-form-item label="新闻图片"
                               v-if="addForm.xwtp">

@@ -2,7 +2,7 @@
     <div class="table">
         <div class="crumbs">
             <el-breadcrumb separator="/">
-                <el-breadcrumb-item><i class="el-icon-lx-cascades"></i> 产品类型</el-breadcrumb-item>
+                <el-breadcrumb-item><i class="el-icon-lx-cascades"></i> 产品类型管理</el-breadcrumb-item>
             </el-breadcrumb>
         </div>
         <div class="handle-box"></div>
@@ -29,9 +29,7 @@
         data() {
             return {
                 modelTitle: '添加信息',
-                url: './static/vuetable.json',
                 tableData: [],
-
             }
         },
         created() {
@@ -55,11 +53,14 @@
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
                 }).then(({ value }) => {
-                    if(value != '') {
+                    console.log(value)
+                    if(value !== null) {
                         this.$axios.post('/equipmentType/add', this.$qs.stringify({name: value})).then((res) => {
                             this.getData();
                             this.$message.success(res.resMsg);
                         });
+                    }else {
+                        this.$message.error('未输入产品类型名称！');
                     }
                 }).catch(() => {
 
@@ -71,11 +72,13 @@
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
                 }).then(({ value }) => {
-                    if(value != '') {
+                    if(value !== null) {
                         this.$axios.post('/equipmentType/update', this.$qs.stringify({id: row.id, name: value, gsid: row.gsid})).then((res) => {
                             this.getData();
                             this.$message.success(res.resMsg);
                         });
+                    }else {
+                        this.$message.error('未输入产品类型名称！');
                     }
                 }).catch(() => {
 
@@ -102,19 +105,6 @@
 <style scoped>
     .handle-box {
         margin-bottom: 20px;
-    }
-
-    .handle-select {
-        width: 120px;
-    }
-
-    .handle-input {
-        width: 300px;
-        display: inline-block;
-    }
-    .del-dialog-cnt{
-        font-size: 16px;
-        text-align: center
     }
     .table{
         width: 100%;
