@@ -78,6 +78,7 @@ public class UserController {
         if (userRepository.findByUuid(entity.getUuid()) == null) {
             return ApiResult.FAILURE("修改失败，不存在");
         }
+        entity.setMm(MD5Utils.getMD5(entity.getMm()));
         UserEntity entity1 = userRepository.save(entity);
         if (entity1 == null) {
             return ApiResult.FAILURE("修改失败");
