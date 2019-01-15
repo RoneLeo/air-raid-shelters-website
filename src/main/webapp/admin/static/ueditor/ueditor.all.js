@@ -8041,7 +8041,9 @@ var fillCharReg = new RegExp(domUtils.fillChar, 'g');
 //维护编辑器一下默认的不在插件中的配置项
 UE.Editor.defaultOptions = function(editor){
 
-    var _url = editor.options.UEDITOR_HOME_URL;
+    var _url = process.env.NODE_ENV === 'development' ? editor.options.UEDITOR_HOME_URL : 'http://47.96.85.104/admin/static/ueditor/';
+    console.log(process.env.NODE_ENV)
+    console.log(_url);
     return {
         isShow: true,
         initialContent: '',
@@ -14448,6 +14450,7 @@ UE.plugins['undo'] = function () {
 UE.plugin.register('copy', function () {
 
     var me = this;
+    this.options.UEDITOR_HOME_URL = process.env.NODE_ENV === 'development' ? this.options.UEDITOR_HOME_URL : 'http://47.96.85.104/admin/static/ueditor/';
 
     function initZeroClipboard() {
 
@@ -16450,7 +16453,7 @@ UE.plugins['list'] = function () {
 
             me.addListener("ready",function(){
                 utils.loadFile(document,{
-                    src : opt.codeMirrorJsUrl || opt.UEDITOR_HOME_URL + "third-party/codemirror/codemirror.js",
+                    src : opt.codeMirrorJsUrl || (process.env.NODE_ENV === 'development' ? opt.UEDITOR_HOME_URL : 'http://47.96.85.104/admin/static/ueditor/') + "third-party/codemirror/codemirror.js",
                     tag : "script",
                     type : "text/javascript",
                     defer : "defer"
@@ -16465,7 +16468,7 @@ UE.plugins['list'] = function () {
                     tag : "link",
                     rel : "stylesheet",
                     type : "text/css",
-                    href : opt.codeMirrorCssUrl || opt.UEDITOR_HOME_URL + "third-party/codemirror/codemirror.css"
+                    href : opt.codeMirrorCssUrl ||  (process.env.NODE_ENV === 'development' ? opt.UEDITOR_HOME_URL : 'http://47.96.85.104/admin/static/ueditor/') + "third-party/codemirror/codemirror.css"
                 });
 
             });
@@ -24538,7 +24541,6 @@ UE.plugin.register('simpleupload', function (){
                 processData: false,
                 contentType: false,
                 success: function (data) {
-                    console.log(data);
                     // data = $.parseJSON(data);
                   // data = JSON.parse(data);
                   var link, loader,
@@ -29409,6 +29411,8 @@ UE.ui = baidu.editor.ui = {};
             type:"text/css",
             rel:"stylesheet"
         });
+
+
 
         var oldRender = editor.render;
         editor.render = function (holder) {
