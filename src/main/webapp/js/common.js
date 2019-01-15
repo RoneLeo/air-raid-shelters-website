@@ -622,7 +622,6 @@ function addClickHandler(target, window) {
 }
 
 function addMapOverlay(companyName,companyAddr,companyPosition) {
-    console.log(companyPosition)
     var marker = new AMap.Marker({
         icon: "//vdata.amap.com/icons/b18/1/2.png",
         position: new AMap.LngLat(companyPosition.lng,companyPosition.lat),
