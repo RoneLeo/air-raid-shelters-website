@@ -4,19 +4,23 @@
             <div >
                 <el-row style="border-bottom: 1px dashed #0095FF;margin-bottom: 10px;padding: 8px 0;">
                     <el-col  :span="22" style="height: 100%;">
-                        <el-form :inline="true" :model="form" class="demo-form-inline"  label-position="right">
-                            <el-form-item label-width="80px" label="产品类型">
+                        <el-form :inline="true" :model="form" ref="form" class="demo-form-inline"  label-position="right">
+                            <el-form-item label-width="80px" label="产品类型"
+                                            prop="sblx"
+                                          :rules="[{ required: true, message: '产品类型不能为空', trigger: 'blur' }]">
                                 <el-select v-model="form.sblx" placeholder="请选择产品类型">
                                     <el-option v-for="item in this.equipmentType" :key="item.id*2.0987" :label="item.name"
                                                :value="item.id"></el-option>
                                 </el-select>
                             </el-form-item>
-                            <el-form-item label-width="150px" label="产品名称">
+                            <el-form-item label-width="150px" label="产品名称"
+                                            prop="cpmc"
+                                          :rules="[{ required: true, message: '产品名称不能为空', trigger: 'blur' }]">
                                 <el-input v-model="form.cpmc" placeholder="产品名称" clearable></el-input>
                             </el-form-item>
 
                             <el-form-item v-if="!form.id || !form.cptp" label-width="150px" label="产品图片">
-                                <input type="file" @change="getFile($event)"/>
+                                <input type="file" @change="getFile($event)" accept="image/*"/>
                             </el-form-item>
                             <el-form-item v-else="" label-width="150px" label="产品图片">
                                 <img :src="`http://182.151.22.247:8081${form.cptp}`" alt="" style="width: 140px;height: 100px;position: relative;border-radius: 5px">
@@ -186,22 +190,27 @@ import UEditor from '@/components/common/ueditor.vue'
                 }, 300)
             },
             prelook() {
-                let url = '/equipment/add';
-                if(this.pId) {
-                    url = '/equipment/update'
-                }
-                let formData = new FormData();
-                for (let key in this.form) {
-                    formData.append(key, this.form[key]);
-                }
-                formData.append('contents', JSON.stringify(this.contents));
-                let config = {
-                    headers: {
-                        'Content-Type': 'multipart/form-data'
+                this.$refs.form.validate((valid) => {
+                    if (valid) {
+                        let url = '/equipment/add';
+                        if(this.pId) {
+                            url = '/equipment/update'
+                        }
+                        let formData = new FormData();
+                        for (let key in this.form) {
+                            formData.append(key, this.form[key]);
+                        }
+                        formData.append('contents', JSON.stringify(this.contents));
+                        let config = {
+                            headers: {
+                                'Content-Type': 'multipart/form-data'
+                            }
+                        };
+                        this.$axios.post(url, formData, config).then(res => {
+                            this.$refs.form.resetFields()
+                            this.$router.push({name:'products', params: {sblx: this.form.sblx}});
+                        })
                     }
-                };
-                this.$axios.post(url, formData, config).then(res => {
-                    this.$router.push({name:'products', params: {sblx: this.form.sblx}});
                 })
             },
 

@@ -591,20 +591,21 @@ function getInfoForHome() {
 //创建和初始化地图函数：
 var map;
 function initMap(companyInfo) {
-    console.log(companyInfo)
     var jwdArr = companyInfo.jwd.split(',');
     var companyPosition = {lat: jwdArr[0], lng: jwdArr[1]}; //经纬度
     var companyName = companyInfo.gsmc; //名称
     var companyAddr = companyInfo.lxdz; //地址
     createMap(companyPosition);//创建地图
-    setMapEvent();//设置地图事件
+    // setMapEvent();//设置地图事件
     addMapControl();//向地图添加控件
     addMapOverlay(companyName,companyAddr,companyPosition);//向地图添加覆盖物
 }
 
 function createMap(companyPosition) {
-    map = new BMap.Map("map");
-    map.centerAndZoom(new BMap.Point(companyPosition.lng, companyPosition.lat), 16);
+    map = new AMap.Map('map', {
+        zoom: 16,
+    })
+    map.setCenter(new AMap.LngLat(companyPosition.lng,companyPosition.lat));
 }
 
 function setMapEvent() {
@@ -621,46 +622,47 @@ function addClickHandler(target, window) {
 }
 
 function addMapOverlay(companyName,companyAddr,companyPosition) {
-    var markers = [
-        {
-            title: companyName,
-            content: '地址：' + companyAddr,
-            position: companyPosition,
-            imageOffset: {width: -46, height: -21}
-        }
-    ];
-    for (var index = 0; index < markers.length; index++) {
-        var point = new BMap.Point(markers[index].position.lng, markers[index].position.lat);
-        var marker = new BMap.Marker(point, {
-            icon: new BMap.Icon("http://api.map.baidu.com/lbsapi/createmap/images/icon.png", new BMap.Size(20, 25), {
-                imageOffset: new BMap.Size(markers[index].imageOffset.width, markers[index].imageOffset.height)
-            })
-        });
-        var label = new BMap.Label(markers[index].title, {offset: new BMap.Size(25, 5)});
-        var opts = {
-            width: 200,
-            title: markers[index].title,
-            enableMessage: false
-        };
-        var infoWindow = new BMap.InfoWindow(markers[index].content, opts);
-        marker.setLabel(label);
-        addClickHandler(marker, infoWindow);
-        map.addOverlay(marker);
-    }
+    var marker = new AMap.Marker({
+        icon: "//vdata.amap.com/icons/b18/1/2.png",
+        position: new AMap.LngLat(companyPosition.lng,companyPosition.lat),
+        offset: new AMap.Pixel(-12, -12)
+    });
+    marker.setMap(map);
+
+    var text = new AMap.Text({
+        text:companyName,
+        textAlign:'center', // 'left' 'right', 'center',
+        verticalAlign:'middle', //middle 、bottom
+        draggable:false,
+        cursor:'pointer',
+        angle:0,
+        style:{
+            'padding': '.1rem .2rem',
+            'border-radius': '.15rem',
+            'background-color': 'transparent',
+            'width': 'auto',
+            'border': '2px solid red',
+            'text-align': 'center',
+            'font-size': '14px',
+            'color': 'black'
+        },
+        position: new AMap.LngLat(companyPosition.lng,companyPosition.lat),
+        offset: new AMap.Pixel(105, 10),
+    });
+    text.setMap(map);
 }
 
 //向地图添加控件
 function addMapControl() {
-    var scaleControl = new BMap.ScaleControl({anchor: BMAP_ANCHOR_BOTTOM_LEFT});
-    scaleControl.setUnit(BMAP_UNIT_IMPERIAL);
-    map.addControl(scaleControl);
-    var navControl = new BMap.NavigationControl({anchor: BMAP_ANCHOR_TOP_LEFT, type: 0});
-    map.addControl(navControl);
-    var overviewControl = new BMap.OverviewMapControl({
-        anchor: BMAP_ANCHOR_BOTTOM_RIGHT,
-        isOpen: false
+    AMap.plugin([
+        'AMap.ToolBar',
+    ], function(){
+        // 在图面添加工具条控件，工具条控件集成了缩放、平移、定位等功能按钮在内的组合控件
+        map.addControl(new AMap.ToolBar({
+            // 简易缩放模式，默认为 false
+            liteStyle: true
+        }));
     });
-    map.addControl(overviewControl);
 }
 
 //获取页面参数

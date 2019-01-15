@@ -74,7 +74,7 @@
                 <el-form-item label="文件"
                               prop="file"
                               :rules="[{ required: true, message: '文件不能为空', trigger: 'blur' }]">
-                    <input type="file" @change="getFile($event)"/>
+                    <input type="file" @change="getFile($event)" accept="image/*"/>
                 </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">

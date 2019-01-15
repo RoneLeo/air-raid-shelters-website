@@ -53,7 +53,7 @@
                 </el-form-item>
                 <el-form-item label="展示图片"
                               v-if="!addForm.id || !addForm.tp">
-                    <input type="file" @change="getFile($event)" />
+                    <input type="file" @change="getFile($event)" accept="image/*"/>
                 </el-form-item>
                 <el-form-item label="展示图片"
                               v-if="addForm.tp">
