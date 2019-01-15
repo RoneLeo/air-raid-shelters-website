@@ -88,11 +88,11 @@ public class UserController {
     @ApiOperation("重置密码")
     @RequestMapping("/resetMm")
     public ApiResult<Object> resetMm(String id, HttpServletRequest request) throws Exception {
-//        String uuid = getUuid(request);
-//        // 判断是否登录
-//        if ("".equals(uuid)) {
-//            return ApiResult.UNKNOWN();
-//        }
+        String uuid = getUuid(request);
+        // 判断是否登录
+        if ("".equals(uuid)) {
+            return ApiResult.UNKNOWN();
+        }
         UserEntity entity = userRepository.findByUuid(id);
         if (StringUtils.isEmpty(id) || entity == null) {
             return ApiResult.FAILURE("id不能为空或该用户不存在");
