@@ -90,7 +90,8 @@
                 disabled: false,
                 map: {},
                 positionPicker: {},
-                marker: {}
+                marker: {},
+                gsmc: '',
             }
         },
         mounted() {
@@ -102,6 +103,9 @@
             })
         },
         created() {
+            this.$axios.get('/company/findGsmcByGsid').then((res) => {
+                this.gsmc = res.data;
+            });
         },
         computed: {},
         destoryed() {
@@ -131,7 +135,7 @@
                             mode: 'dragMap',//设定为拖拽地图模式，可选'dragMap'、'dragMarker'，默认为'dragMap'
                             map: this.map//依赖地图对象
                         });
-                        this.positionPicker.start(this.map.getCenter());
+//                        this.positionPicker.start(this.map.getCenter());
 //                        console.log(this.positionPicker);
                         this.positionPicker.on('success', (positionResult) => {
                             this.companyForm.jwd = positionResult.position.lat + ',' + positionResult.position.lng;
@@ -168,6 +172,10 @@
                 this.$axios.post(url , this.$qs.stringify(Object.assign({}, this.companyForm))).then((res) => {
                     this.disabled = true;
                     this.positionPicker.stop();
+                    this.$message({
+                        message: '保存成功！',
+                        type: 'success'
+                    });
                     this.setMarker();
                 });
             },
@@ -178,12 +186,10 @@
                     if (this.companyForm !== null) {
 //                        console.log(111)
                         this.disabled = true;
-                        this.positionPicker.stop();
-                        this.disabled = true
                         this.setMarker();
                     }else {
                         this.companyForm = {
-                            gsmc: '',
+                            gsmc: this.gsmc,
                             lxdh: '',
                             lxdz:'',
                             lxcz: '',
@@ -191,6 +197,7 @@
                             lxyb: '',
                             lxyx: '',
                         }
+                        this.positionPicker.start(this.map.getCenter());
                     }
 
                 });

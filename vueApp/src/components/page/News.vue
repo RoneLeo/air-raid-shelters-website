@@ -94,7 +94,7 @@
                 </el-form-item>
                 <el-form-item label="新闻图片"
                               v-if="!addForm.id || !addForm.xwtp">
-                    <input type="file" @change="getFile($event)" accept="image/*"/>
+                    <input id="fileInput" ref="pathClear" type="file" @change="getFile($event)" accept="image/*"/>
                 </el-form-item>
                 <el-form-item label="新闻图片"
                               v-if="addForm.xwtp">
@@ -151,6 +151,9 @@
             },
             closeClear() {
                 this.$refs.addForm.resetFields()
+                if(this.$refs.pathClear) {
+                    this.$refs.pathClear.value =''
+                }
             },
             handleClick(tab, event) {
                 if(tab.name === 'first'){
@@ -222,6 +225,7 @@
             add(){
                 this.addForm = {};
                 this.modelVisible = true;
+                this.file = {};
             },
             // 保存编辑
             saveEdit(addForm) {

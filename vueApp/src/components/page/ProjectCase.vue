@@ -53,7 +53,7 @@
                 </el-form-item>
                 <el-form-item label="展示图片"
                               v-if="!addForm.id || !addForm.tp">
-                    <input type="file" @change="getFile($event)" accept="image/*"/>
+                    <input id="fileInput" ref="pathClear" type="file" @change="getFile($event)" accept="image/*"/>
                 </el-form-item>
                 <el-form-item label="展示图片"
                               v-if="addForm.tp">
@@ -102,6 +102,9 @@
             },
             closeClear() {
                 this.$refs.addForm.resetFields()
+                if(this.$refs.pathClear) {
+                    this.$refs.pathClear.value =''
+                }
             },
             editFile(index, row) {
                 this.addForm = Object.assign({}, row);
@@ -144,6 +147,7 @@
             add(){
                 this.addForm = {};
                 this.modelVisible = true;
+                this.file = {};
             },
 
             // 保存编辑

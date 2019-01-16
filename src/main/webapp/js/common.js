@@ -1,4 +1,4 @@
-var ServerUrl = 'http://182.151.22.247:8081/';
+var ServerUrl = 'http://47.96.85.104:80/';
 var Gsid = 1;
 
 $(function () {
