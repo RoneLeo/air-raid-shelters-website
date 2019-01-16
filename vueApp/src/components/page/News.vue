@@ -99,7 +99,7 @@
                 <el-form-item label="新闻图片"
                               v-if="addForm.xwtp">
                     <div style="position: relative;display: inline-block;width: auto;height: auto;">
-                        <img :src="`http://182.151.22.247:8081${addForm.xwtp}`" alt="" class="image">
+                        <img :src="`http://47.96.85.104:80${addForm.xwtp}`" alt="" class="image">
                         <i v-if="addForm.xwtp" class="el-icon-error image-icon" @click="deleteTP"></i>
                     </div>
 
@@ -239,9 +239,6 @@
                         let formData = new FormData();
                         for (let key in this.addForm) {
                             formData.append(key, this.addForm[key]);
-                        }
-                        for (var value of formData.values()) {
-                            console.log(value);
                         }
                         let config = {
                             headers: {

@@ -4,11 +4,7 @@
     list-style: none;
     text-decoration: none;
 }
-@media screen and (max-width:1200px){
-    body {
-        width: 1200px;
-    }
-}
+
 
 .clearfix, .c {
     zoom: 1;
@@ -35,6 +31,7 @@
 .head_top_box{
     width: 100%;
     margin: 20px auto 0 auto;
+    padding: 0 20px;
 }
 .head_logo{
     float: left;
@@ -186,6 +183,10 @@
     height: 230px;
     line-height: 220px;
 }
+.product_list_li_img img {
+    width: 100%;
+    height: 100%;
+}
 .product_list_li_name{
     text-align: center;
     font-size: 14px;
@@ -263,6 +264,10 @@
 .news_list_li_img{
     float: left;
     width: 200px;
+}
+.news_list_li_img img {
+    width: 200px;
+    height: 100%;
 }
 .news_list_li_con{
     float: left;
@@ -753,6 +758,10 @@
     text-align: center;
     width: 215px;
     height: 215px;
+    line-height: 210px;
+    /*display: flex;*/
+    /*justify-content: center;*/
+    /*align-content: center;*/
     border: 1px solid #EBEBEB;
     -webkit-transition: all 0.4s;
     -moz-transition: all 0.4s;
@@ -761,7 +770,9 @@
     transition: all 0.4s;
 }
 .product_main_img img{
-    width:100%;
+    max-height: 100%;
+    max-width: 100%;
+    /*width:100%;*/
 }
 .product_main_list li{
     float: left;
@@ -1748,5 +1759,16 @@
     border: 0;
     background: #fff;
     font-size: 15px;
+}
+
+@media screen and (min-width: 1200px){
+    .head_top_box {
+        width: 1300px;
+    }
+}
+@media screen and (max-width:1200px){
+    body {
+        width: 1200px;
+    }
 }
 

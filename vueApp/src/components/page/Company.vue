@@ -173,7 +173,7 @@
                     this.disabled = true;
                     this.positionPicker.stop();
                     this.$message({
-                        message: '保存成功！',
+                        message: res.resMsg,
                         type: 'success'
                     });
                     this.setMarker();
