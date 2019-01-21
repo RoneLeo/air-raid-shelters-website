@@ -34,7 +34,6 @@ public class NewsController {
     @Resource
     private UserController userController;
 
-    private static final String NEWS_PHOTO_PATH = "/news/";
 
 
     @ApiOperation(value = "添加")

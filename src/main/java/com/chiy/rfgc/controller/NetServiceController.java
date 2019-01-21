@@ -38,11 +38,15 @@ public class NetServiceController {
         if ("".equals(uuid)) {
             return ApiResult.UNKNOWN();
         }
-        // 验证手机号码
-        String phone = "(\\+\\d+)?1[3458]\\d{9}$";
-        if (!Pattern.matches(phone, entity.getLxdh())) {
-            return ApiResult.FAILURE("请输入正确联系电话");
+        // 验证手机号码长度不超过20
+        if (entity.getLxdh().length() > 20) {
+            return ApiResult.FAILURE("输入过长");
         }
+//        // 验证手机号码
+//        String phone = "(\\+\\d+)?1[3458]\\d{9}$";
+//        if (!Pattern.matches(phone, entity.getLxdh())) {
+//            return ApiResult.FAILURE("请输入正确联系电话");
+//        }
         // 验证邮箱
         String email = "^([a-z0-9A-Z]+[-|\\.]?)+[a-z0-9A-Z]@([a-z0-9A-Z]+(-[a-z0-9A-Z]+)?\\.)+[a-zA-Z]{2,}$";
         if (!Pattern.matches(email, entity.getDzyx())) {
@@ -60,10 +64,14 @@ public class NetServiceController {
     @ApiOperation(value = "前端添加接口")
     @RequestMapping("/addFront")
     public ApiResult<Object> addFront(Integer gsid, NetserviceEntity entity) {
-        // 验证手机号码
-        String phone = "(\\+\\d+)?1[3458]\\d{9}$";
-        if (!Pattern.matches(phone, entity.getLxdh())) {
-            return ApiResult.FAILURE("请输入正确联系电话");
+//        // 验证手机号码
+//        String phone = "(\\+\\d+)?1[3458]\\d{9}$";
+//        if (!Pattern.matches(phone, entity.getLxdh())) {
+//            return ApiResult.FAILURE("请输入正确联系电话");
+//        }
+        // 验证手机号码长度不超过20
+        if (entity.getLxdh().length() > 20) {
+            return ApiResult.FAILURE("输入过长");
         }
         // 验证邮箱
         String email = "^([a-z0-9A-Z]+[-|\\.]?)+[a-z0-9A-Z]@([a-z0-9A-Z]+(-[a-z0-9A-Z]+)?\\.)+[a-zA-Z]{2,}$";
@@ -91,11 +99,15 @@ public class NetServiceController {
         if (netServiceRepository.findById(entity.getId()) == null) {
             return ApiResult.FAILURE("不存在，修改失败");
         }
-        // 验证手机号码
-        String phone = "(\\+\\d+)?1[3458]\\d{9}$";
-        if (!Pattern.matches(phone, entity.getLxdh())) {
-            return ApiResult.FAILURE("请输入正确联系电话");
+        // 验证手机号码长度不超过20
+        if (entity.getLxdh().length() > 20) {
+            return ApiResult.FAILURE("输入过长");
         }
+//        // 验证手机号码
+//        String phone = "(\\+\\d+)?1[3458]\\d{9}$";
+//        if (!Pattern.matches(phone, entity.getLxdh())) {
+//            return ApiResult.FAILURE("请输入正确联系电话");
+//        }
         // 验证邮箱
         String email = "^([a-z0-9A-Z]+[-|\\.]?)+[a-z0-9A-Z]@([a-z0-9A-Z]+(-[a-z0-9A-Z]+)?\\.)+[a-zA-Z]{2,}$";
         if (!Pattern.matches(email, entity.getDzyx())) {

@@ -2,12 +2,9 @@ package com.chiy.rfgc;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
-import org.springframework.boot.web.servlet.MultipartConfigFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.convert.converter.Converter;
 
-import javax.servlet.MultipartConfigElement;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -43,17 +40,5 @@ public class RfgcApplication {
         };
     }
 
-//    @Bean
-//    public MultipartConfigElement multipartConfigElement() {
-//        MultipartConfigFactory factory = new MultipartConfigFactory();
-//        // 设置文件大小限制 ,超出设置页面会抛出异常信息，
-//        // 这样在文件上传的地方就需要进行异常信息的处理了;
-//        factory.setMaxFileSize("2024MB"); // KB,MB
-//        /// 设置总上传数据总大小
-//        factory.setMaxRequestSize("2024MB");
-//        // Sets the directory location where files will be stored.
-//        // factory.setLocation("路径地址");
-//        return factory.createMultipartConfig();
-//    }
 }
 
