@@ -18,7 +18,7 @@ console.log(process.env.NODE_ENV)
 // if(process.env.NODE_ENV === 'development') {
 //     console.log(111);
 // }
-axios.defaults.baseURL= process.env.NODE_ENV === 'development' ? '/api' : 'http://182.151.22.247:8081';
+axios.defaults.baseURL= process.env.NODE_ENV === 'development' ? '/api' : 'http://47.96.85.104:80';
 // http request 拦截器（所有发送的请求都要从这儿过一次）
 axios.interceptors.request.use(
     config => {

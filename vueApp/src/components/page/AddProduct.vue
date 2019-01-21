@@ -23,7 +23,7 @@
                                 <input type="file" @change="getFile($event)" accept="image/*"/>
                             </el-form-item>
                             <el-form-item v-else="" label-width="150px" label="产品图片">
-                                <img :src="`http://182.151.22.247:8081${form.cptp}`" alt="" style="width: 140px;height: 100px;position: relative;border-radius: 5px">
+                                <img :src="`http://47.96.85.104:80${form.cptp}`" alt="" style="width: 140px;height: 100px;position: relative;border-radius: 5px">
                                 <i v-if="form.cptp" class="el-icon-error image-icon" @click="deleteTP"></i>
                             </el-form-item>
                         </el-form>

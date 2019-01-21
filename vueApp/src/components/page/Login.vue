@@ -27,7 +27,7 @@
         data: function(){
             return {
                 ruleForm: {
-                    username: 'admin',
+                    username: 'scxdrf.com.cn',
                     password: '123456'
                 },
                 rules: {
@@ -49,6 +49,7 @@
                             if(res.resCode == 200){
                                 let data = res.data;
                                 localStorage.setItem('ms_username',data.xm);
+                                localStorage.setItem('gsid',data.gsid);
                                 localStorage.setItem('uuid',data.uuid);
                                 this.$router.push('/company');
                             }else{

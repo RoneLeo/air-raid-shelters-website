@@ -53,12 +53,12 @@
                 </el-form-item>
                 <el-form-item label="展示图片"
                               v-if="!addForm.id || !addForm.tp">
-                    <input type="file" @change="getFile($event)" accept="image/*"/>
+                    <input id="fileInput" ref="pathClear" type="file" @change="getFile($event)" accept="image/*"/>
                 </el-form-item>
                 <el-form-item label="展示图片"
                               v-if="addForm.tp">
                     <div style="position: relative;display: inline-block;width: auto;height: auto;">
-                        <img :src="`http://182.151.22.247:8081${addForm.tp}`" alt="" class="image">
+                        <img :src="`http://47.96.85.104:80${addForm.tp}`" alt="" class="image">
                         <i v-if="addForm.tp" class="el-icon-error image-icon" @click="deleteTP"></i>
                     </div>
 
@@ -102,6 +102,9 @@
             },
             closeClear() {
                 this.$refs.addForm.resetFields()
+                if(this.$refs.pathClear) {
+                    this.$refs.pathClear.value =''
+                }
             },
             editFile(index, row) {
                 this.addForm = Object.assign({}, row);
@@ -144,6 +147,7 @@
             add(){
                 this.addForm = {};
                 this.modelVisible = true;
+                this.file = {};
             },
 
             // 保存编辑
@@ -158,9 +162,6 @@
                         let formData = new FormData();
                         for(let key in this.addForm) {
                             formData.append(key, this.addForm[key]);
-                        }
-                        for (var value of formData.values()) {
-                            console.log(value);
                         }
                         let config = {
                             headers: {

@@ -1,4 +1,4 @@
-var ServerUrl = 'http://182.151.22.247:8081/';
+var ServerUrl = 'http://47.96.85.104:80';
 var Gsid = 1;
 
 $(function () {
@@ -69,7 +69,7 @@ function createMenu() {
 //获取顶部和底部等公共
 function getCompanyInfo() {
     $('#foot').load('template/footer.html');
-    $.post(ServerUrl + 'contactUs/findAllByGsid',{gsid: Gsid,page:1,size:1},function (json) {
+    $.post(ServerUrl + '/contactUs/findAllByGsid',{gsid: Gsid,page:1,size:1},function (json) {
         var content = json.data.content[0];
         var gsmc = content.gsmc;
         var lxdh = content.lxdh;
@@ -124,7 +124,7 @@ function getCompanyInfo() {
 
 //获取banner信息
 function banner() {
-    $.post(ServerUrl + 'file/findAllByGsid',{gsid: Gsid,wjlx:2,page:1,size:10000},function (json) {
+    $.post(ServerUrl + '/file/findAllByGsid',{gsid: Gsid,wjlx:2,page:1,size:10000},function (json) {
         var content = json.data.content;
         if (!content.length) {
             return false;
@@ -147,7 +147,7 @@ function banner() {
 
 //资质证书
 function createCertificate() {
-    $.post(ServerUrl + 'file/findAllByGsid',{gsid: Gsid,wjlx:1,page:1,size:10000},function (json) {
+    $.post(ServerUrl + '/file/findAllByGsid',{gsid: Gsid,wjlx:1,page:1,size:10000},function (json) {
         console.log(json.data)
         var content = json.data.content;
         if(!content.length){
@@ -196,7 +196,7 @@ function submitService() {
             formData.gsid = Gsid;
             $this.prop('disabled',true).val('提交中...');
             $.AMUI.progress.start();
-            $.post(ServerUrl + 'netService/addFront',formData,function (json) {
+            $.post(ServerUrl + '/netService/addFront',formData,function (json) {
                 if(json.resCode == 200){
                     alert('信息提交成功!');
                 }
@@ -216,7 +216,7 @@ function submitService() {
 
 //招聘信息
 function recruitment() {
-    $.post(ServerUrl + 'recruitment/findAllByGsid',{gsid:Gsid,page:1,size:1000},function (json) {
+    $.post(ServerUrl + '/recruitment/findAllByGsid',{gsid:Gsid,page:1,size:1000},function (json) {
         var content = json.data.content;
         var recruitmentTable = '';
         for(var i=0;i<content.length;i++){
@@ -241,7 +241,7 @@ function recruitment() {
 function recruitmentDetails(){
     var id = getUrlParam().id;
     if(id){
-        $.post(ServerUrl + 'recruitment/findById',{id:id},function (json) {
+        $.post(ServerUrl + '/recruitment/findById',{id:id},function (json) {
             var data = json.data;
             var xxsm = data.xxsm;
             $('#recruitmentDetails').html(xxsm);
@@ -258,7 +258,7 @@ function projectCase() {
 function getCaseData(isPage,page) {
     var page = page || 1;
     var size = 12;//一页显示多少条数据
-    $.post(ServerUrl + 'projectCase/findAllByGsid',{gsid: Gsid,page:page,size:size},function (json) {
+    $.post(ServerUrl + '/projectCase/findAllByGsid',{gsid: Gsid,page:page,size:size},function (json) {
         var content = json.data.content;
         var pages = json.data.totalPages;
         var totalElements = json.data.totalElements;
@@ -307,7 +307,7 @@ function getCaseData(isPage,page) {
 function projectCaseDetails(){
     var id = getUrlParam().id;
     if(id){
-        $.post(ServerUrl + 'projectCase/findById',{id:id},function (json) {
+        $.post(ServerUrl + '/projectCase/findById',{id:id},function (json) {
             var data = json.data;
             $('#caseName').html(data.gcmc);
             $('#caseImg').prop('src',ServerUrl + data.tp);
@@ -330,7 +330,7 @@ function getNewsData(type,isPage,page) {
     if(type == 2){
         detailsPage = 'industryNewsDetails.html'
     }
-    $.post(ServerUrl + 'news/findAllByGsid',{gsid:Gsid,xwlx:type,page:page,size:size},function (json) {
+    $.post(ServerUrl + '/news/findAllByGsid',{gsid:Gsid,xwlx:type,page:page,size:size},function (json) {
         console.log('news',json);
         var content = json.data.content;
         var pages = json.data.totalPages;
@@ -374,7 +374,7 @@ function getNewsData(type,isPage,page) {
 function newsDetails() {
     var id = getUrlParam().id;
     if(id){
-        $.post(ServerUrl + 'news/findById',{id:id},function (json) {
+        $.post(ServerUrl + '/news/findById',{id:id},function (json) {
             var data = json.data;
             $('#newsTitle').html(data.xwbt);
             $('#newsImg').prop('src', ServerUrl + data.xwtp);
@@ -387,7 +387,7 @@ function newsDetails() {
 //product
 function product() {
     //获取全部设备类型
-    $.post(ServerUrl + 'equipmentType/findByGsid',{gsid:Gsid},function (json) {
+    $.post(ServerUrl + '/equipmentType/findByGsid',{gsid:Gsid},function (json) {
         var data = json.data;
         var productType = '';
         for(var i=0;i<data.length;i++){
@@ -418,7 +418,7 @@ function product() {
 function getProduct(sblx,isPage,page) {
     var size = 3;
     var page = page || 1;
-    $.post(ServerUrl + 'equipment/frontFindAllByGsidAndSblx',{gsid:Gsid,sblx:sblx,page:page,size:size},function (json) {
+    $.post(ServerUrl + '/equipment/frontFindAllByGsidAndSblx',{gsid:Gsid,sblx:sblx,page:page,size:size},function (json) {
         var data = json.data;
         var pages = json.totalPages;
         var totalElements = json.totalElements;
@@ -499,22 +499,29 @@ function animateScroll() {
 
 function getInfoForHome() {
     //产品
-    $.post(ServerUrl + 'equipment/frontFindAllByGsidAndSblx',{gsid:Gsid,sblx:'',page:1,size:4},function (json){
+    $.post(ServerUrl + '/equipment/frontFindAllByGsidAndSblx',{gsid:Gsid,sblx:'',page:1,size:4},function (json){
         var data = json.data;
-        $('#productListHome').find('li').each(function (index) {
-            var $this = $(this);
-            $this.find('.product_list_li_bg span').text(data[index].cpmc);
-            $this.find('.product_list_li_name').text(data[index].cpmc);
-            $this.find('img').prop('src',ServerUrl + data[index].cptp);
-        });
+        if(data.length) {
+            $('#productListHome').find('li').each(function (index) {
+                var $this = $(this);
+                $this.find('.product_list_li_bg span').text(data[index].cpmc);
+                $this.find('.product_list_li_name').text(data[index].cpmc);
+                $this.find('img').prop('src',ServerUrl + data[index].cptp);
+            });
+        }
     });
 
     //新闻
-    $.post(ServerUrl + 'news/findAllByGsid',{gsid:Gsid,xwlx:'',page:1,size:10},function (json) {
+    $.post(ServerUrl + '/news/findAllByGsid',{gsid:Gsid,xwlx:'',page:1,size:10},function (json) {
         var newsType = {1: '公司新闻',2: '行业新闻'};
-        var data = json.data.content;
+        var data = [];
         var newsListHome = '';
         var newsListHome2 = '';
+        for(let i = 0; i < json.data.content.length; i ++) {
+            if(json.data.content[i].xwtp) {
+                data.push(json.data.content[i]);
+            }
+        }
         for(var i=0;i<data.length;i++){
             var item = data[i];
             var type = newsType[item.xwlx];
@@ -527,13 +534,14 @@ function getInfoForHome() {
             if(item.xwlx == 2){
                 detailsUrl = 'industryNewsDetails.html?id=' + id;
             }
+
             if(i<2){
                 newsListHome += '<li>\n' +
                     '<a href="'+detailsUrl+'">\n' +
                     '<div class="news_list_li c">\n' +
                     '    <div class="news_list_li_img"><img src="'+imgSrc+'"></div>\n' +
                     '    <div class="news_list_li_con">\n' +
-                    '        <div class="news_list_li_name c"><span>['+type+']</span>'+title+'</div>\n' +
+                    '        <div class="news_list_li_name c"><span> ['+type+'] </span>'+title+'</div>\n' +
                     '        <div class="news_list_li_time c">'+time+'</div>\n' +
                     '        <div class="news_list_li_js c">'+content+'</div>\n' +
                     '        <div class="news_list_li_more c">[ 查看详情 ]</div>\n' +
@@ -542,19 +550,18 @@ function getInfoForHome() {
                     '</a>\n' +
                 '</li>';
             }else{
-                var scrollCount = data.length+1 - 2;
-                var curr = i+1 - 2;
-                newsListHome2 += '<li>\n' +
-                    '<a href="'+detailsUrl+'">\n' +
-                    '<div class="news_list_ban_li c" style="background: url('+imgSrc+') no-repeat center;">\n' +
-                    '    <div class="am-slider-desc">\n' +
-                    '        <div class="am-slider-counter"><span class="am-active">'+curr+'</span>/'+scrollCount+'</div>\n' + title +
-                    '    </div>\n' +
-                    '</div>\n' +
-                    '</a>\n' +
-                '</li>';
+                var scrollCount = data.length- 2;
+                var curr = i + 1 - 2;
+                    newsListHome2 += '<li>\n' +
+                        '<a href="'+detailsUrl+'">\n' +
+                        '<div class="news_list_ban_li c" style="background: url('+imgSrc+') no-repeat center;">\n' +
+                        '    <div class="am-slider-desc">\n' +
+                        '        <div class="am-slider-counter"><span class="am-active">'+curr+'</span>/'+scrollCount+'</div>\n' + title +
+                        '    </div>\n' +
+                        '</div>\n' +
+                        '</a>\n' +
+                        '</li>';
             }
-
         }
         $('#newsListHome').html(newsListHome);
         $('#newsListHome2').html(newsListHome2);
@@ -563,7 +570,7 @@ function getInfoForHome() {
     });
 
     //案例
-    $.post(ServerUrl + 'projectCase/findAllByGsid',{gsid:Gsid,page:1,size:3},function (json){
+    $.post(ServerUrl + '/projectCase/findAllByGsid',{gsid:Gsid,page:1,size:3},function (json){
         var data = json.data.content;
         var projectListHome = ''
         for(var i=0;i<data.length;i++){

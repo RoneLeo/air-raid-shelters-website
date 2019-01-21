@@ -132,8 +132,7 @@
                 this.modelVisible = true;
             },
             resetMM(index, row) {
-                row.mm = '123456';
-                this.$axios.post('/user/update' ,this.$qs.stringify(Object.assign({}, row))).then((res) => {
+                this.$axios.post('/user/resetMm' ,this.$qs.stringify({id: row.uuid})).then((res) => {
                     this.$message.success('已将密码重置为123456，请告知用户尽快修改密码！');
 //                    this.modelVisible = false;
                     this.getData();

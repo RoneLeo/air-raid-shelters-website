@@ -83,7 +83,7 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item label="文件">
-                    <input type="file" @change="getFile($event)" accept="image/*"/>
+                    <input id="fileInput" ref="pathClear" type="file" @change="getFile($event)" accept="image/*"/>
                 </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
@@ -137,6 +137,9 @@
             },
             closeClear() {
                 this.$refs.addForm.resetFields()
+                if(this.$refs.pathClear) {
+                    this.$refs.pathClear.value =''
+                }
             },
             handleClick(tab, event) {
                 if(tab.name === 'first'){
@@ -169,7 +172,7 @@
             },
             lookFile(index, row) {
                 this.wjmc = row.wjmc;
-                this.wjlj = 'http://182.151.22.247:8081' + row.wjlj;
+                this.wjlj = 'http://47.96.85.104:80' + row.wjlj;
                 this.dialogTPVisible = true;
 //                window.open('http://182.151.22.247:8081' + row.wjlj);
             },
@@ -212,6 +215,7 @@
                 this.addForm = {};
                 this.file = {};
                 this.modelVisible = true;
+
             },
             // 保存编辑
             saveEdit(addForm) {
