@@ -1,9 +1,13 @@
 var ServerUrl = 'http://47.96.85.104:80';
-var Gsid = 1;
+var Gsid = 2;
 
 $(function () {
     getCompanyInfo();
     createMenu();
+
+    if(1){
+        $('#appCss').prop('href','css/red.css');
+    }
 });
 
 //菜单信息
