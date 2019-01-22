@@ -1,13 +1,23 @@
 var ServerUrl = 'http://47.96.85.104:80';
-var Gsid = 2;
-
+var Gsid = 4;
+// var domain = window.location.host;
+// console.log(domain);
+// if(domain.indexOf('scxwrf.com') !== -1) {
+//     $('#appCss').prop('href','css/blue.css');
+// }else if(domain.indexOf('scxdrf.com.cn') !== -1) {
+//     Gsid = 2;
+//     $('#appCss').prop('href','css/red.css');
+// }else if(domain.indexOf('ynhrfh.com') !== -1) {
+//     Gsid = 3;
+//     $('#appCss').prop('href','css/golden.css');
+// }else if(domain.indexOf('zjxkrf.com') !== -1) {
+//     Gsid = 4;
+//     $('#appCss').prop('href','css/golden.css');
+// }
 $(function () {
     getCompanyInfo();
     createMenu();
-
-    if(1){
-        $('#appCss').prop('href','css/red.css');
-    }
+    $('#appCss').prop('href','css/blue.css');
 });
 
 //菜单信息
@@ -479,7 +489,7 @@ function getProduct(sblx,isPage,page) {
                 for(var i=0;i<productDetailsArr.length;i++){
                     var item = productDetailsArr[i];
                     productIntroTitleList += '<li class="">'+item.bt+'</li>';
-                    productIntroContentList += '<h1>'+item.bt+'</h1><p>'+item.xxnr+'</p>'
+                    productIntroContentList += '<h1><i class="iconfont icon-shezhi1"></i><span></span>'+item.bt+'</h1><p>'+item.xxnr+'</p>'
                 }
                 $('#productIntroTitleList').html(productIntroTitleList);
                 $('#productIntroContentList').html(productIntroContentList);
