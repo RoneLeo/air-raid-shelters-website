@@ -1,23 +1,34 @@
 var ServerUrl = 'http://47.96.85.104:80';
-var Gsid = 4;
-// var domain = window.location.host;
-// console.log(domain);
-// if(domain.indexOf('scxwrf.com') !== -1) {
-//     $('#appCss').prop('href','css/blue.css');
-// }else if(domain.indexOf('scxdrf.com.cn') !== -1) {
-//     Gsid = 2;
-//     $('#appCss').prop('href','css/red.css');
-// }else if(domain.indexOf('ynhrfh.com') !== -1) {
-//     Gsid = 3;
-//     $('#appCss').prop('href','css/golden.css');
-// }else if(domain.indexOf('zjxkrf.com') !== -1) {
-//     Gsid = 4;
-//     $('#appCss').prop('href','css/golden.css');
-// }
+var Gsid = 1;
+var domain = window.location.host;
+console.log(domain);
+if(domain.indexOf('scxdrf.com.cn') !== -1) {
+    Gsid = 2;
+}else if(domain.indexOf('ynhrfh.com') !== -1) {
+    Gsid = 3;
+}else if(domain.indexOf('zjxkrf.com') !== -1) {
+    Gsid = 4;
+}
 $(function () {
     getCompanyInfo();
     createMenu();
-    $('#appCss').prop('href','css/blue.css');
+    switch (Gsid) {
+        case 1:
+            $('#appCss').prop('href','css/blue.css');
+            break;
+        case 2:
+            $('#appCss').prop('href','css/red.css');
+            break;
+        case 3:
+            $('#appCss').prop('href','css/golden.css');
+            break;
+        case 4:
+            $('#appCss').prop('href','css/golden.css');
+            break;
+        default:
+            $('#appCss').prop('href','css/blue.css');
+            break;
+    }
 });
 
 //菜单信息
