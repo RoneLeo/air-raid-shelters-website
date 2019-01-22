@@ -1,0 +1,143 @@
+.head_logo a {
+    color: #222222;
+}
+.am-slider-a1 .am-control-nav li a.am-active {
+    background-color: #560066;
+}
+
+.head_bottom, .erji p a:hover{
+    background-color: #670079;
+}
+.head_nav_list li:hover, .head_nav_list li.head_nav_li_select, .erji {
+    background-color: #560066;
+}
+.foot_top {
+    background-color: #670079;
+}
+ .foot_bottom{
+    background-color: #560066;
+}
+
+.head_nav_list li a, .banner_li_txt{
+    font-size: 16px;
+    color: #ffffff;
+}
+.title_enname {
+    color: #560066;
+}
+.product_list_li:hover .product_list_li_bg{
+    background-color: rgba(86,0,102,0.8);
+}
+.product_list_li:hover{
+    border: 5px solid rgba(86,0,102,0.8);
+}
+.product_list_li:hover .product_list_li_bg span {
+    color: #ffffff;
+}
+.news_list_li_more {
+    color: #560066;
+}
+.news_list_ul li:hover .news_list_li_name {
+    color: #560066;
+    font-weight: 600;
+}
+.news_list_a:hover, .am-slider-c3 .am-slider-counter {
+    background-color: #560066;
+}
+
+.application_li:hover .application_li_name {
+    color: #560066;
+    font-weight: 500;
+    font-size: 16px;
+    letter-spacing: 1px;
+}
+.application_li:hover{
+    border: 1px solid rgba(86,0,102,0.5);
+    box-shadow: 1px 1px 2px 1px rgba(86,0,102,0.5);
+}
+.service_box li:hover .service_li_name, .service_box li:hover .service_li_enname{
+    color: #97009F;
+}
+.service_li_icon span {
+    background-color: #560066;
+}
+.service_box li:hover .service_li_icon span {
+    background-color: #97009F;
+}
+.service_box li:hover .service_li_icon i {
+    font-size: 56px;
+}
+.service_li_icon i {
+    color: #fff;
+}
+
+.foot_li_more {
+    border: 1px solid #f1f1f1;
+    color: #f1f1f1;
+}
+.foot_li_more:hover {
+    border: 1px solid #000000;
+}
+.foot_li_list>ul>li a:hover, .foot_li_more:hover {
+    color: #000000;
+}
+
+.footer>ul>li {
+    border-right: 1px solid RGBA(206, 205, 205, .4);
+}
+.footer>ul>li:last-child {
+    border-right: 0;
+}
+
+.n_main_nav_ul li a.n_main_nav_li_now, .n_main_nav_ul li a:hover {
+    background-color: #560066;
+    color: #ffffff;
+}
+/*.n_main_nav_ul li a:hover {*/
+    /*background-color: #660000;*/
+    /*color: #ffffff;*/
+/*}*/
+.n_main_nav_ul li a {
+    background-color: #f5f5f5;
+    color: #333333;
+}
+.n_main_nav_title {
+    background: url("../img/p1.png") no-repeat center;
+}
+.n_main_nav_ul li .n_main_nav_erji_p a.n_main_nav_li_now {
+    background-color: #8D0685;
+}
+.n_main_nav_ul li .n_main_nav_erji_p a:hover{
+    background-color: #8D0685;
+    color: #ffffff;
+}
+.n_main_con_mbx a:hover{
+    color: #560066;
+}
+.news_main_list li:hover .n_main_con_title, .news_main_list li:hover .n_main_con_time,
+.news_main_list li:hover .n_main_con_js, .product_main_list li:hover .product_main_name,
+.show_chanpin_nav_ul li.show_chanpin_nav_li_select, .show_chanpin_content h1,
+.show_chanpin_con_more a:hover, .show_chanpin_nav_ul li:hover {
+    color: #670079;
+}
+
+.news_main_list li:hover{
+    border-bottom: 1px dashed #670079;
+}
+
+.product_main_list li:hover .product_main_img {
+    border: 0;
+}
+
+.about_main_submit input {
+    background-color: #670079;
+}
+.show_chanpin_nav_ul li.show_chanpin_nav_li_select, .show_chanpin_nav_ul li:hover{
+    border-bottom: 2px solid #670079;
+}
+.show_chanpin_content h1>span {
+    background-color: #670079;
+}
+
+
+

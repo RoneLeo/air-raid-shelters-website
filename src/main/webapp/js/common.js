@@ -8,6 +8,8 @@ if(domain.indexOf('scxdrf.com.cn') !== -1) {
     Gsid = 3;
 }else if(domain.indexOf('zjxkrf.com') !== -1) {
     Gsid = 4;
+}else if(domain.indexOf('cdchiy.com') !== -1) {
+    Gsid = 5;
 }
 $(function () {
     getCompanyInfo();
@@ -23,7 +25,7 @@ $(function () {
             $('#appCss').prop('href','css/golden.css');
             break;
         case 4:
-            $('#appCss').prop('href','css/golden.css');
+            $('#appCss').prop('href','css/purple.css');
             break;
         default:
             $('#appCss').prop('href','css/blue.css');
