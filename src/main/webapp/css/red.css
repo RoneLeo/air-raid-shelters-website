@@ -36,9 +36,7 @@
 .news_list_ul li:hover .news_list_li_name {
     color: #990000;
 }
-.news_list_ul li:hover .news_list_li_img img{
-    transform: scale(1.1);
-}
+
 .news_list_a:hover, .am-slider-c3 .am-slider-counter {
     background-color: #660000;
 }
@@ -121,10 +119,7 @@
 .news_main_list li:hover{
     border-bottom: 1px dashed #660000;
 }
-.product_main_list li:hover .product_main_img img{
-    /*box-shadow: 1px 1px 2px 1px #ffcccc;*/
-    transform: scale(1.1);
-}
+
 .product_main_list li:hover .product_main_img {
     border: 0;
 }

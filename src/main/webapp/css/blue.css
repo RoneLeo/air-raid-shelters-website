@@ -125,10 +125,6 @@
     border-bottom: 1px dashed #2f4d93;
 }
 
-.product_main_list li:hover .product_main_img img{
-    box-shadow: 1px 1px 2px 1px rgba(47,77,147,0.5);
-    transform: scale(1.1);
-}
 .product_main_list li:hover .product_main_img {
     border: 0;
 }
@@ -143,6 +139,5 @@
     background-color: #2f4d93;
 }
 
-/*.show_chanpin_con_more a:hover{*/
 
 
