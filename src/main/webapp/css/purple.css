@@ -76,10 +76,11 @@
     color: #f1f1f1;
 }
 .foot_li_more:hover {
-    border: 1px solid #000000;
+    /*border: 1px solid #000000;*/
 }
 .foot_li_list>ul>li a:hover, .foot_li_more:hover {
-    color: #000000;
+    text-shadow: 1px 1px 1px #ccc;
+    transform: scale(1.1);
 }
 
 .footer>ul>li {

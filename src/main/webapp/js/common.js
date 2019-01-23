@@ -1,7 +1,7 @@
 var ServerUrl = 'http://47.96.85.104:80';
 var Gsid = 1;
 var domain = window.location.host;
-console.log(domain);
+// console.log(domain);
 if(domain.indexOf('scxdrf.com.cn') !== -1) {
     Gsid = 2;
 }else if(domain.indexOf('ynhrfh.com') !== -1) {
