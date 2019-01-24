@@ -56,6 +56,9 @@ public class ContactUsController {
         if (!Pattern.matches(email, entity.getLxyx())) {
             return ApiResult.FAILURE("请输入正确联系邮箱");
         }
+        if (entity.getGslx() == null) {
+            return ApiResult.FAILURE("公司类型不能为空");
+        }
         entity.setGsid(userRepository.findByUuid(uuid).getGsid());
         entity.setCjsj(new Date());
         ContactusEntity entity1 = contactUsRepository.save(entity);

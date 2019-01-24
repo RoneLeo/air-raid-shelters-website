@@ -259,6 +259,16 @@ public class EquipmentController {
         return ApiResult.SUCCESS(addMap(list));
     }
 
+    @ApiOperation("查询所有")
+    @RequestMapping("/findAll")
+    public ApiResult<Object> findAll() {
+        List<EquipmentEntity> list = equipmentRepository.findAll();
+        if (list == null) {
+            return ApiResult.FAILURE("不存在");
+        }
+        return ApiResult.SUCCESS(addMap(list));
+    }
+
     public List<Map> addMap(Page<EquipmentEntity> list) {
         List<Map> result = new ArrayList<>();
         for (EquipmentEntity equipmentEntity : list) {
@@ -290,6 +300,8 @@ public class EquipmentController {
         }
         return result;
     }
+
+
 
     static class ProductTitle {
         private String bt;
