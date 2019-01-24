@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
+import java.util.List;
 import java.util.regex.Pattern;
 
 @Api(description = "联系我们")
@@ -161,8 +162,8 @@ public class ContactUsController {
         if ("".equals(uuid)) {
             return ApiResult.UNKNOWN();
         }
-        ContactusEntity entity = contactUsRepository.findByGsid(userRepository.findByUuid(uuid).getGsid());
-        return ApiResult.SUCCESS(entity);
+        List<ContactusEntity> list = contactUsRepository.findAllByGsidOrderByGslx(userRepository.findByUuid(uuid).getGsid());
+        return ApiResult.SUCCESS(list);
     }
 
     @ApiOperation("通过id查询")
