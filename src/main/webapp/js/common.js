@@ -1,9 +1,36 @@
 var ServerUrl = 'http://47.96.85.104:80';
 var Gsid = 1;
-
+var domain = window.location.host;
+// console.log(domain);
+if(domain.indexOf('scxdrf.com.cn') !== -1) {
+    Gsid = 2;
+}else if(domain.indexOf('ynhrfh.com') !== -1) {
+    Gsid = 3;
+}else if(domain.indexOf('zjxkrf.com') !== -1) {
+    Gsid = 4;
+}else if(domain.indexOf('cdchiy.com') !== -1) {
+    Gsid = 5;
+}
 $(function () {
     getCompanyInfo();
     createMenu();
+    switch (Gsid) {
+        case 1:
+            $('#appCss').prop('href','css/blue.css');
+            break;
+        case 2:
+            $('#appCss').prop('href','css/red.css');
+            break;
+        case 3:
+            $('#appCss').prop('href','css/golden.css');
+            break;
+        case 4:
+            $('#appCss').prop('href','css/purple.css');
+            break;
+        default:
+            $('#appCss').prop('href','css/blue.css');
+            break;
+    }
 });
 
 //菜单信息
@@ -475,7 +502,7 @@ function getProduct(sblx,isPage,page) {
                 for(var i=0;i<productDetailsArr.length;i++){
                     var item = productDetailsArr[i];
                     productIntroTitleList += '<li class="">'+item.bt+'</li>';
-                    productIntroContentList += '<h1>'+item.bt+'</h1><p>'+item.xxnr+'</p>'
+                    productIntroContentList += '<h1><i class="iconfont icon-shezhi1"></i><span></span>'+item.bt+'</h1><p>'+item.xxnr+'</p>'
                 }
                 $('#productIntroTitleList').html(productIntroTitleList);
                 $('#productIntroContentList').html(productIntroContentList);

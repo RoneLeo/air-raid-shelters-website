@@ -170,21 +170,26 @@
                     url = '/contactUs/update'
                 }
                 this.$axios.post(url , this.$qs.stringify(Object.assign({}, this.companyForm))).then((res) => {
-                    this.disabled = true;
-                    this.positionPicker.stop();
-                    this.$message({
-                        message: res.resMsg,
-                        type: 'success'
-                    });
-                    this.setMarker();
+                    if(res.resCode === 200) {
+                        this.disabled = true;
+                        this.positionPicker.stop();
+                        this.$message({
+                            message: res.resMsg,
+                            type: 'success'
+                        });
+                        this.setMarker();
+                    }else {
+                        this.$message({
+                            message: res.resMsg,
+                            type: 'error'
+                        });
+                    }
                 });
             },
             getData() {
                 this.$axios.post('/contactUs/findByGsid').then((res) => {
                     this.companyForm = res.data;
-                    console.log(this.companyForm)
                     if (this.companyForm !== null) {
-//                        console.log(111)
                         this.disabled = true;
                         this.setMarker();
                     }else {

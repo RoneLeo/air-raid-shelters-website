@@ -8,7 +8,12 @@
     <meta name="description" id="headDescription" content="">
     <link rel="icon" type="image/x-icon" href="img/favicon.ico" />
     <link rel="stylesheet" href="css/amazeui.min.css">
-    <link rel="stylesheet" href="css/app.css?v=1.0">
+    <link rel="stylesheet" href="css/iconfont/iconfont.css">
+    <link rel="stylesheet" href="css/app2.css">
+    <link rel="stylesheet" id="appCss">
+
+    <!--<link rel="stylesheet" hrgolden.css.css">-->
+
     <link rel="stylesheet" href="css/index.css">
 
     <!--[if (gte IE 9)|!(IE)]><!-->
@@ -153,7 +158,10 @@
                     <a href="list-41-1.html">
                         <div class="service_li c">
                             <div class="service_li_icon">
-                                <img src="img/service/service_img1.png">
+                                <span>
+                                    <i class="iconfont icon-kefu"></i>
+                                </span>
+                                <!--<img src="img/service/service_img1.png">-->
                             </div>
                             <div class="service_li_name">联系我们</div>
                             <div class="service_li_enname">CONTACT US</div>
@@ -166,7 +174,10 @@
                     <a href="product.html">
                         <div class="service_li c">
                             <div class="service_li_icon">
-                                <img src="img/service/service_img2.png">
+                                <span>
+                                    <i class="iconfont icon-xiaoxitongzhi"></i>
+                                </span>
+                                <!--<img src="img/service/service_img2.png">-->
                             </div>
                             <div class="service_li_name">产品中心</div>
                             <div class="service_li_enname">PRODUCT</div>
@@ -179,7 +190,10 @@
                     <a href="project.html">
                         <div class="service_li c">
                             <div class="service_li_icon">
-                                <img src="img/service/service_img3.png">
+                                <span>
+                                    <i class="iconfont icon-weibiaoti1"></i>
+                                </span>
+                                <!--<img src="img/service/service_img3.png">-->
                             </div>
                             <div class="service_li_name">工程案例</div>
                             <div class="service_li_enname">APPLICATION AREA</div>
@@ -192,7 +206,10 @@
                     <a href="recruitment.html">
                         <div class="service_li c">
                             <div class="service_li_icon">
-                                <img src="img/service/service_img4.png">
+                                <span>
+                                    <i class="iconfont icon-drxx59"></i>
+                                </span>
+                                <!--<img src="img/service/service_img4.png">-->
                             </div>
                             <div class="service_li_name">人才招聘</div>
                             <div class="service_li_enname">TALENT RECRUITMENT</div>
@@ -210,8 +227,6 @@
 <div id="foot"></div>
 <script>
     $(function () {
-        console.log(window.screen.width,document.body.offsetWidth);
-
         banner();
         getInfoForHome();
     })
