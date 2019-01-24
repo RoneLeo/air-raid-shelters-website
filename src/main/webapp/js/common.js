@@ -1,5 +1,5 @@
 var ServerUrl = 'http://47.96.85.104:80';
-var Gsid = 1;
+var Gsid = 2;
 var domain = window.location.host;
 // console.log(domain);
 if(domain.indexOf('scxdrf.com.cn') !== -1) {
@@ -96,58 +96,72 @@ function createMenu() {
 //获取顶部和底部等公共
 function getCompanyInfo() {
     $('#foot').load('template/footer.html');
-    $.post(ServerUrl + '/contactUs/findAllByGsid',{gsid: Gsid,page:1,size:1},function (json) {
-        var content = json.data.content[0];
-        var gsmc = content.gsmc;
-        var lxdh = content.lxdh;
-        var lxcz = content.lxcz;
-        var gswz = content.gswz;
-        var gsjj = content.gsjj;
-        var lxyb = content.lxyb;
-        var lxdz = content.lxdz;
-        var lxyx = content.lxyx;
-        var baxx = content.baxx;
-        var gsgjz = content.gjz;
-        var gsms = content.gsms;
-        var goInTxt = gsmc.substr(2,2);
-        //顶部信息
-        var head = '<div class="head_logo">\n' +
-            '<a href="index.html">\n' +
-            '<img class="head_logo_img" src="img/rf-logo.png" alt="">' + gsmc +
-            '</a>\n' +
-            '</div>\n' +
-            '<div class="head_tel">\n' +
-            '<div class="head_tel_img"><img src="http://www.ytrsrf.com/images/tel.png"></div>\n' +
-            '<div class="head_tel_phone">\n' +
-            '    <div class="head_tel_phone_a c">联系电话</div>\n' +
-            '    <div class="head_tel_phone_b c">'+lxdh+'</div>\n' +
-            '</div>\n' +
-            '</div>'
-        $('#headTop').html(head);
-        $('#headTitle,#contactName').text(gsmc);
-        $('#headKeywords').attr('content',gsgjz);
-        $('#headDescription').attr('content',gsms);
+    $.post(ServerUrl + '/contactUs/findAllByGsid',{gsid: Gsid, page: 1, size: 5},function (json) {
+        var companyData = json.data.content;
+        var selectOptions = '';
+        var content;
 
-        //公共底部信息
-        $('#footerPhone,#contactPhone').text(lxdh);
-        $('#footerAddress,#contactAddress').text(lxdz);
-        $('#footerUrl,#contactUrl').text(gswz);
-        $('#footerFax,#contactFax').text(lxcz);
-        $('#footerPostcode,#contactPostcode').text(lxyb);
-        $('#contactEmail').text(lxyx);
-        $('#baxx').text(baxx);
+        for(let i = 0; i < companyData.length; i ++) {
+            if(companyData[i].gslx === 1) {  //总公司
+                content = companyData[i];
+                var gsmc = content.gsmc;
+                var lxdh = content.lxdh;
+                var lxcz = content.lxcz;
+                var gswz = content.gswz;
+                var gsjj = content.gsjj;
+                var lxyb = content.lxyb;
+                var lxdz = content.lxdz;
+                var lxyx = content.lxyx;
+                var baxx = content.baxx;
+                var gsgjz = content.gjz;
+                var gsms = content.gsms;
+                var goInTxt = gsmc.substr(2,2);
+                //顶部信息
+                var head = '<div class="head_logo">\n' +
+                    '<a href="index.html">\n' +
+                    '<img class="head_logo_img" src="img/rf-logo.png" alt="">' + gsmc +
+                    '</a>\n' +
+                    '</div>\n' +
+                    '<div class="head_tel">\n' +
+                    '<div class="head_tel_img"><img src="http://www.ytrsrf.com/images/tel.png"></div>\n' +
+                    '<div class="head_tel_phone">\n' +
+                    '    <div class="head_tel_phone_a c">联系电话</div>\n' +
+                    '    <div class="head_tel_phone_b c">'+lxdh+'</div>\n' +
+                    '</div>\n' +
+                    '</div>'
+                $('#headTop').html(head);
+                $('#headTitle,#contactName').text(gsmc);
+                $('#headKeywords').attr('content',gsgjz);
+                $('#headDescription').attr('content',gsms);
 
-        //公司简介
-        $('#introContent').html(gsjj);
-        $('.go-in').text('走进' + goInTxt);
+                //公共底部信息
+                $('#footerPhone,#contactPhone').text(lxdh);
+                $('#footerAddress,#contactAddress').text(lxdz);
+                $('#footerUrl,#contactUrl').text(gswz);
+                $('#footerFax,#contactFax').text(lxcz);
+                $('#footerPostcode,#contactPostcode').text(lxyb);
+                $('#contactEmail').text(lxyx);
+                $('#baxx').text(baxx);
 
-        //初始化地图
-        if($('#map').length){
-            initMap(content);
+                //公司简介
+                $('#introContent').html(gsjj);
+                $('.go-in').text('走进' + goInTxt);
+
+                //初始化地图
+                if($('#map').length){
+                    initMap(content);
+                }
+                selectOptions += '<option value="'+ companyData[i].id + '" selected>' + companyData[i].gsmc + '</option>'
+            }else {
+                selectOptions += '<option value="'+ companyData[i].id + '">' + companyData[i].gsmc + '</option>'
+            }
         }
+        $('#selectGroup').html(selectOptions);
+
 
     });
 }
+
 
 //获取banner信息
 function banner() {
@@ -623,7 +637,7 @@ function getInfoForHome() {
 
 //联系我们地图配置
 //创建和初始化地图函数：
-var map;
+var map, marker, text;
 function initMap(companyInfo) {
     var jwdArr = companyInfo.jwd.split(',');
     var companyPosition = {lat: jwdArr[0], lng: jwdArr[1]}; //经纬度
@@ -656,14 +670,14 @@ function addClickHandler(target, window) {
 }
 
 function addMapOverlay(companyName,companyAddr,companyPosition) {
-    var marker = new AMap.Marker({
+    marker = new AMap.Marker({
         icon: "//vdata.amap.com/icons/b18/1/2.png",
         position: new AMap.LngLat(companyPosition.lng,companyPosition.lat),
         offset: new AMap.Pixel(-12, -12)
     });
     marker.setMap(map);
 
-    var text = new AMap.Text({
+    text = new AMap.Text({
         text:companyName,
         textAlign:'center', // 'left' 'right', 'center',
         verticalAlign:'middle', //middle 、bottom
