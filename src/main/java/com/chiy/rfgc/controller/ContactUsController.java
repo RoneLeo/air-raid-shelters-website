@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
+import java.util.List;
 import java.util.regex.Pattern;
 
 @Api(description = "联系我们")
@@ -43,15 +44,21 @@ public class ContactUsController {
         if (entity.getLxyb().length() != 6 || !Pattern.matches(post, entity.getLxyb())) {
             return ApiResult.FAILURE("请输入正确邮编");
         }
-        // 验证手机号码
-        String phone = "(\\+\\d+)?1[3458]\\d{9}$";
-        if (!Pattern.matches(phone, entity.getLxdh())) {
-            return ApiResult.FAILURE("请输入正确联系电话");
+        // 验证手机号码长度不超过20
+        if (entity.getLxdh().length() > 20) {
+            return ApiResult.FAILURE("输入过长");
         }
+//        String phone = "(\\+\\d+)?1[3458]\\d{9}$";
+//        if (!Pattern.matches(phone, entity.getLxdh())) {
+//            return ApiResult.FAILURE("请输入正确联系电话");
+//        }
         // 验证邮箱
         String email = "^([a-z0-9A-Z]+[-|\\.]?)+[a-z0-9A-Z]@([a-z0-9A-Z]+(-[a-z0-9A-Z]+)?\\.)+[a-zA-Z]{2,}$";
         if (!Pattern.matches(email, entity.getLxyx())) {
             return ApiResult.FAILURE("请输入正确联系邮箱");
+        }
+        if (entity.getGslx() == null) {
+            return ApiResult.FAILURE("公司类型不能为空");
         }
         entity.setGsid(userRepository.findByUuid(uuid).getGsid());
         entity.setCjsj(new Date());
@@ -79,11 +86,15 @@ public class ContactUsController {
         if (entity.getLxyb().length() != 6 || !Pattern.matches(post, entity.getLxyb())) {
             return ApiResult.FAILURE("请输入正确邮编");
         }
-        // 验证手机号码
-        String phone = "(\\+\\d+)?1[3458]\\d{9}$";
-        if (!Pattern.matches(phone, entity.getLxdh())) {
-            return ApiResult.FAILURE("请输入正确联系电话");
+        // 验证手机号码长度不超过20
+        if (entity.getLxdh().length() > 20) {
+            return ApiResult.FAILURE("输入过长");
         }
+//        // 验证手机号码
+//        String phone = "(\\+\\d+)?1[3458]\\d{9}$";
+//        if (!Pattern.matches(phone, entity.getLxdh())) {
+//            return ApiResult.FAILURE("请输入正确联系电话");
+//        }
         // 验证邮箱
         String email = "^([a-z0-9A-Z]+[-|\\.]?)+[a-z0-9A-Z]@([a-z0-9A-Z]+(-[a-z0-9A-Z]+)?\\.)+[a-zA-Z]{2,}$";
         if (!Pattern.matches(email, entity.getLxyx())) {
@@ -151,8 +162,8 @@ public class ContactUsController {
         if ("".equals(uuid)) {
             return ApiResult.UNKNOWN();
         }
-        ContactusEntity entity = contactUsRepository.findByGsid(userRepository.findByUuid(uuid).getGsid());
-        return ApiResult.SUCCESS(entity);
+        List<ContactusEntity> list = contactUsRepository.findAllByGsidOrderByGslx(userRepository.findByUuid(uuid).getGsid());
+        return ApiResult.SUCCESS(list);
     }
 
     @ApiOperation("通过id查询")

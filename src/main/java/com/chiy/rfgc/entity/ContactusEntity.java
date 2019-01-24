@@ -12,6 +12,8 @@ public class ContactusEntity {
     private Integer id;
     @ApiModelProperty(value = "公司id")
     private Integer gsid;
+    @ApiModelProperty(value = "公司类型")
+    private Integer gslx;
     @ApiModelProperty(value = "公司名称")
     private String gsmc;
     @ApiModelProperty(value = "联系地址")
@@ -58,6 +60,16 @@ public class ContactusEntity {
 
     public void setGsid(Integer gsid) {
         this.gsid = gsid;
+    }
+
+    @Basic
+    @Column(name = "company_type")
+    public Integer getGslx() {
+        return gslx;
+    }
+
+    public void setGslx(Integer gslx) {
+        this.gslx = gslx;
     }
 
     @Basic

@@ -38,7 +38,6 @@ public class ProductDetailsController {
     @Resource
     private EquipmentRepository equipmentRepository;
 
-    private static final String PRODUCT_PHOTO_PATH = "/equipment/";
 
 
     @ApiOperation(value = "添加")

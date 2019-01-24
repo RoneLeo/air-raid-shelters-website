@@ -8,6 +8,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 public interface ContactUsRepository extends CrudRepository<ContactusEntity, Long> {
 
     ContactusEntity save(ContactusEntity entity);
@@ -27,4 +29,5 @@ public interface ContactUsRepository extends CrudRepository<ContactusEntity, Lon
     // 通过公司id查询
     Page<ContactusEntity> findAllByGsidOrderByCjsjDesc(Integer gsid, Pageable pageable);
 
+    List<ContactusEntity> findAllByGsidOrderByGslx(Integer gsid);
 }

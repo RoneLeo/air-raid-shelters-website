@@ -40,4 +40,6 @@ public interface EquipmentRepository extends CrudRepository<EquipmentEntity, Lon
 
     Page<EquipmentEntity> findAllByGsid(Integer gsid, Pageable pageable);
 
+    List<EquipmentEntity> findAll();
+
 }
