@@ -66,7 +66,13 @@
                     </li>
                 </ul>
             </div>
+            <div style="margin-top: 20px">
+                <!--<label>公司名</label>-->
+                <select id="selectGroup" data-am-selected="{btnWidth: '100%', btnSize: 'sm'}" onchange="companyChange()" style="background-color: #2f4d93">
+                </select>
+            </div>
         </div>
+
         <div class="n_main_con">
             <div class="n_main_con_mbx c"><a href="index.html">网站首页</a> > <a>联系我们</a> > <a>联系我们</a></div>
             <div class="lianxi_main_list c">
@@ -103,5 +109,37 @@
 
 <!--foot-->
 <div id="foot"></div>
+<script>
+    function companyChange(){
+        var objS = document.getElementById("selectGroup");
+        var companyId = objS.options[objS.selectedIndex].value;
+        $.post(ServerUrl + '/contactUs/findById',{id: companyId},function (json) {
+            var content = json.data;
+
+            //修改公司基本信息
+            $('#contactName').text(content.gsmc);
+            $('#contactPhone').text(content.lxdh);
+            $('#contactAddress').text(content.lxdz);
+            $('#contactUrl').text(content.gswz);
+            $('#contactFax').text(content.lxcz);
+            $('#contactPostcode').text(content.lxyb);
+            $('#contactEmail').text(content.lxyx);
+            //修改地图定位
+            updateMap(content);
+        })
+    }
+    function updateMap(companyInfo) {
+        var jwdArr = companyInfo.jwd.split(',');
+        var companyPosition = {lat: jwdArr[0], lng: jwdArr[1]}; //经纬度
+        var companyName = companyInfo.gsmc; //名称
+        var companyAddr = companyInfo.lxdz; //地址
+        if(map && marker) {
+            map.remove(marker);
+            map.setCenter(new AMap.LngLat(companyPosition.lng,companyPosition.lat));
+            addMapOverlay(companyName,companyAddr,companyPosition);//向地图添加覆盖物
+        }
+    }
+
+</script>
 </body>
 </html>

@@ -1,15 +1,22 @@
 var ServerUrl = 'http://47.96.85.104:80';
 var Gsid = 1;
 var domain = window.location.host;
-// console.log(domain);
-if(domain.indexOf('scxdrf.com.cn') !== -1) {
+var imgSrc = '/img/QRcode/scxwrf.png';
+if(domain.indexOf('scxwrf.com') !== -1) {
+    Gsid = 1;
+    imgSrc = '/img/QRcode/scxwrf.png';
+}else if(domain.indexOf('scxdrf.com.cn') !== -1) {
     Gsid = 2;
+    imgSrc = '/img/QRcode/scxdrf.png';
 }else if(domain.indexOf('ynhrfh.com') !== -1) {
     Gsid = 3;
+    imgSrc = '/img/QRcode/ynhrfh.png';
 }else if(domain.indexOf('zjxkrf.com') !== -1) {
     Gsid = 4;
+    imgSrc = '/img/QRcode/zjxkrf.png';
 }else if(domain.indexOf('cdchiy.com') !== -1) {
     Gsid = 5;
+    imgSrc = '/img/QRcode/scxwrf.png';
 }
 $(function () {
     getCompanyInfo();
@@ -31,6 +38,7 @@ $(function () {
             $('#appCss').prop('href','css/blue.css');
             break;
     }
+
 });
 
 //菜单信息
@@ -96,58 +104,75 @@ function createMenu() {
 //获取顶部和底部等公共
 function getCompanyInfo() {
     $('#foot').load('template/footer.html');
-    $.post(ServerUrl + '/contactUs/findAllByGsid',{gsid: Gsid,page:1,size:1},function (json) {
-        var content = json.data.content[0];
-        var gsmc = content.gsmc;
-        var lxdh = content.lxdh;
-        var lxcz = content.lxcz;
-        var gswz = content.gswz;
-        var gsjj = content.gsjj;
-        var lxyb = content.lxyb;
-        var lxdz = content.lxdz;
-        var lxyx = content.lxyx;
-        var baxx = content.baxx;
-        var gsgjz = content.gjz;
-        var gsms = content.gsms;
-        var goInTxt = gsmc.substr(2,2);
-        //顶部信息
-        var head = '<div class="head_logo">\n' +
-            '<a href="index.html">\n' +
-            '<img class="head_logo_img" src="img/rf-logo.png" alt="">' + gsmc +
-            '</a>\n' +
-            '</div>\n' +
-            '<div class="head_tel">\n' +
-            '<div class="head_tel_img"><img src="http://www.ytrsrf.com/images/tel.png"></div>\n' +
-            '<div class="head_tel_phone">\n' +
-            '    <div class="head_tel_phone_a c">联系电话</div>\n' +
-            '    <div class="head_tel_phone_b c">'+lxdh+'</div>\n' +
-            '</div>\n' +
-            '</div>'
-        $('#headTop').html(head);
-        $('#headTitle,#contactName').text(gsmc);
-        $('#headKeywords').attr('content',gsgjz);
-        $('#headDescription').attr('content',gsms);
+    $.post(ServerUrl + '/contactUs/findAllByGsid',{gsid: Gsid},function (json) {
+        var companyData = json.data.content;
+        var selectOptions = '';
+        var content;
 
-        //公共底部信息
-        $('#footerPhone,#contactPhone').text(lxdh);
-        $('#footerAddress,#contactAddress').text(lxdz);
-        $('#footerUrl,#contactUrl').text(gswz);
-        $('#footerFax,#contactFax').text(lxcz);
-        $('#footerPostcode,#contactPostcode').text(lxyb);
-        $('#contactEmail').text(lxyx);
-        $('#baxx').text(baxx);
+        for(let i = 0; i < companyData.length; i ++) {
+            if(companyData[i].gslx === 1) {  //总公司
+                content = companyData[i];
+                var gsmc = content.gsmc;
+                var lxdh = content.lxdh;
+                var lxcz = content.lxcz;
+                var gswz = content.gswz;
+                var gsjj = content.gsjj;
+                var lxyb = content.lxyb;
+                var lxdz = content.lxdz;
+                var lxyx = content.lxyx;
+                var baxx = content.baxx;
+                var gsgjz = content.gjz;
+                var gsms = content.gsms;
+                var goInTxt = gsmc.substr(2,2);
+                //顶部信息
+                var head = '<div class="head_logo">\n' +
+                    '<a href="index.html">\n' +
+                    '<img class="head_logo_img" src="img/rf-logo.png" alt="">' + gsmc +
+                    '</a>\n' +
+                    '</div>\n' +
+                    '<div class="head_tel">\n' +
+                    '<div class="head_tel_img"><img src="http://www.ytrsrf.com/images/tel.png"></div>\n' +
+                    '<div class="head_tel_phone">\n' +
+                    '    <div class="head_tel_phone_a c">联系电话</div>\n' +
+                    '    <div class="head_tel_phone_b c">'+lxdh+'</div>\n' +
+                    '</div>\n' +
+                    '</div>'
+                $('#headTop').html(head);
+                $('#headTitle,#contactName').text(gsmc);
+                $('#headKeywords').attr('content',gsgjz);
+                $('#headDescription').attr('content',gsms);
 
-        //公司简介
-        $('#introContent').html(gsjj);
-        $('.go-in').text('走进' + goInTxt);
+                //公共底部信息
+                $('#footerPhone,#contactPhone').text(lxdh);
+                $('#footerAddress,#contactAddress').text(lxdz);
+                $('#footerUrl,#contactUrl').text(gswz);
+                $('#footerFax,#contactFax').text(lxcz);
+                $('#footerPostcode,#contactPostcode').text(lxyb);
+                $('#contactEmail').text(lxyx);
+                $('#baxx').text(baxx);
+                let qrCodeHtml = '<div class="foot_li_ewm_a"><img src="'+imgSrc+'" alt="" /></div>\n' +
+                    '<div class="foot_li_ewm_a"><img src="'+imgSrc+'" alt="" /></div>\n';
+                $('#qrCode').html(qrCodeHtml);
 
-        //初始化地图
-        if($('#map').length){
-            initMap(content);
+                //公司简介
+                $('#introContent').html(gsjj);
+                $('.go-in').text('走进' + goInTxt);
+
+                //初始化地图
+                if($('#map').length){
+                    initMap(content);
+                }
+                selectOptions += '<option value="'+ companyData[i].id + '" selected>' + companyData[i].gsmc + '</option>'
+            }else {
+                selectOptions += '<option value="'+ companyData[i].id + '">' + companyData[i].gsmc + '</option>'
+            }
         }
+        $('#selectGroup').html(selectOptions);
+
 
     });
 }
+
 
 //获取banner信息
 function banner() {
@@ -175,7 +200,6 @@ function banner() {
 //资质证书
 function createCertificate() {
     $.post(ServerUrl + '/file/findAllByGsid',{gsid: Gsid,wjlx:1,page:1,size:10000},function (json) {
-        console.log(json.data)
         var content = json.data.content;
         if(!content.length){
             return false;
@@ -227,8 +251,6 @@ function submitService() {
                 if(json.resCode == 200){
                     alert('信息提交成功!');
                 }
-                console.log(json);
-
                 $this.val('提交').prop('disabled',false);
                 $.AMUI.progress.done();
                 $('#submitForm')[0].reset();
@@ -358,7 +380,6 @@ function getNewsData(type,isPage,page) {
         detailsPage = 'industryNewsDetails.html'
     }
     $.post(ServerUrl + '/news/findAllByGsid',{gsid:Gsid,xwlx:type,page:page,size:size},function (json) {
-        console.log('news',json);
         var content = json.data.content;
         var pages = json.data.totalPages;
         var totalElements = json.data.totalElements;
@@ -449,7 +470,6 @@ function getProduct(sblx,isPage,page) {
         var data = json.data;
         var pages = json.totalPages;
         var totalElements = json.totalElements;
-        console.log(pages,json);
         if(!isPage && (size < totalElements)){
             $("#productPage").page({
                 pages: pages, //页数
@@ -507,7 +527,6 @@ function getProduct(sblx,isPage,page) {
                 $('#productIntroTitleList').html(productIntroTitleList);
                 $('#productIntroContentList').html(productIntroContentList);
                 animateScroll();
-                console.log(product);
             });
         }
 
@@ -623,7 +642,7 @@ function getInfoForHome() {
 
 //联系我们地图配置
 //创建和初始化地图函数：
-var map;
+var map, marker, text;
 function initMap(companyInfo) {
     var jwdArr = companyInfo.jwd.split(',');
     var companyPosition = {lat: jwdArr[0], lng: jwdArr[1]}; //经纬度
@@ -656,34 +675,17 @@ function addClickHandler(target, window) {
 }
 
 function addMapOverlay(companyName,companyAddr,companyPosition) {
-    var marker = new AMap.Marker({
+    marker = new AMap.Marker({
         icon: "//vdata.amap.com/icons/b18/1/2.png",
         position: new AMap.LngLat(companyPosition.lng,companyPosition.lat),
         offset: new AMap.Pixel(-12, -12)
     });
     marker.setMap(map);
-
-    var text = new AMap.Text({
-        text:companyName,
-        textAlign:'center', // 'left' 'right', 'center',
-        verticalAlign:'middle', //middle 、bottom
-        draggable:false,
-        cursor:'pointer',
-        angle:0,
-        style:{
-            'padding': '.1rem .2rem',
-            'border-radius': '.15rem',
-            'background-color': 'transparent',
-            'width': 'auto',
-            'border': '2px solid red',
-            'text-align': 'center',
-            'font-size': '14px',
-            'color': 'black'
-        },
-        position: new AMap.LngLat(companyPosition.lng,companyPosition.lat),
-        offset: new AMap.Pixel(105, 10),
+    marker.setLabel({
+        //修改label相对于maker的位置
+        offset: new AMap.Pixel(25, 20),
+        content: "<div class='info'>" + companyName + "</div>"
     });
-    text.setMap(map);
 }
 
 //向地图添加控件

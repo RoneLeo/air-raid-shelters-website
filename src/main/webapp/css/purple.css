@@ -1,6 +1,14 @@
 .head_logo a {
     color: #222222;
 }
+.am-selected-btn.am-btn-default {
+    background-color: #670079;
+    color: #ddd;
+}
+.am-btn-default.am-active, .am-btn-default:active, .am-dropdown.am-active .am-btn-default.am-dropdown-toggle {
+    background-color: #670079;
+    color: #ddd;
+}
 .am-slider-a1 .am-control-nav li a.am-active {
     background-color: #560066;
 }
