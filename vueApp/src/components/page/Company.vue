@@ -305,8 +305,8 @@
                         if(gslx === 2) {
                             this.newCompanyBoxShow = false;
                             this.positionPicker2.stop();
-                            this.subcompanyForm.push(data);
-//                            this.getData();
+//                            this.subcompanyForm.push(data);
+                            this.getData();
                         }
                         this.$message({
                             message: res.resMsg,
