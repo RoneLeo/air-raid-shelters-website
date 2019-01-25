@@ -124,7 +124,6 @@
             $('#contactFax').text(content.lxcz);
             $('#contactPostcode').text(content.lxyb);
             $('#contactEmail').text(content.lxyx);
-
             //修改地图定位
             updateMap(content);
         })
@@ -134,12 +133,11 @@
         var companyPosition = {lat: jwdArr[0], lng: jwdArr[1]}; //经纬度
         var companyName = companyInfo.gsmc; //名称
         var companyAddr = companyInfo.lxdz; //地址
-        if(marker) {
+        if(map && marker) {
             map.remove(marker);
+            map.setCenter(new AMap.LngLat(companyPosition.lng,companyPosition.lat));
+            addMapOverlay(companyName,companyAddr,companyPosition);//向地图添加覆盖物
         }
-//        text.setMap();
-        map.setCenter(new AMap.LngLat(companyPosition.lng,companyPosition.lat));
-        addMapOverlay(companyName,companyAddr,companyPosition);//向地图添加覆盖物
     }
 
 </script>

@@ -104,7 +104,7 @@ function createMenu() {
 //获取顶部和底部等公共
 function getCompanyInfo() {
     $('#foot').load('template/footer.html');
-    $.post(ServerUrl + '/contactUs/findAllByGsid',{gsid: Gsid, page: 1, size: 5},function (json) {
+    $.post(ServerUrl + '/contactUs/findAllByGsid',{gsid: Gsid},function (json) {
         var companyData = json.data.content;
         var selectOptions = '';
         var content;
