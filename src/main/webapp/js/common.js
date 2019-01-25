@@ -1,15 +1,19 @@
 var ServerUrl = 'http://47.96.85.104:80';
 var Gsid = 2;
 var domain = window.location.host;
-// console.log(domain);
+var imgSrc = '/img/QRcode/scxwrf.png';
 if(domain.indexOf('scxdrf.com.cn') !== -1) {
     Gsid = 2;
+    imgSrc = '/img/QRcode/scxdrf.png';
 }else if(domain.indexOf('ynhrfh.com') !== -1) {
     Gsid = 3;
+    imgSrc = '/img/QRcode/ynhrfh.png';
 }else if(domain.indexOf('zjxkrf.com') !== -1) {
     Gsid = 4;
+    imgSrc = '/img/QRcode/zjxkrf.png';
 }else if(domain.indexOf('cdchiy.com') !== -1) {
     Gsid = 5;
+    imgSrc = '/img/QRcode/scxwrf.png';
 }
 $(function () {
     getCompanyInfo();
@@ -31,6 +35,7 @@ $(function () {
             $('#appCss').prop('href','css/blue.css');
             break;
     }
+
 });
 
 //菜单信息
@@ -95,6 +100,7 @@ function createMenu() {
 
 //获取顶部和底部等公共
 function getCompanyInfo() {
+    console.log(imgSrc)
     $('#foot').load('template/footer.html');
     $.post(ServerUrl + '/contactUs/findAllByGsid',{gsid: Gsid, page: 1, size: 5},function (json) {
         var companyData = json.data.content;
@@ -142,6 +148,10 @@ function getCompanyInfo() {
                 $('#footerPostcode,#contactPostcode').text(lxyb);
                 $('#contactEmail').text(lxyx);
                 $('#baxx').text(baxx);
+                let qrCodeHtml = '<div class="foot_li_ewm_a"><img src="'+imgSrc+'" alt="" /></div>\n' +
+                    '<div class="foot_li_ewm_a"><img src="'+imgSrc+'" alt="" /></div>\n';
+                $('#qrCode').html(qrCodeHtml);
+                console.log('imgSrc',imgSrc, qrCodeHtml,  $('#qrCode'));
 
                 //公司简介
                 $('#introContent').html(gsjj);

@@ -10,6 +10,9 @@
                 <el-tooltip v-show="!newCompanyBoxShow" class="item" effect="light" content="添加分公司" placement="bottom">
                     <el-button type="primary" icon="el-icon-plus" @click="addNewCompany" circle style="box-shadow: 1px 2px 2px 1px #ccc"></el-button>
                 </el-tooltip>
+                <el-tooltip v-show="newCompanyBoxShow" class="item" effect="light" content="返回主页面" placement="bottom">
+                    <el-button type="primary" icon="el-icon-back" @click="goBack" circle style="box-shadow: 1px 2px 2px 1px #ccc;margin-right: 5px;"></el-button>
+                </el-tooltip>
                 <el-tooltip v-show="newCompanyBoxShow" class="item" effect="light" content="保存分公司信息" placement="bottom">
                     <el-button type="success" icon="el-icon-check" @click="saveNewCompany" circle style="box-shadow: 1px 2px 2px 1px #ccc"></el-button>
                 </el-tooltip>
@@ -77,7 +80,7 @@
                     </div>
                     <div class="company-list" style="margin-top: 80px">
                         <!--<h3>子公司信息</h3>-->
-                            <div class="company-list-item" v-for="item in subcompanyForm" :key="item.id*0.98987" style="">
+                            <div class="company-list-item" v-for="item in subcompanyForm" :key="item.id*0.989870023" style="">
                                 <div style="position: absolute;top: 8px;right: 14px;">
                                     <el-button-group>
                                         <el-tooltip class="item" effect="light" content="编辑分公司信息" placement="bottom" >
@@ -88,8 +91,6 @@
                                         </el-tooltip>
                                     </el-button-group>
                                 </div>
-
-
                                 <div class="subtitle" style="">{{item.gsmc}}</div>
                                 <el-form :model="item" label-width="120px" size="medium">
                                     <el-form-item label="联系电话">
@@ -98,7 +99,7 @@
                                     <el-form-item label="联系邮箱">
                                         {{item.lxyx}}
                                     </el-form-item>
-                                    <el-form-item label="联系地址">
+                                    <el-form-item label="联系地址" style="width: 98%">
                                         {{item.lxdz}}
                                     </el-form-item>
                                 </el-form>
@@ -110,15 +111,6 @@
                     <el-form ref="newCompanyForm" :model="newCompanyData" label-width="120px" size="medium">
                         <el-form-item label="公司名称" style="display: block;width: 98%">
                             <el-input v-model="newCompanyData.gsmc" :disabled="disabled2"></el-input>
-                        </el-form-item>
-                        <el-form-item label="经纬度">
-                            <el-input v-model="newCompanyData.jwd" :disabled="true"></el-input>
-                        </el-form-item>
-                        <el-form-item label="联系地址">
-                            <el-input v-model="newCompanyData.lxdz" :disabled="disabled2"></el-input>
-                        </el-form-item>
-                        <el-form-item label="" style="display: block;width: 98%">
-                            <div id="map2" style="width: 100%; height: 400px;"></div>
                         </el-form-item>
                         <el-form-item label="联系电话">
                             <el-input v-model="newCompanyData.lxdh" :disabled="disabled2"></el-input>
@@ -132,22 +124,32 @@
                         <el-form-item label="联系邮箱">
                             <el-input v-model="newCompanyData.lxyx" :disabled="disabled2" ></el-input>
                         </el-form-item>
-                        <el-form-item label="公司网站">
-                            <el-input v-model="newCompanyData.gswz" :disabled="disabled2"></el-input>
+                        <el-form-item label="经纬度">
+                            <el-input v-model="newCompanyData.jwd" :disabled="true"></el-input>
                         </el-form-item>
-                        <el-form-item label="备案信息">
-                            <el-input v-model="newCompanyData.baxx" :disabled="disabled2"></el-input>
+                        <el-form-item label="联系地址">
+                            <el-input v-model="newCompanyData.lxdz" :disabled="disabled2"></el-input>
                         </el-form-item>
-                        <el-form-item label="公司描述">
-                            <el-input v-model="newCompanyData.gsms" :disabled="disabled2"></el-input>
+                        <el-form-item label="" style="display: block;width: 98%">
+                            <div id="map2" style="width: 100%; height: 400px;"></div>
                         </el-form-item>
-                        <el-form-item label="搜索关键字">
-                            <el-input v-model="newCompanyData.gjz" :disabled="disabled2"></el-input>
-                        </el-form-item>
-                        <el-form-item label="公司简介" style="display: block;width: 98%">
-                            <el-input v-model="newCompanyData.gsjj" type="textarea" :autosize="{ minRows: 15, maxRows: 30}"
-                                      :disabled="disabled2" ></el-input>
-                        </el-form-item>
+
+                        <!--<el-form-item label="公司网站">-->
+                            <!--<el-input v-model="newCompanyData.gswz" :disabled="disabled2"></el-input>-->
+                        <!--</el-form-item>-->
+                        <!--<el-form-item label="备案信息">-->
+                            <!--<el-input v-model="newCompanyData.baxx" :disabled="disabled2"></el-input>-->
+                        <!--</el-form-item>-->
+                        <!--<el-form-item label="公司描述">-->
+                            <!--<el-input v-model="newCompanyData.gsms" :disabled="disabled2"></el-input>-->
+                        <!--</el-form-item>-->
+                        <!--<el-form-item label="搜索关键字">-->
+                            <!--<el-input v-model="newCompanyData.gjz" :disabled="disabled2"></el-input>-->
+                        <!--</el-form-item>-->
+                        <!--<el-form-item label="公司简介" style="display: block;width: 98%">-->
+                            <!--<el-input v-model="newCompanyData.gsjj" type="textarea" :autosize="{ minRows: 15, maxRows: 30}"-->
+                                      <!--:disabled="disabled2" ></el-input>-->
+                        <!--</el-form-item>-->
                     </el-form>
                 </div>
             </div>
@@ -194,9 +196,20 @@
             this.map && this.map.destory();
         },
         methods: {
+            goBack() {
+                this.newCompanyBoxShow = false;
+                this.newCompanyData = {}
+            },
             deleteNewCompany(item) {
                 console.log(item.id)
-                this.$axios.get('/contactUs/delete?id' + item.id).then(res => {
+                this.$axios.get('/contactUs/delete?id=' + item.id).then(res => {
+                    for(let i = 0; i < this.subcompanyForm.length; i ++) {
+                        if(this.subcompanyForm[i].id === item.id) {
+                            console.log(i, item.id)
+                            this.subcompanyForm.splice(i,1);
+                            console.log(this.subcompanyForm)
+                        }
+                    }
                     this.$message({
                         message: res.resMsg,
                         type: 'success'
@@ -210,10 +223,14 @@
                 this.positionPicker2.start(new AMap.LngLat(position[1], position[0]));
             },
             saveNewCompany() {
+                this.newCompanyData = Object.assign({}, this.newCompanyData);
                 this.save(this.newCompanyData, 2);
             },
             addNewCompany() {
-                this.newCompanyData = {}
+                this.newCompanyData = {
+                    jwd: '',
+                    lxdz: ''
+                }
                 this.newCompanyBoxShow = true;
                 this.positionPicker2.start(this.map2.getCenter());
             },
@@ -236,7 +253,6 @@
                     })
                 }
                 if (UIloaded) {
-//                    console.log(this.map);
                     AMapUI.loadUI(['misc/PositionPicker'], (PositionPicker) => {
                         this.positionPicker = new PositionPicker({
                             mode: 'dragMap',//设定为拖拽地图模式，可选'dragMap'、'dragMarker'，默认为'dragMap'
@@ -246,16 +262,14 @@
                             this.companyForm.jwd = positionResult.position.lat + ',' + positionResult.position.lng;
                             this.companyForm.lxdz = positionResult.address;
                         });
-
                         this.positionPicker2 = new PositionPicker({
                             mode: 'dragMap',//设定为拖拽地图模式，可选'dragMap'、'dragMarker'，默认为'dragMap'
                             map: this.map2//依赖地图对象
                         });
                         this.positionPicker2.on('success', (positionResult) => {
-                            console.log(111,positionResult)
                             this.newCompanyData.jwd = positionResult.position.lat + ',' + positionResult.position.lng;
                             this.newCompanyData.lxdz = positionResult.address;
-
+                            console.log(this.newCompanyData.jwd, this.newCompanyData.lxdz);
                         });
                     });
                 }
@@ -295,7 +309,8 @@
                         if(gslx === 2) {
                             this.newCompanyBoxShow = false;
                             this.positionPicker2.stop();
-                            this.getData();
+                            this.subcompanyForm.push(data);
+//                            this.getData();
                         }
                         this.$message({
                             message: res.resMsg,
@@ -310,13 +325,16 @@
                 });
             },
             getData() {
+                this.subcompanyForm = [];
                 this.$axios.post('/contactUs/findByGsid').then((res) => {
                      let data = res.data;
-                    if(data.length > 1) {
-                        this.companyForm = data[0];
-                        this.subcompanyForm = data.splice(1, data.length);
-                        console.log(  this.subcompanyForm )
-                    }
+                     for(let i = 0; i < data.length; i ++) {
+                         if(data[i].gslx === 1) {  //总公司
+                             this.companyForm = data[i];
+                         }else {
+                             this.subcompanyForm.push(data[i]);
+                         }
+                     }
                     if (this.companyForm !== null) {
                         this.disabled = true;
                         this.setMarker();
