@@ -146,10 +146,12 @@ public class ContactUsController {
 
     @ApiOperation("前端显示公司信息")
     @RequestMapping("/findAllByGsid")
-    public ApiResult<Object> findAllByGsid(Integer gsid, int page, int size) {
-        Pageable pageable = PageRequest.of(page - 1, size);
-
-        Page<ContactusEntity> list = contactUsRepository.findAllByGsidOrderByCjsjDesc(gsid, pageable);
+    public ApiResult<Object> findAllByGsid(Integer gsid) {
+//        Pageable pageable = PageRequest.of(page - 1, size);
+        if (gsid == null) {
+            return ApiResult.FAILURE("公司id不能为空");
+        }
+        List<ContactusEntity> list = contactUsRepository.findAllByGsidOrderByGslx(gsid);
 
         return ApiResult.SUCCESS(list);
     }
