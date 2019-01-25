@@ -105,7 +105,7 @@ function createMenu() {
 function getCompanyInfo() {
     $('#foot').load('template/footer.html');
     $.post(ServerUrl + '/contactUs/findAllByGsid',{gsid: Gsid},function (json) {
-        var companyData = json.data.content;
+        var companyData = json.data;
         var selectOptions = '';
         var content;
 
