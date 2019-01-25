@@ -295,7 +295,7 @@
                 if(data.id) {
                     url = '/contactUs/update'
                 }
-                this.$axios.post(url , this.$qs.stringify(Object.assign({}, data, {gslx: gslx}))).then((res) => {
+                this.$axios.post(url, this.$qs.stringify(Object.assign({}, data, {gslx: gslx}))).then((res) => {
                     if(res.resCode === 200) {
                         if(gslx === 1) {
                             this.disabled = true;
@@ -305,7 +305,6 @@
                         if(gslx === 2) {
                             this.newCompanyBoxShow = false;
                             this.positionPicker2.stop();
-//                            this.subcompanyForm.push(data);
                             this.getData();
                         }
                         this.$message({

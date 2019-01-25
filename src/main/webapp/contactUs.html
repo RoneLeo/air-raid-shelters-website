@@ -134,7 +134,9 @@
         var companyPosition = {lat: jwdArr[0], lng: jwdArr[1]}; //经纬度
         var companyName = companyInfo.gsmc; //名称
         var companyAddr = companyInfo.lxdz; //地址
-        map.remove(marker);
+        if(marker) {
+            map.remove(marker);
+        }
 //        text.setMap();
         map.setCenter(new AMap.LngLat(companyPosition.lng,companyPosition.lat));
         addMapOverlay(companyName,companyAddr,companyPosition);//向地图添加覆盖物
