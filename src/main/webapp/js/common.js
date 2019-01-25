@@ -1,8 +1,11 @@
 var ServerUrl = 'http://47.96.85.104:80';
-var Gsid = 2;
+var Gsid = 1;
 var domain = window.location.host;
 var imgSrc = '/img/QRcode/scxwrf.png';
-if(domain.indexOf('scxdrf.com.cn') !== -1) {
+if(domain.indexOf('scxwrf.com') !== -1) {
+    Gsid = 1;
+    imgSrc = '/img/QRcode/scxwrf.png';
+}else if(domain.indexOf('scxdrf.com.cn') !== -1) {
     Gsid = 2;
     imgSrc = '/img/QRcode/scxdrf.png';
 }else if(domain.indexOf('ynhrfh.com') !== -1) {
@@ -100,7 +103,6 @@ function createMenu() {
 
 //获取顶部和底部等公共
 function getCompanyInfo() {
-    console.log(imgSrc)
     $('#foot').load('template/footer.html');
     $.post(ServerUrl + '/contactUs/findAllByGsid',{gsid: Gsid, page: 1, size: 5},function (json) {
         var companyData = json.data.content;
@@ -151,7 +153,6 @@ function getCompanyInfo() {
                 let qrCodeHtml = '<div class="foot_li_ewm_a"><img src="'+imgSrc+'" alt="" /></div>\n' +
                     '<div class="foot_li_ewm_a"><img src="'+imgSrc+'" alt="" /></div>\n';
                 $('#qrCode').html(qrCodeHtml);
-                console.log('imgSrc',imgSrc, qrCodeHtml,  $('#qrCode'));
 
                 //公司简介
                 $('#introContent').html(gsjj);
@@ -199,7 +200,6 @@ function banner() {
 //资质证书
 function createCertificate() {
     $.post(ServerUrl + '/file/findAllByGsid',{gsid: Gsid,wjlx:1,page:1,size:10000},function (json) {
-        console.log(json.data)
         var content = json.data.content;
         if(!content.length){
             return false;
@@ -251,8 +251,6 @@ function submitService() {
                 if(json.resCode == 200){
                     alert('信息提交成功!');
                 }
-                console.log(json);
-
                 $this.val('提交').prop('disabled',false);
                 $.AMUI.progress.done();
                 $('#submitForm')[0].reset();
@@ -382,7 +380,6 @@ function getNewsData(type,isPage,page) {
         detailsPage = 'industryNewsDetails.html'
     }
     $.post(ServerUrl + '/news/findAllByGsid',{gsid:Gsid,xwlx:type,page:page,size:size},function (json) {
-        console.log('news',json);
         var content = json.data.content;
         var pages = json.data.totalPages;
         var totalElements = json.data.totalElements;
@@ -473,7 +470,6 @@ function getProduct(sblx,isPage,page) {
         var data = json.data;
         var pages = json.totalPages;
         var totalElements = json.totalElements;
-        console.log(pages,json);
         if(!isPage && (size < totalElements)){
             $("#productPage").page({
                 pages: pages, //页数
@@ -531,7 +527,6 @@ function getProduct(sblx,isPage,page) {
                 $('#productIntroTitleList').html(productIntroTitleList);
                 $('#productIntroContentList').html(productIntroContentList);
                 animateScroll();
-                console.log(product);
             });
         }
 
@@ -686,28 +681,11 @@ function addMapOverlay(companyName,companyAddr,companyPosition) {
         offset: new AMap.Pixel(-12, -12)
     });
     marker.setMap(map);
-
-    text = new AMap.Text({
-        text:companyName,
-        textAlign:'center', // 'left' 'right', 'center',
-        verticalAlign:'middle', //middle 、bottom
-        draggable:false,
-        cursor:'pointer',
-        angle:0,
-        style:{
-            'padding': '.1rem .2rem',
-            'border-radius': '.15rem',
-            'background-color': 'transparent',
-            'width': 'auto',
-            'border': '2px solid red',
-            'text-align': 'center',
-            'font-size': '14px',
-            'color': 'black'
-        },
-        position: new AMap.LngLat(companyPosition.lng,companyPosition.lat),
-        offset: new AMap.Pixel(105, 10),
+    marker.setLabel({
+        //修改label相对于maker的位置
+        offset: new AMap.Pixel(25, 20),
+        content: "<div class='info'>" + companyName + "</div>"
     });
-    text.setMap(map);
 }
 
 //向地图添加控件

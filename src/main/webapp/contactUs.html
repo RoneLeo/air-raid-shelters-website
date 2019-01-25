@@ -135,7 +135,7 @@
         var companyName = companyInfo.gsmc; //名称
         var companyAddr = companyInfo.lxdz; //地址
         map.remove(marker);
-        text.setMap();
+//        text.setMap();
         map.setCenter(new AMap.LngLat(companyPosition.lng,companyPosition.lat));
         addMapOverlay(companyName,companyAddr,companyPosition);//向地图添加覆盖物
     }

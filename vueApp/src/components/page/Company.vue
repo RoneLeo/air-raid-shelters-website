@@ -201,13 +201,10 @@
                 this.newCompanyData = {}
             },
             deleteNewCompany(item) {
-                console.log(item.id)
                 this.$axios.get('/contactUs/delete?id=' + item.id).then(res => {
                     for(let i = 0; i < this.subcompanyForm.length; i ++) {
                         if(this.subcompanyForm[i].id === item.id) {
-                            console.log(i, item.id)
                             this.subcompanyForm.splice(i,1);
-                            console.log(this.subcompanyForm)
                         }
                     }
                     this.$message({
@@ -269,7 +266,6 @@
                         this.positionPicker2.on('success', (positionResult) => {
                             this.newCompanyData.jwd = positionResult.position.lat + ',' + positionResult.position.lng;
                             this.newCompanyData.lxdz = positionResult.address;
-                            console.log(this.newCompanyData.jwd, this.newCompanyData.lxdz);
                         });
                     });
                 }
