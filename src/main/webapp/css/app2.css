@@ -1858,4 +1858,7 @@
         width: 1200px;
     }
 }
+.browsehappy {
+    display: none;
+}
 
