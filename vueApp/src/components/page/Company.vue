@@ -22,28 +22,28 @@
                      style="min-width: 900px; max-width: 95%; height: auto;padding: 20px 0 50px;">
                     <el-form ref="companyForm" :model="companyForm" label-width="120px" size="medium">
                         <el-form-item label="公司名称" style="display: block;width: 98%">
-                            <el-input v-model="companyForm.gsmc" :disabled="disabled"></el-input>
+                            <el-input v-model="companyForm.gsmc" :disabled="disabled" placeholder="（必填项）"> </el-input>
                         </el-form-item>
                         <el-form-item label="经纬度">
-                            <el-input v-model="companyForm.jwd" :disabled="true"></el-input>
+                            <el-input v-model="companyForm.jwd" :disabled="true" placeholder="（必填项）"></el-input>
                         </el-form-item>
                         <el-form-item label="联系地址">
-                            <el-input v-model="companyForm.lxdz" :disabled="disabled"></el-input>
+                            <el-input v-model="companyForm.lxdz" :disabled="disabled" placeholder="（必填项）"></el-input>
                         </el-form-item>
                         <el-form-item label="" style="display: block;width: 98%">
                             <div id="AMap_container" style="width: 100%; height: 400px;"></div>
                         </el-form-item>
                         <el-form-item label="联系电话">
-                            <el-input v-model="companyForm.lxdh" :disabled="disabled"></el-input>
+                            <el-input v-model="companyForm.lxdh" :disabled="disabled" placeholder="（必填项）"></el-input>
                         </el-form-item>
                         <el-form-item label="联系传真">
-                            <el-input v-model="companyForm.lxcz" :disabled="disabled"></el-input>
+                            <el-input v-model="companyForm.lxcz" :disabled="disabled" placeholder="（必填项）"></el-input>
                         </el-form-item>
                         <el-form-item label="联系邮编">
-                            <el-input v-model="companyForm.lxyb" :disabled="disabled"></el-input>
+                            <el-input v-model="companyForm.lxyb" :disabled="disabled" placeholder="（必填项）"></el-input>
                         </el-form-item>
                         <el-form-item label="联系邮箱">
-                            <el-input v-model="companyForm.lxyx" :disabled="disabled"></el-input>
+                            <el-input v-model="companyForm.lxyx" :disabled="disabled" placeholder="（必填项）"></el-input>
                         </el-form-item>
                         <el-form-item label="公司网站">
                             <el-input v-model="companyForm.gswz" :disabled="disabled"></el-input>
@@ -110,46 +110,29 @@
                      style="min-width: 900px; max-width: 90%; height: auto;padding: 20px 0 50px;">
                     <el-form ref="newCompanyForm" :model="newCompanyData" label-width="120px" size="medium">
                         <el-form-item label="公司名称" style="display: block;width: 98%">
-                            <el-input v-model="newCompanyData.gsmc" :disabled="disabled2"></el-input>
+                            <el-input v-model="newCompanyData.gsmc" :disabled="disabled2" placeholder="（必填项）"></el-input>
                         </el-form-item>
                         <el-form-item label="联系电话">
-                            <el-input v-model="newCompanyData.lxdh" :disabled="disabled2"></el-input>
+                            <el-input v-model="newCompanyData.lxdh" :disabled="disabled2" placeholder="（必填项）"></el-input>
                         </el-form-item>
                         <el-form-item label="联系传真">
-                            <el-input v-model="newCompanyData.lxcz" :disabled="disabled2"></el-input>
+                            <el-input v-model="newCompanyData.lxcz" :disabled="disabled2" placeholder="（必填项）"></el-input>
                         </el-form-item>
                         <el-form-item label="联系邮编">
-                            <el-input v-model="newCompanyData.lxyb" :disabled="disabled2" ></el-input>
+                            <el-input v-model="newCompanyData.lxyb" :disabled="disabled2" placeholder="（必填项）"></el-input>
                         </el-form-item>
                         <el-form-item label="联系邮箱">
-                            <el-input v-model="newCompanyData.lxyx" :disabled="disabled2" ></el-input>
+                            <el-input v-model="newCompanyData.lxyx" :disabled="disabled2" placeholder="（必填项）"></el-input>
                         </el-form-item>
                         <el-form-item label="经纬度">
-                            <el-input v-model="newCompanyData.jwd" :disabled="true"></el-input>
+                            <el-input v-model="newCompanyData.jwd" :disabled="true" placeholder="（必填项）"></el-input>
                         </el-form-item>
                         <el-form-item label="联系地址">
-                            <el-input v-model="newCompanyData.lxdz" :disabled="disabled2"></el-input>
+                            <el-input v-model="newCompanyData.lxdz" :disabled="disabled2" placeholder="（必填项）"></el-input>
                         </el-form-item>
                         <el-form-item label="" style="display: block;width: 98%">
                             <div id="map2" style="width: 100%; height: 400px;"></div>
                         </el-form-item>
-
-                        <!--<el-form-item label="公司网站">-->
-                            <!--<el-input v-model="newCompanyData.gswz" :disabled="disabled2"></el-input>-->
-                        <!--</el-form-item>-->
-                        <!--<el-form-item label="备案信息">-->
-                            <!--<el-input v-model="newCompanyData.baxx" :disabled="disabled2"></el-input>-->
-                        <!--</el-form-item>-->
-                        <!--<el-form-item label="公司描述">-->
-                            <!--<el-input v-model="newCompanyData.gsms" :disabled="disabled2"></el-input>-->
-                        <!--</el-form-item>-->
-                        <!--<el-form-item label="搜索关键字">-->
-                            <!--<el-input v-model="newCompanyData.gjz" :disabled="disabled2"></el-input>-->
-                        <!--</el-form-item>-->
-                        <!--<el-form-item label="公司简介" style="display: block;width: 98%">-->
-                            <!--<el-input v-model="newCompanyData.gsjj" type="textarea" :autosize="{ minRows: 15, maxRows: 30}"-->
-                                      <!--:disabled="disabled2" ></el-input>-->
-                        <!--</el-form-item>-->
                     </el-form>
                 </div>
             </div>
